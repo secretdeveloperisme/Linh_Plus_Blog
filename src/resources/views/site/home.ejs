@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head") %>  
+</head>
+<body>
+  <header>
+    <%- include("../partials/nav") %>
+  </header>
+  <h1>
+    <% posts.forEach(element => { %>
+     <h1>
+       <%= element %> 
+     </h1>
+    <% }) %>
+  </h1>
+  <footer>
+    <%- include("../partials/footer.ejs") %> 
+  </footer>
+</body>
+</html>
