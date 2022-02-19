@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const ejs = require('ejs');
 const path = require("path");
 const route = require("./routes");
+const methodOverride = require("method-override");
 
 
 // cross origin resource sharing 
@@ -16,13 +16,20 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
+// set public folder
+app.use(express.static(path.join(__dirname,"public")));
 // set view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "resources","views"));
 app.set("view option",{
   delimiter: "?"
 })
+// method override for put delete API
+app.use(methodOverride("_method"));
+//route app
 route(app);
+
+
 app.listen(7777, ()=>{
   console.log("app is running on port 7777!");
 })

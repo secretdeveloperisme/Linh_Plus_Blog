@@ -1,21 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include("../partials/head") %>  
+  <%- include("../partials/head") %> 
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <header>
-    <%- include("../partials/nav") %>
-  </header>
-  <h1>
-    <% posts.forEach(element => { %>
-     <h1>
-       <%= element %> 
-     </h1>
-    <% }) %>
-  </h1>
-  <footer>
-    <%- include("../partials/footer.ejs") %> 
-  </footer>
+  <div class="app">
+    <header class="sticky-top">
+      <%- include("../partials/nav") %>
+    </header>
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5">
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="#" class="nav-link link-dark" aria-current="page">
+              <i class="fa fa-home" aria-hidden="true"></i>
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-dark" data-bs-toggle="collapse" href="#categoryList" aria-expanded="true">
+              <i class="fa fa-list" aria-hidden="true"></i>
+              Category
+            </a>
+            <ul id="categoryList" class="collapse mr-2 list-group list-group-flush">
+              <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">book</a></li>
+              <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">programing</a></li>
+              <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">knowledge</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#tagList" class="nav-link link-dark" data-bs-toggle="collapse" >
+              <i class="fa fa-tags" aria-hidden="true"></i>
+              Tag
+            </a>
+            <ul class="collapse list-style-none list-group list-group-flush" id="tagList" >
+              <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Active item</a></li>
+              <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Item</a></li>
+              <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Disabled item</a></li>
+            </ul>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content row">
+        <div class="posts px-4 col-xl-9">
+          <div class="post-list-header d-flex my-2">
+            <h5>Bài đăng mới nhất</h5>
+            <div class="list-mode ms-auto btn btn-primary" id="btnChangeListMode">
+              <span>Grid</span>
+              <i class="fas fa-th-large"></i>
+            </div>
+          </div>
+          <div class="post-list row g-3">
+            <div class="col-xl-12"> 
+              <div class="post-item container-fluid d-flex shadow rounded py-2">
+                <div class="post-item-thumbnail me-3">
+                  <a href="" class="text-decoration-none" style="background-image: url('/images/posts/facebook-milestone-post.png');">
+                  </a>
+                </div>
+                <div class="post-content">
+                  <div class="post-tag">
+                    <a href="" class="tag-link">#facebook</a>
+                    <a href="" class="tag-link">#programming</a>
+                  </div>
+                  <h6 class="post-title">
+                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
+                  </h6>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                    </div>
+                    <div class="post-published">
+                      02/18/2022
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-12"> 
+              <div class="post-item container-fluid d-flex shadow rounded py-2">
+                <div class="post-item-thumbnail me-3">
+                  <a href="" class="text-decoration-none" style="background-image: url('/images/posts/facebook-milestone-post.png');">
+                  </a>
+                </div>
+                <div class="post-content">
+                  <div class="post-tag">
+                    <a href="" class="tag-link">#facebook</a>
+                    <a href="" class="tag-link">#programming</a>
+                  </div>
+                  <h6 class="post-title">
+                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
+                  </h6>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                    </div>
+                    <div class="post-published">
+                      02/18/2022
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-12"> 
+              <div class="post-item container-fluid d-flex shadow rounded py-2">
+                <div class="post-item-thumbnail me-3">
+                  <a href="" class="text-decoration-none" style="background-image: url('/images/posts/facebook-milestone-post.png');">
+                  </a>
+                </div>
+                <div class="post-content">
+                  <div class="post-tag">
+                    <a href="" class="tag-link">#facebook</a>
+                    <a href="" class="tag-link">#programming</a>
+                  </div>
+                  <h6 class="post-title">
+                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
+                  </h6>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                    </div>
+                    <div class="post-published">
+                      02/18/2022
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-more-wrapper my-2 d-flex">
+            <button type="button" class="btn btn-outline-primary m-auto">Thêm</button>
+          </div>
+        </div>
+        <div class="col-xl-3">
+          <div class="popular-post">
+            <div class="popular-post-header pt-2">
+              <h4>Bài viết phổ biến</h4>
+            </div>
+            <div class="popular-post-list">
+              <div class="popular-post-item d-flex p-2">
+                <div class="popular-post-item-order">
+                  
+                </div>
+                <div class="post-content">
+                  <h6 class="post-title">
+                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
+                  </h6>
+                  <div class="post-tag">
+                    <a href="" class="tag-link">#facebook</a>
+                    <a href="" class="tag-link">#programming</a>
+                  </div>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                    </div>
+                    <div class="post-published">
+                      02/18/2022
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="popular-post-item d-flex p-2">
+                <div class="popular-post-item-order">
+                  
+                </div>
+                <div class="post-content">
+                  <h6 class="post-title">
+                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
+                  </h6>
+                  <div class="post-tag">
+                    <a href="" class="tag-link">#facebook</a>
+                    <a href="" class="tag-link">#programming</a>
+                  </div>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                    </div>
+                    <div class="post-published">
+                      02/18/2022
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="popular-post-item d-flex p-2">
+                <div class="popular-post-item-order">
+                  
+                </div>
+                <div class="post-content">
+                  <h6 class="post-title">
+                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
+                  </h6>
+                  <div class="post-tag">
+                    <a href="" class="tag-link">#facebook</a>
+                    <a href="" class="tag-link">#programming</a>
+                    <a href="" class="tag-link">#book</a>
+                  </div>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                    </div>
+                    <div class="post-published">
+                      02/18/2022
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <footer class="col-xl-12">
+          <%- include("../partials/footer.ejs") %> 
+        </footer>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <script src="/js/home.js"></script>
 </body>
 </html>
