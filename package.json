@@ -10,6 +10,7 @@
     "express": "^4.17.3",
     "jsonwebtoken": "8.5.1",
     "method-override": "^3.0.0",
+    "mysql2": "^2.3.3",
     "node-sass": "^7.0.1",
     "sequelize": "^6.16.1"
   },

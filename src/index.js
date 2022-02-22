@@ -4,7 +4,7 @@ const app = express();
 const path = require("path");
 const route = require("./routes");
 const methodOverride = require("method-override");
-
+const db = require("./app/models");
 
 // cross origin resource sharing 
 app.use(cors({

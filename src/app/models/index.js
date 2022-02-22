@@ -1,0 +1,79 @@
+const databaseConfig = require("../config/db.config");
+const Sequelize = require("sequelize");
+const User = require("./User");
+const Post = require("./Post");
+const Tag = require("./Tag");
+const PostTag = require("./PostTag");
+const Category = require("./Category")
+const PostCategory = require("./PostCategory");
+const Like = require("./Like");
+const Comment = require("./Comment");
+
+const db = {};
+const sequelize = new Sequelize(
+  databaseConfig.root.DB,
+  databaseConfig.root.USER,
+  databaseConfig.root.PASSWORD,
+  {
+    host : databaseConfig.host,
+    dialect : databaseConfig.dialect,
+    port : databaseConfig.port,
+    pool: {
+      max : databaseConfig.pool.max,
+      min : databaseConfig.pool.min,
+      idle : databaseConfig.idle,
+      acquire: databaseConfig.pool.acquire
+    }
+  }
+)
+db.User = User(sequelize);
+db.Post = Post(sequelize);
+db.Tag = Tag(sequelize);
+db.PostTag = PostTag(sequelize);
+db.Category = Category(sequelize);
+db.PostCategory = PostCategory(sequelize);
+db.Like = Like(sequelize);
+db.Comment = Comment(sequelize);
+/* ======== association ======== */
+// User <---> Post
+db.User.hasMany(db.Post);
+db.Post.belongsTo(db.User);
+// Post <=-=> Tag
+db.Post.belongsToMany(db.Tag,
+  {
+    through: db.PostTag,
+    
+  }
+);
+db.Tag.belongsToMany(db.Post,
+  {
+    through: db.PostTag
+  }
+);
+// Post <=-=> Category
+db.Category.belongsToMany(db.Post,{
+  through: db.PostCategory
+});
+db.Post.belongsToMany(db.Category,{
+  through: db.PostCategory
+});
+// Like <=-=> Post
+db.User.belongsToMany(db.Post,{
+  through : db.Like
+});
+db.Post.belongsToMany(db.User,{
+  through : db.Like
+});
+// Comment <=-->Post 
+db.Post.hasMany(db.Comment);
+db.Comment.belongsTo(db.Post);
+// Comment <=-->User 
+db.User.hasMany(db.Comment);
+db.Comment.belongsTo(db.User);
+// Comment <---> Comment 
+db.Comment.hasOne(db.Comment);
+db.Comment.belongsTo(db.Comment);
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
