@@ -1,6 +1,8 @@
 const databaseConfig = require("../config/db.config");
 const Sequelize = require("sequelize");
 const User = require("./User");
+const Role = require("./Role");
+const UserRole = require("./UserRole");
 const Post = require("./Post");
 const Tag = require("./Tag");
 const PostTag = require("./PostTag");
@@ -27,6 +29,8 @@ const sequelize = new Sequelize(
   }
 )
 db.User = User(sequelize);
+db.Role = Role(sequelize);
+db.UserRole = UserRole(sequelize);
 db.Post = Post(sequelize);
 db.Tag = Tag(sequelize);
 db.PostTag = PostTag(sequelize);
@@ -35,6 +39,13 @@ db.PostCategory = PostCategory(sequelize);
 db.Like = Like(sequelize);
 db.Comment = Comment(sequelize);
 /* ======== association ======== */
+// User <=-=> Role
+db.User.belongsToMany(db.Role,{
+  through: db.UserRole
+})
+db.Role.belongsToMany(db.User, {
+  through: db.UserRole
+})
 // User <---> Post
 db.User.hasMany(db.Post);
 db.Post.belongsTo(db.User);
