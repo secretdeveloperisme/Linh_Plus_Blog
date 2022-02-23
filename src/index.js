@@ -4,8 +4,7 @@ const app = express();
 const path = require("path");
 const route = require("./routes");
 const methodOverride = require("method-override");
-const db = require("./app/models");
-
+const cookieParser = require("cookie-parser");
 // cross origin resource sharing 
 app.use(cors({
   "origin": "http://127.0.0.1:7777"
@@ -26,9 +25,10 @@ app.set("view option",{
 })
 // method override for put delete API
 app.use(methodOverride("_method"));
+// use cookie parser middleware
+app.use(cookieParser())
 //route app
 route(app);
-
 
 app.listen(7777, ()=>{
   console.log("app is running on port 7777!");
