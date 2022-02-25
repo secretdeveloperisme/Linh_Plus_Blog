@@ -8,7 +8,7 @@
 <body>
   <div class="app">
     <header class="sticky-top">
-      <%- include("../partials/nav") %>
+      <%- include("../partials/nav",{user:null}) %>
     </header>
     <div class="main px-4">
       <div class="sidebar overflow-auto pt-2 pb-5">
@@ -24,7 +24,7 @@
               <i class="fa fa-list" aria-hidden="true"></i>
               Category
             </a>
-            <ul id="categoryList" class="collapse mr-2 list-group list-group-flush">
+            <ul id="categoryList" class="collapse show mr-2 list-group list-group-flush">
               <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">book</a></li>
               <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">programing</a></li>
               <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">knowledge</a></li>
@@ -35,7 +35,7 @@
               <i class="fa fa-tags" aria-hidden="true"></i>
               Tag
             </a>
-            <ul class="collapse list-style-none list-group list-group-flush" id="tagList" >
+            <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
               <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Active item</a></li>
               <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Item</a></li>
               <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Disabled item</a></li>
@@ -64,7 +64,7 @@
             <div class="col-xl-12"> 
               <div class="post-item container-fluid d-flex shadow rounded py-2">
                 <div class="post-item-thumbnail me-3">
-                  <a href="" class="text-decoration-none" style="background-image: url('/images/posts/facebook-milestone-post.png');">
+                  <a href="" class="text-decoration-none rounded" style="background-image: url('/images/posts/facebook-milestone-post.png');">
                   </a>
                 </div>
                 <div class="post-content">
@@ -90,7 +90,7 @@
             <div class="col-xl-12"> 
               <div class="post-item container-fluid d-flex shadow rounded py-2">
                 <div class="post-item-thumbnail me-3">
-                  <a href="" class="text-decoration-none" style="background-image: url('/images/posts/facebook-milestone-post.png');">
+                  <a href="" class="text-decoration-none rounded" style="background-image: url('/images/posts/facebook-milestone-post.png');">
                   </a>
                 </div>
                 <div class="post-content">
@@ -116,7 +116,7 @@
             <div class="col-xl-12"> 
               <div class="post-item container-fluid d-flex shadow rounded py-2">
                 <div class="post-item-thumbnail me-3">
-                  <a href="" class="text-decoration-none" style="background-image: url('/images/posts/facebook-milestone-post.png');">
+                  <a href="" class="text-decoration-none rounded" style="background-image: url('/images/posts/facebook-milestone-post.png');">
                   </a>
                 </div>
                 <div class="post-content">
@@ -237,6 +237,8 @@
       </li>
     </ul>
   </div>
+  <%- include("../auth/login") %>
   <script src="/js/home.js"></script>
+  <script src="/js/login.js"></script>
 </body>
 </html>

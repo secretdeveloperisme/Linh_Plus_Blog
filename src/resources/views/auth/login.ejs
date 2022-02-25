@@ -1,0 +1,83 @@
+<div class="modal  fade" id="loginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" id="loginDialogModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalTitle">Login & Signup</h5>
+        <button class="btn-close" data-bs-dismiss="modal" arial-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs w-100" id="myTab" role="tablist">
+          <li class="nav-item w-50" role="presentation">
+            <button class="nav-link active w-100" id="loginTab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="home" aria-selected="true"><i class="fas fa-sign-in-alt me-2"></i>Login</button>
+          </li>
+          <li class="nav-item w-50" role="presentation">
+            <button class="nav-link w-100" id="signupTab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab" aria-controls="profile" aria-selected="false"><i class="fas fa-user-plus me-2"></i> Signup</button>
+          </li>
+        </ul>
+        <div class="tab-content py-3" id="myTabContent">
+          <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+            <form class="row g-3" action="/auth/login" method="post">
+              <div class="col-lg-12">
+                <label for="username" class="form-label">Username</label>
+                <input type="text"  id="username" name="username" class="form-control" placeholder="input your username....">
+              </div>
+              <div class="col-lg-12">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="input your password....">
+              </div>
+              <div class="col-lg-12">
+                <button class="btn btn-primary">Login</button>
+              </div>
+            </form>
+          </div>
+          <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+            <form class="row g-3" action="/auth/signup" method="post">
+              <div class="col-6">
+                <div class="col-lg-12">
+                  <label for="signupUsername" class="form-label">Username</label>
+                  <input type="text" id="signupUsername" name="username" class="form-control" placeholder="input your username....">
+                </div>
+                <div class="col-lg-12">
+                  <label for="signupPassword" class="form-label">Password</label>
+                  <input type="password" id="signupPassword" name="password" class="form-control" placeholder="input your password....">
+                </div>
+                <div class="col-lg-12">
+                  <label for="retypePassword" class="form-label">Retype Password</label>
+                  <input type="password" id="retypePassword" class="form-control" placeholder="input your retype password....">
+                </div>
+                <div class="col-lg-12">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="text" id="email" class="form-control" placeholder="input your email....@gmail.com">
+                </div>
+                <div class="col-lg-12">
+                  <label for="age" class="form-label">Age<span class="badge bg-primary ms-2" id="ageOutput">0</span></label>
+                  <input type="range" name="age" class="form-range" min="15" max="70" step="1" id="age" list="ageMark">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="col-12">
+                  <label for="address" class="form-label">Address</label>
+                  <input type="text" id="address" name="address" class="form-control" placeholder="input your phone number....">
+                </div>
+                <div class="col-12">
+                  <label for="biography" class="form-label">Biography</label>
+                  <textarea type="text" id="biography" name="biography"rows="3" class="form-control" placeholder="input your biography...."></textarea>
+                </div>
+                <div class="col-12 m-3">
+                  <input type="file" name="avatar" hidden class="custom-file-input" accept="image/*" id="avatar">
+                  <label class="d-flex flex-column text-center" for="avatar" style="width: fit-content;">
+                    <img class="border-danger img-thumbnail" id="displayAvatar" style="width: 128px; height: 128px; object-fit: contain;">
+                    Avatar
+                  </label>
+                </div>
+              </div>
+              <div>
+                <button class="btn btn-primary">Sign up</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

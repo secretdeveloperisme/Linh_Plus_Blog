@@ -1,6 +1,10 @@
 
 @import "variables";
 
+body{
+  background-color: $backgroundColor;
+}
+
 .navbar{
   background-color: white;
 }
@@ -42,7 +46,6 @@
   }
 }
 .content{
-  background-color: $backgroundColor;
   padding: 0px 5px 0 $sidebarWidth;
 }
 .connect-me{
@@ -128,4 +131,11 @@
   position: fixed;
   bottom: 10px;
   right: 10px;
+}
+
+
+// login sign up
+
+#loginDialogModal{
+  transition: all linear .5s !important;
 }
