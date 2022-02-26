@@ -40,9 +40,11 @@ class AuthController {
         username : req.body.username,
         passwordHash : req.body.password,
         email : req.body.email,
-        phoneNumber : req.body.phoneNumber,
+        gender: req.body.gender,
+        address : req.body.address,
         biography: req.body.biography,
-        age : parseInt(req.body.age)
+        age : parseInt(req.body.age),
+        avatar : req.body.avatarPath
       });
       let role = await Role.findOne({
         where: {
@@ -58,6 +60,7 @@ class AuthController {
      res.status(200).json({status: "success", message: "Register Account successfully"})
     }
     catch(err){
+      console.log(err);
       res.status(500).json({status: "failed", message: "Server has an error"});
     }
     

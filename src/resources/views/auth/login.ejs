@@ -19,11 +19,11 @@
             <form class="row g-3" action="/auth/login" method="post">
               <div class="col-lg-12">
                 <label for="username" class="form-label">Username</label>
-                <input type="text"  id="username" name="username" class="form-control" placeholder="input your username....">
+                <input type="text"  id="username" name="username" class="form-control" required placeholder="input your username....">
               </div>
               <div class="col-lg-12">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="input your password....">
+                <input type="password" id="password" name="password" class="form-control" required placeholder="input your password....">
               </div>
               <div class="col-lg-12">
                 <button class="btn btn-primary">Login</button>
@@ -31,27 +31,37 @@
             </form>
           </div>
           <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
-            <form class="row g-3" action="/auth/signup" method="post">
+            <form class="row g-3" id="signupForm" action="/auth/signup" method="post" enctype="application/x-www-form-urlencoded">
               <div class="col-6">
                 <div class="col-lg-12">
                   <label for="signupUsername" class="form-label">Username</label>
-                  <input type="text" id="signupUsername" name="username" class="form-control" placeholder="input your username....">
+                  <input type="text" id="signupUsername" required name="username" class="form-control" placeholder="input your username....">
                 </div>
                 <div class="col-lg-12">
                   <label for="signupPassword" class="form-label">Password</label>
-                  <input type="password" id="signupPassword" name="password" class="form-control" placeholder="input your password....">
+                  <input type="password" id="signupPassword"required name="password" class="form-control" placeholder="input your password....">
                 </div>
                 <div class="col-lg-12">
                   <label for="retypePassword" class="form-label">Retype Password</label>
-                  <input type="password" id="retypePassword" class="form-control" placeholder="input your retype password....">
+                  <input type="password" id="retypePassword" required class="form-control" placeholder="input your retype password....">
+                </div>
+                <div id="gender" class="p-2">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" id="maleGender" class="form-check-input" value="m" checked>
+                    <label for="maleGender" class="form-check-label">Male</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" id="femaleGender" class="form-check-input" value="f">
+                    <label for="femaleGender" class="form-check-label">Male</label>
+                  </div>
                 </div>
                 <div class="col-lg-12">
                   <label for="email" class="form-label">Email</label>
-                  <input type="text" id="email" class="form-control" placeholder="input your email....@gmail.com">
+                  <input type="text" id="email" name="email" required class="form-control" placeholder="input your email....@gmail.com">
                 </div>
                 <div class="col-lg-12">
-                  <label for="age" class="form-label">Age<span class="badge bg-primary ms-2" id="ageOutput">0</span></label>
-                  <input type="range" name="age" class="form-range" min="15" max="70" step="1" id="age" list="ageMark">
+                  <label for="age" class="form-label">Age<span class="badge bg-primary ms-2" id="ageOutput">15</span></label>
+                  <input type="range" name="age" required class="form-range" min="15" max="70" value="15" step="1" id="age" list="ageMark">
                 </div>
               </div>
               <div class="col-6">
@@ -69,6 +79,7 @@
                     <img class="border-danger img-thumbnail" id="displayAvatar" style="width: 128px; height: 128px; object-fit: contain;">
                     Avatar
                   </label>
+                  <input type="hidden" name="avatarPath" id="avatarPath">
                 </div>
               </div>
               <div>

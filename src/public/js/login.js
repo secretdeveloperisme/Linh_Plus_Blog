@@ -4,6 +4,8 @@ $(()=>{
   const $loginTab = $("#loginTab");
   const $signupTab = $("#signupTab");
   const $loginDialogModal = $("#loginDialogModal");
+  const $avatarPath = $("#avatarPath");
+  const $signupForm = $("#signupForm");
   // show age output 
   const $ageInput = $("#age");
   const $ageOutput = $("#ageOutput");
@@ -29,11 +31,31 @@ $(()=>{
     $ageOutput.text($ageInput.val());
   })
   // display avatar image
-  let avatarReader = new FileReader();
-  avatarReader.onloadend = function(event){
-    $avatarOutput.attr("src", this.result);
-  }
+  $signupForm.on("submit", function(event){
+    const xhrAvatar = new XMLHttpRequest();
+    xhrAvatar.open("POST","/me/upload/avatar",false);
+    let form  = new FormData();
+    let avatarFile = $avatarInput[0].files[0];
+    form.append("avatar", avatarFile);
+    xhrAvatar.send(form);
+    if(xhrAvatar.status == 200){    
+      let response = JSON.parse(xhrAvatar.responseText);
+      if(response.status === "success"){
+        $avatarPath.val(response.filename)
+      }
+      else{
+        event.preventDefault();
+      }
+    }
+    else{ 
+      event.preventDefault();
+    }
+  })
   $avatarInput.on("change", function(event){
+    let avatarReader = new FileReader();
+    avatarReader.onload = (event)=>{
+      $avatarOutput.attr("src", event.target.result);
+    }
     avatarReader.readAsDataURL(this.files[0]);
   })
 

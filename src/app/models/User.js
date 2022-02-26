@@ -21,6 +21,15 @@ module.exports = (sequelize)=>{
         this.setDataValue("passwordHash", bcryptjs.hashSync(value));
       }
     },
+    gender: {
+      type: DataTypes.STRING(1),
+      allowNull: false,
+      defaultValue: "m"
+    },
+    avatar: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
     email:{
       type:DataTypes.STRING(255),
       allowNull: false,
@@ -32,10 +41,9 @@ module.exports = (sequelize)=>{
       type: DataTypes.STRING(1000),
       allowNull: true
     },
-    phoneNumber:{
-      type: DataTypes.STRING(11),
-      allowNull: true,
-      field: "phone_number"
+    address:{
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     age: {
       type: DataTypes.INTEGER({length:3}),

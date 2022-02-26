@@ -19,21 +19,7 @@ const isExistentEmailOrUserNameOrPhone = (req, res,next)=>{
       if(user){
         return res.status(400).json({status: "failed", message: "Email is duplicate"});
       }
-      User.findOne({
-        where:{
-          phoneNumber : req.body.phoneNumber
-        }
-      })
-      .then(user=>{
-        if(user){
-          return res.status(400).json({status: "failed", message: "Phone is duplicate"});
-        }
-        next();
-      })
-      .catch(err=>{
-        res.status(500);
-      })
-
+      next();
     })
     .catch(err=>{
       res.status(500);
