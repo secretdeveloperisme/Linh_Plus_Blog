@@ -12,6 +12,15 @@ $(()=>{
   // show avatar output
   const $avatarInput = $("#avatar");
   const $avatarOutput = $("#displayAvatar");
+  // valid password and email sign up 
+  const $retypePassword = $("#retypePassword");
+  const $signupEmail= $("#email");
+  const $signupPassword= $("#signupPassword");
+  const $noticePasswordLower = $("#lower");
+  const $noticePasswordCapital = $("#capital");
+  const $noticePasswordNumber= $("#number");
+  const $noticePasswordLength= $("#length");
+  const $noticePasswordSpecial= $("#special");
   // add events
   $btnLogin.on("click",function(event){
     $loginDialogModal.removeClass("modal-lg");
@@ -27,18 +36,78 @@ $(()=>{
   $signupTab.on("click", function(event){
     $loginDialogModal.addClass("modal-lg")
   })
-  $ageInput.on("change", function(event){
+  $ageInput.on("input", function(event){
     $ageOutput.text($ageInput.val());
   })
+  const warnValidEmail = (event)=>{
+    let email  = $signupEmail.val();
+    let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+    if(emailRegex.test(email)){
+      $signupEmail.siblings(".valid-feedback").css("display", "block")
+      $signupEmail.siblings(".invalid-feedback").css("display", "none")
+    }
+    else{
+      $signupEmail.siblings(".invalid-feedback").css("display", "block")
+      $signupEmail.siblings(".valid-feedback").css("display", "none")
+    }
+  }
+  $signupEmail.on("keyup", warnValidEmail)
+  const warnValidPassword = (event)=>{
+    let password = $signupPassword.val();
+    if(password.length < 8){
+      $noticePasswordLength.addClass("invalid").removeClass("valid")
+    }
+    else{
+      $noticePasswordLength.removeClass("invalid").addClass("valid")
+    }
+    const capitalRegex = /[A-Z]/g
+    if(!capitalRegex.test(password)){
+      $noticePasswordCapital.addClass("invalid").removeClass("valid")
+    }
+    else{
+      $noticePasswordCapital.removeClass("invalid").addClass("valid")
+    }
+    const lowerRegex = /[a-z]/g
+    if(!lowerRegex.test(password)){
+      $noticePasswordLower.addClass("invalid").removeClass("valid")
+    }
+    else{
+      $noticePasswordLower.removeClass("invalid").addClass("valid")
+    }
+    const numberRegex = /[0-9]/g
+    if(!numberRegex.test(password)){
+      $noticePasswordNumber.addClass("invalid").removeClass("valid")
+    }
+    else{
+      $noticePasswordNumber.removeClass("invalid").addClass("valid")
+    }
+    const specialRegex = /\W/g
+    if(!specialRegex.test(password)){
+      $noticePasswordSpecial.addClass("invalid").removeClass("valid")
+    }
+    else{
+      $noticePasswordSpecial.removeClass("invalid").addClass("valid")
+    }
+  }
+  $signupPassword.on("keyup", warnValidPassword);
   // display avatar image
   $signupForm.on("submit", function(event){
+    // check valid form 
+    const passwordRegex = /(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if(
+      !(passwordRegex.test($signupPassword.val()) &&
+      emailRegex.test($signupEmail.val()) &&
+      $signupPassword.val() === $retypePassword.val())
+      )
+      return event.preventDefault();
     const xhrAvatar = new XMLHttpRequest();
     xhrAvatar.open("POST","/me/upload/avatar",false);
     let form  = new FormData();
     let avatarFile = $avatarInput[0].files[0];
     form.append("avatar", avatarFile);
     xhrAvatar.send(form);
-    if(xhrAvatar.status == 200){    
+      if(xhrAvatar.status == 200){    
       let response = JSON.parse(xhrAvatar.responseText);
       if(response.status === "success"){
         $avatarPath.val(response.filename)
@@ -58,5 +127,10 @@ $(()=>{
     }
     avatarReader.readAsDataURL(this.files[0]);
   })
+  const checkValidSignup = ()=>{
 
+  }
+  
+
+  
 })
