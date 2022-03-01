@@ -35,6 +35,15 @@ module.exports = (sequelize)=>{
     content: {
       type: DataTypes.TEXT,
       allowNull: false
+    },
+    StatusId : {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "statuses",
+        key: "id",
+      },
+      field: "status_id",
+      allowNull: false
     }
   },{
     sequelize,

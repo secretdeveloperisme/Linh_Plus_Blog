@@ -10,6 +10,7 @@ const Category = require("./Category")
 const PostCategory = require("./PostCategory");
 const Like = require("./Like");
 const Comment = require("./Comment");
+const Status = require("./Status");
 
 const db = {};
 const sequelize = new Sequelize(
@@ -28,14 +29,15 @@ const sequelize = new Sequelize(
     }
   }
 )
-db.User = User(sequelize);
 db.Role = Role(sequelize);
+db.User = User(sequelize);
 db.UserRole = UserRole(sequelize);
-db.Post = Post(sequelize);
-db.Tag = Tag(sequelize);
-db.PostTag = PostTag(sequelize);
+db.Status = Status(sequelize);
 db.Category = Category(sequelize);
+db.Tag = Tag(sequelize);
+db.Post = Post(sequelize);
 db.PostCategory = PostCategory(sequelize);
+db.PostTag = PostTag(sequelize);
 db.Like = Like(sequelize);
 db.Comment = Comment(sequelize);
 /* ======== association ======== */
@@ -46,7 +48,7 @@ db.User.belongsToMany(db.Role,{
 db.Role.belongsToMany(db.User, {
   through: db.UserRole
 })
-// User <---> Post
+// User <--=> Post
 db.User.hasMany(db.Post);
 db.Post.belongsTo(db.User);
 // Post <=-=> Tag
@@ -61,6 +63,9 @@ db.Tag.belongsToMany(db.Post,
     through: db.PostTag
   }
 );
+// Post <=--> Status
+db.Status.hasMany(db.Post);
+db.Post.belongsTo(db.Status);
 // Post <=-=> Category
 db.Category.belongsToMany(db.Post,{
   through: db.PostCategory
