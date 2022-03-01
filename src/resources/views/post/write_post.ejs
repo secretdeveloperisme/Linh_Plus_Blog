@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../partials/head") %>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/write_post.css">
+</head>
+
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <% if(user) {%>
+        <%- include("../partials/nav",{user:user}) %>
+          <%}else {%>
+            <%- include("../partials/nav") %>
+              <% } %>
+    </header>
+    <div class="main px-4">
+      <form action="/post/write" method="post" id="formUploadPost">
+        <div class="sidebar overflow-auto p-2">
+          <div class="mb-3" id="postImageWrapper">
+            <h4>Image</h4>
+            <input type="file" name="postImage" hidden accept="image/*" id="postImage">
+            <label class="d-flex flex-column text-center" for="postImage" style="width: fit-content;">
+              <img class="border-danger img-thumbnail post-image" id="displayPostImage" src="/images/posts/facebook-milestone-post.png"></label>
+          </div>
+          <div class="mb-3">
+            <h4 for="title">Tags</h4>
+            <div type="text" name="tags" contenteditable="true" id="tags" class="form-control tags"
+              placeholder="separate tags by space"></div>
+          </div>
+          <div class="mb-3">
+            <h4 class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#categories" aria-expanded="true">
+              Categories</h4>
+            <div class="categories collpasing show" id="categories">
+              <% if(categories){ %>
+                <% categories.forEach((value, index)=>{ %>
+                  <div class="mb-2">
+                    <input type="checkbox" class="form-check-input" name="category" id="category<%= value.id %>" value="<%= value.id %> ">
+                    <label for="category<%= value.id %>" class="form-check-label"><%= value.name %> </label>
+                  </div>
+                <% }) %>
+              <% } %> 
+            </div>
+          </div>
+          <div class="status ">
+            <h4>Status</h4>
+            <div class="d-flex">
+              <div class="mb-2">
+                <input type="radio" class="btn-check" name="status" id="status0" value="public" checked>
+                <label for="status0" class="btn btn-outline-success">Public</label>
+              </div>
+              <div class="ms-2">
+                <input type="radio" class="btn-check" name="status" value="private" id="status1">
+                <label for="status1" class="btn btn-outline-danger">Private</label>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="content">
+      <div class="p-2">
+        <div class="mb-3">
+          <label for="title">
+            <h4>Title: </h4>
+          </label>
+          <input type="text" name="title" id="title" class="form-control" required placeholder="input your title ...">
+        </div>
+        <div class="mb-3">
+          <label for="description">
+            <h4>Description: </h4>
+          </label>
+          <input type="text" name="description" id="description" class="form-control" placeholder="input your description ...">
+        </div>
+        <div class="mb-3 ">
+          <h4>Content:</h4>
+          <div class="post-content bg-white">
+            <div id="toolbar" class="ql-toolbar ql-snow">
+              <span class="ql-formats">
+                <select class="ql-font"></select>
+                <select class="ql-size"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-script" value="sub"></button>
+                <button class="ql-script" value="super"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-header" value="1"></button>
+                <button class="ql-header" value="2"></button>
+                <button class="ql-blockquote"></button>
+                <button class="ql-code-block"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-direction" value="rtl"></button>
+                <select class="ql-align"></select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+                <button class="ql-video"></button>
+                <button class="ql-formula"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-clean"></button>
+              </span>
+            </div>
+            <div id="editor"></div>
+          </div>
+          <button class="btn btn-primary mt-5" id="btnUpload">Upload</button>
+        </div>
+        <footer>
+          <%- include("../partials/footer.ejs") %>
+        </footer>
+      </div>
+    </div>
+    </form>
+  </div>
+  <ul class="nav-mobile list-style-none">
+    <li class="top-link">
+      <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </div>
+    </li>
+  </ul>
+  </div>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script src="/js/WritePost.js"></script>
+</body>
+
+</html>

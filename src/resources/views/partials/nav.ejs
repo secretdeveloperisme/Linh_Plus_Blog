@@ -16,18 +16,18 @@
         <% if(user) { %>
           <li class="nav-item dropdown ms-lg-auto">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="nav-user__avatar rounded-circle" style="background-image: url('/images/avatars/hlp.jpg');">  
+            <div class="nav-user__avatar rounded-circle" style="background-image: url('<%= user.avatar %>');">  
             </div>
             <div class="nav-user__username">
              <%= user.username %> 
             </div>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Viết Bài</a></li>
-              <li><a class="dropdown-item" href="#">Bài viết của tôi</a></li>
-              <li><a class="dropdown-item" href="#">Thông tin của tôi</a></li>
+              <li><a class="dropdown-item" href="/post/write">Viết Bài</a></li>
+              <li><a class="dropdown-item" href="/me/posts">Bài viết của tôi</a></li>
+              <li><a class="dropdown-item" href="/me/info">Thông tin của tôi</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><a class="dropdown-item" href="#" id="btnLogout">Logout</a></li>
             </ul>
           </li> 
         <% } else {%>

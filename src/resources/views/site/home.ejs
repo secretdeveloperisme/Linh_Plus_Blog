@@ -8,7 +8,11 @@
 <body>
   <div class="app">
     <header class="sticky-top">
-      <%- include("../partials/nav",{user:null}) %>
+      <% if(user) {%> 
+      <%- include("../partials/nav",{user:user}) %>
+      <%}else {%> 
+      <%- include("../partials/nav") %>
+      <% } %> 
     </header>
     <div class="main px-4">
       <div class="sidebar overflow-auto pt-2 pb-5">

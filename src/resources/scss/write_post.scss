@@ -1,0 +1,15 @@
+.post-image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tags{
+  font-size: 0.9rem;
+}
+.tags:empty::before{
+  font-size: 0.7rem;
+  content: attr(placeholder);
+}
+.tags:empty:focus:before{
+  content: ""
+} 

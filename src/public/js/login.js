@@ -127,10 +127,4 @@ $(()=>{
     }
     avatarReader.readAsDataURL(this.files[0]);
   })
-  const checkValidSignup = ()=>{
-
-  }
-  
-
-  
 })
