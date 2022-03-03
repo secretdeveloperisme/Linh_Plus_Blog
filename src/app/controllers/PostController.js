@@ -1,5 +1,7 @@
 const db = require("../models");
+const {Op} = require("sequelize");
 const fs = require('fs');
+const slugify = require("slugify");
 class PostController{
   // GET: /post/write/
   writePost(req, res){
@@ -20,6 +22,63 @@ class PostController{
     .catch(err=>{
       res.render("site/home", {user:null})
     })
+  }
+  async uploadPost(req, res){
+    console.log(req.body);
+    if(req.body.title && req.body.description && req.body.content && req.body.status && req.userId){
+      try{
+        db.sequelize.transaction(async t=>{
+          let status = await db.Status.findOne({
+            where: {
+              name: req.body.status
+            }
+          })
+          let post = db.Post.build({
+            title: req.body.title,
+            description : req.body.description,
+            content: req.body.content,
+            slug : slugify(req.body.title,"_"),
+            image : req.body.imagePath,
+            UserId: req.userId,
+            StatusId : status.id
+          });
+          try {
+            await post.save({transaction: t})
+          } catch (error) {
+            console.log(error);
+          }
+          let categories = db.Category.bulkBuild(req.body.categories.map((value,index)=>{
+            return {id: value};
+          }));
+         
+          await post.setCategories(categories,{ transaction: t}).catch(err=>{
+            console.log(err);
+          })
+         
+          // insert tags 
+          for(let value of req.body.tags){
+            try{
+              let [tag, isFound] = await db.Tag.findOrCreate({
+                where: {
+                  name: value
+                }
+              });
+              let tagDB = await post.addTags(tag,{transaction: t});
+              console.log(tagDB);
+            }
+            catch(err){
+              console.log(err);
+            }
+          }
+        })
+        res.status(200).json({status:"success", message:"upload post successfully"})
+      }
+      catch(err){
+        console.log(err);
+        res.status(500).json({status:"failed", message:"upload post failed"})
+      }
+    }
+    
   }
   // GET: /post/edit/:slug
   editPost(req, res){

@@ -24,6 +24,7 @@
           <div class="mb-3" id="postImageWrapper">
             <h4>Image</h4>
             <input type="file" name="postImage" hidden accept="image/*" id="postImage">
+            <input type="hidden" name="imagePath" id="imagePath">
             <label class="d-flex flex-column text-center" for="postImage" style="width: fit-content;">
               <img class="border-danger img-thumbnail post-image" id="displayPostImage" src="/images/posts/facebook-milestone-post.png"></label>
           </div>
@@ -39,7 +40,7 @@
               <% if(categories){ %>
                 <% categories.forEach((value, index)=>{ %>
                   <div class="mb-2">
-                    <input type="checkbox" class="form-check-input" name="category" id="category<%= value.id %>" value="<%= value.id %> ">
+                    <input type="checkbox" class="form-check-input" name="categories" id="category<%= value.id %>" value="<%= value.id %> ">
                     <label for="category<%= value.id %>" class="form-check-label"><%= value.name %> </label>
                   </div>
                 <% }) %>
@@ -124,6 +125,7 @@
               </span>
             </div>
             <div id="editor"></div>
+            <input type="hidden" name="content" id="content">
           </div>
           <button class="btn btn-primary mt-5" id="btnUpload">Upload</button>
         </div>

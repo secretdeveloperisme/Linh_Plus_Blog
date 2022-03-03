@@ -30,6 +30,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage})
 router.get("/write",verifyToken,postController.writePost);
+router.post("/write",verifyToken, postController.uploadPost);
 router.get("/edit/:slug", postController.editPost);
 router.post("/image", [verifyToken, upload.single("image")],postController.uploadImage);
 

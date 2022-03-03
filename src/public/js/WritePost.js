@@ -4,6 +4,8 @@ $(()=>{
   const $displayPostImage = $("#displayPostImage");
   const $tags = $("#tags");
   const $formUploadPost =  $("#formUploadPost");
+  const $imagePath = $("#imagePath");
+  const $content = $("#content");
   function imageHandler() {
     let input = document.createElement('input');
     input.setAttribute('type', 'file');
@@ -102,6 +104,7 @@ $(()=>{
       }
     }
   })
+  console.log($imagePath, $content);
   $formUploadPost.on("submit",(event)=>{
     let postAvatar = $postImage[0].files[0];
     let avatarPostForm = new FormData();
@@ -113,17 +116,8 @@ $(()=>{
       let res = JSON.parse(xhrPostImage.responseText);
       console.log(res);
       if(res.status === "success"){
-        let imagePathInput = document.createElement("input");
-        $(imagePathInput).attr("type", "hidden");
-        $(imagePathInput).attr("name", "imagePath");
-        $(imagePathInput).attr("value", res.imagePath);
-        $($postImageWrapper).append($(imagePathInput));
-        let contentInput = document.createElement("input");
-        $(contentInput).attr("type", "hidden");
-        $(contentInput).attr("name", "content");
-        $(contentInput).attr("value", editor.root.innerHTML);
-        $($formUploadPost).append($(contentInput));
-        console.log("success");
+        $imagePath.val(res.imagePath);
+        $content.val(editor.root.innerHTML);
       }
       else{
         event.preventDefault();

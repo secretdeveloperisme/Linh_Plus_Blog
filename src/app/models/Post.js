@@ -22,6 +22,8 @@ module.exports = (sequelize)=>{
     },
     slug:{
       type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
       allowNull: false
     },
     description: {
