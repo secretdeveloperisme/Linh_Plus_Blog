@@ -1,35 +1,67 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require("../config/auth.config");
 const db = require("../models");
-class SiteController{
-  index(req, res){
+class SiteController {
+  // GET: /
+  index(req, res) {
+    let data = {
+      posts: null,
+      user: null
+    };
     let token = req.cookies["accessToken"];
-    if(token)
-      jwt.verify(token, authConfig.secretKey, (err, decode)=>{
-        console.log(decode);
-        let userId = decode.userId;
-        if(err){
-          res.render("site/home",{user: null});
-        }
-        db.User.findOne({
-          where: {
-            id : userId
-          }
-        })
-        .then(user=>{
-          if(user)
-            res.render("site/home", {user})
-          else{
-            res.render("site/home",{user: null});
-          }
-        })
-        .catch(err=>{
-          res.render("site/home",{user: null});
-        })
+    db.Post.findAll({
+      attributes: "",
+      include: [{
+        model: db.User,
+        attributes: ["username"]
+      }, {
+        model: db.Category,
+        attributes: ["id", "name"]
+      }, {
+        model: db.Tag,
+        attributes: ["id", "name"]
+      }],
+      order: [["createdAt", "DESC"]]
+    })
+      .then(posts => {
+        data.posts = posts;
+        db.Category.findAll()
+          .then(categories => {
+            data.categories = categories;
+            db.Tag.findAll()
+              .then(tags => {
+                data.tags = tags;
+                if (token)
+                  jwt.verify(token, authConfig.secretKey, (err, decode) => {
+                    let userId = decode.userId;
+                    if (err) {
+                      res.render("site/home", data);
+                    }
+                    db.User.findOne({
+                      where: {
+                        id: userId
+                      }
+                    })
+                      .then(user => {
+                        if (user) {
+                          data.user = user;
+                          res.render("site/home", data)
+
+                        }
+                        else {
+                          res.render("site/home", data);
+                        }
+                      })
+                      .catch(err => {
+                        res.render("site/home", data);
+                      })
+                  })
+                else {
+                  res.render("site/home", data);
+                }
+              })
+          })
       })
-    else{
-      res.render("site/home",{user: null});
-    }
   }
 }
 module.exports = new SiteController();

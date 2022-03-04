@@ -47,7 +47,7 @@ class PostController{
           } catch (error) {
             console.log(error);
           }
-          let categories = db.Category.bulkBuild(req.body.categories.map((value,index)=>{
+          let categories = db.Category.bulkBuild([...req.body.categories].map((value,index)=>{
             return {id: value};
           }));
          

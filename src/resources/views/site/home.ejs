@@ -18,7 +18,7 @@
       <div class="sidebar overflow-auto pt-2 pb-5">
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
-            <a href="#" class="nav-link link-dark" aria-current="page">
+            <a href="/" class="nav-link link-dark" aria-current="page">
               <i class="fa fa-home" aria-hidden="true"></i>
               Home
             </a>
@@ -29,9 +29,11 @@
               Category
             </a>
             <ul id="categoryList" class="collapse show mr-2 list-group list-group-flush">
-              <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">book</a></li>
-              <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">programing</a></li>
-              <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="">knowledge</a></li>
+              <% if(categories){ %>
+                <% categories.forEach(category=>{ %>
+                  <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="/search/category/<%= category.id %>"><%= category.name %> </a></li>
+              <%  }) %>
+              <% } %>
             </ul>
           </li>
           <li class="nav-item">
@@ -40,9 +42,11 @@
               Tag
             </a>
             <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
-              <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Active item</a></li>
-              <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Item</a></li>
-              <li class="list-group-item list-group-item-action"><a href="" class="text-decoration-none">Disabled item</a></li>
+              <% if(tags){ %>
+                <% tags.forEach(tag=>{ %>
+                  <li class="list-group-item list-group-item-action"><a href="/search/tag/<%= tag.id %>" class="text-decoration-none"><%= tag.name %></a></li>
+              <%  }) %>
+              <% } %>
             </ul>
           </li>
           <li class="nav-connect">
@@ -65,84 +69,37 @@
             </div>
           </div>
           <div class="post-list row g-3">
-            <div class="col-xl-12"> 
-              <div class="post-item container-fluid d-flex shadow rounded py-2">
-                <div class="post-item-thumbnail me-3">
-                  <a href="" class="text-decoration-none rounded" style="background-image: url('/images/posts/facebook-milestone-post.png');">
-                  </a>
-                </div>
-                <div class="post-content">
-                  <div class="post-tag">
-                    <a href="" class="tag-link">#facebook</a>
-                    <a href="" class="tag-link">#programming</a>
-                  </div>
-                  <h6 class="post-title">
-                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
-                  </h6>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+            <% if(posts){ %> 
+              <% posts.forEach((post,index)=>{ %>
+                <div class="col-xl-12"> 
+                  <div class="post-item container-fluid d-flex shadow rounded py-2">
+                    <div class="post-item-thumbnail me-3">
+                      <a href="/post/<%= post.slug %>" class="text-decoration-none rounded" style="background-image: url('<%= post.image %>');">
+                      </a>
                     </div>
-                    <div class="post-published">
-                      02/18/2022
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-12"> 
-              <div class="post-item container-fluid d-flex shadow rounded py-2">
-                <div class="post-item-thumbnail me-3">
-                  <a href="" class="text-decoration-none rounded" style="background-image: url('/images/posts/facebook-milestone-post.png');">
-                  </a>
-                </div>
-                <div class="post-content">
-                  <div class="post-tag">
-                    <a href="" class="tag-link">#facebook</a>
-                    <a href="" class="tag-link">#programming</a>
-                  </div>
-                  <h6 class="post-title">
-                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
-                  </h6>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
-                    </div>
-                    <div class="post-published">
-                      02/18/2022
+                    <div class="post-content">
+                      <div class="post-tag">
+                        <% post.Tags.forEach((tag,index)=>{ %> 
+                          <a href="/search/tag/<%= tag.id %>" class="tag-link">#<%= tag.name %> </a>
+                        <% }) %>
+                      </div>
+                      <h6 class="post-title">
+                        <a href="/post/<%= post.slug %>" class="text-decoration-none text-dark"><%= post.title %> </a>
+                      </h6>
+                      <div class="post-info ">
+                        <div class="post-author">
+                          <a href="/user/<%= post.User.username%>" class="text-decoration-none text-secondary"><%= post.User.username %> </a>
+                        </div>
+                        <div class="post-published">
+                          <%  let date = new Date(post.createdAt)  %>
+                          <%= `${date.getMonth()}/${date.getDate()}/${date.getFullYear()},${date.getHours()}:${date.getMinutes()}` %> 
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
                 </div>
-              </div>
-            </div>
-            <div class="col-xl-12"> 
-              <div class="post-item container-fluid d-flex shadow rounded py-2">
-                <div class="post-item-thumbnail me-3">
-                  <a href="" class="text-decoration-none rounded" style="background-image: url('/images/posts/facebook-milestone-post.png');">
-                  </a>
-                </div>
-                <div class="post-content">
-                  <div class="post-tag">
-                    <a href="" class="tag-link">#facebook</a>
-                    <a href="" class="tag-link">#programming</a>
-                  </div>
-                  <h6 class="post-title">
-                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
-                  </h6>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
-                    </div>
-                    <div class="post-published">
-                      02/18/2022
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
+              <% }) %> 
+            <% } %> 
           </div>
           <div class="btn-more-wrapper my-2 d-flex">
             <button type="button" class="btn btn-outline-primary m-auto">Thêm</button>

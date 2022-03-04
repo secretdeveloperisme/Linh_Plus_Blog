@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const authConfig = require("../config/auth.config");
 const User = db.User;
 const Role = db.Role;
+const siteController = require("../controllers/SiteController");
 class AuthController {
   async login(req, res){
     try{
@@ -23,7 +24,7 @@ class AuthController {
           httpOnly: true,
           maxAge: 24*60*60*1000
         });
-        res.render("site/home", {user})
+        siteController.index(req,res);
       }
       else{
         res.status(400).json({status:"failed", message:"Invalid password"})
