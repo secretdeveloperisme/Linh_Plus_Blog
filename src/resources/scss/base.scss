@@ -1,3 +1,10 @@
+::-webkit-scrollbar{
+  width: 8px;
+}
+::-webkit-scrollbar-thumb{
+  border-radius: 4px;
+  background-color: #0d6efd;
+}
 .no-border{
   border: 0px ;
 }
@@ -42,4 +49,19 @@
 }
 .btn-toggle[aria-expanded="true"]::before {
   transform: rotate(90deg);
+}
+@mixin thumbnailCircle {
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
+.icon-64{
+  width: 64px;
+  height: 64px;
+  @include thumbnailCircle;
+}
+.icon-32{
+  width: 32px;
+  height: 32px;
+  @include thumbnailCircle;
 }

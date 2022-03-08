@@ -33,5 +33,6 @@ router.get("/write",verifyToken,postController.writePost);
 router.post("/write",verifyToken, postController.uploadPost);
 router.get("/edit/:slug", postController.editPost);
 router.post("/image", [verifyToken, upload.single("image")],postController.uploadImage);
+router.get("/:slug",verifyToken ,postController.getPost);
 
 module.exports = router;

@@ -1,7 +1,15 @@
+$reactionLikeColor: rgb(220,38,38);
+$reactionLikeColorBG: rgba(220,38,38,0.1);
+$reactionDislikeColor: rgb(5, 150, 105);
+$reactionDislikeColorBG: rgba(5, 150, 105,0.1);
+$reactionSaveColor: rgb(79, 70, 229);
+$reactionSaveColorBG: rgba(79, 70, 229,0.1);
+
 $primaryColor : #ff0000;
 $iconWidth: 64px;
 $avatarSize : 32px;
 $sidebarWidth: 250px;
+$sidebarShortWidth: 120px;
 $navbarHeight: 90px;
 $backgroundColor: #fafafc;
 $postListThumbnailSize: 150px;

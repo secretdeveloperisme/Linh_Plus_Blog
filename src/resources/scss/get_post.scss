@@ -1,0 +1,55 @@
+@import 'variables';
+
+.sidebar{
+  width: $sidebarShortWidth;
+  overflow: visible;
+}
+.content{
+  padding: 0px 5px 0 $sidebarShortWidth;
+}
+.connect-me{
+  background-color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: $sidebarShortWidth;
+} 
+#btnLike:hover,#btnLike.active{
+  color: $reactionLikeColor;
+  background-color: $reactionLikeColorBG;
+}
+#btnDislike:hover,#btnDislike.active{
+  color: $reactionDislikeColor;
+  background-color: $reactionDislikeColorBG;
+}
+#btnBookmark:hover,#btnBookmark.active{
+  color: $reactionSaveColor;
+  background-color: $reactionSaveColorBG;
+}
+// content post 
+.post-avatar{
+  width: 100%;
+  padding-top: 42%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.post-author__avatar{
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.post-tag{
+  padding: 3px 5px;
+  color: blue;
+}
+.post-tag:hover{
+  cursor: pointer;
+  text-decoration: underline;
+  background-color: rgba($color: #0000ff, $alpha: 0.1);
+  border-radius: 2px;
+}
+// author aside 
+.author{
+  position: sticky;
+  top: $navbarHeight;
+}
