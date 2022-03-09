@@ -1,16 +1,16 @@
 const {DataTypes, Model} = require('sequelize');
 
 module.exports = (sequelize)=>{
-  class Like extends Model{};
-  Like.init({
-    PostId: {
+  class CommentLikes extends Model{};
+  CommentLikes.init({
+    CommentId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: {
-        model: "posts",
+        model: "comments",
         key: "id"
       },
-      field : "post_id"
+      field: "comment_id"
     },
     UserId: {
       type: DataTypes.INTEGER,
@@ -19,7 +19,7 @@ module.exports = (sequelize)=>{
         model: "users",
         key: "id"
       },
-      field: "user_id"
+      field : "user_id"
     },
     TypeLike: {
       type: DataTypes.STRING(30),
@@ -28,7 +28,8 @@ module.exports = (sequelize)=>{
     }
   },{
     sequelize,
-    timestamps: false
+    timestamps: false,
+    tableName: "comment_likes"
   })
-  return Like;
+  return CommentLikes;
 }

@@ -1,6 +1,7 @@
 const databaseConfig = require("../config/db.config");
 const Sequelize = require("sequelize");
 const User = require("./User");
+const FollowUser = require("./FollowUser");
 const Role = require("./Role");
 const UserRole = require("./UserRole");
 const Post = require("./Post");
@@ -10,6 +11,7 @@ const Category = require("./Category")
 const PostCategory = require("./PostCategory");
 const Like = require("./Like");
 const Comment = require("./Comment");
+const CommentLike = require("./CommentLike");
 const Status = require("./Status");
 
 const db = {};
@@ -31,6 +33,7 @@ const sequelize = new Sequelize(
 )
 db.Role = Role(sequelize);
 db.User = User(sequelize);
+db.FollowUser = FollowUser(sequelize);
 db.UserRole = UserRole(sequelize);
 db.Status = Status(sequelize);
 db.Category = Category(sequelize);
@@ -40,6 +43,7 @@ db.PostCategory = PostCategory(sequelize);
 db.PostTag = PostTag(sequelize);
 db.Like = Like(sequelize);
 db.Comment = Comment(sequelize);
+db.CommentLike = CommentLike(sequelize);
 /* ======== association ======== */
 // User <=-=> Role
 db.User.belongsToMany(db.Role,{
@@ -51,6 +55,15 @@ db.Role.belongsToMany(db.User, {
 // User <--=> Post
 db.User.hasMany(db.Post);
 db.Post.belongsTo(db.User);
+// User <=-=> User : user follows user 
+db.User.belongsToMany(db.User,{
+  through: db.FollowUser,
+  as: "users"
+})
+db.User.belongsToMany(db.User,{
+  through: db.FollowUser,
+  as: "follower"
+})
 // Post <=-=> Tag
 db.Post.belongsToMany(db.Tag,
   {
@@ -91,5 +104,12 @@ db.Comment.hasOne(db.Comment);
 db.Comment.belongsTo(db.Comment);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+// Comment <=-=> User : user likes comment
+db.Comment.belongsToMany(db.User,{
+  through: db.CommentLike
+})
+db.User.belongsToMany(db.Comment,{
+  through: db.CommentLike
+})
 
 module.exports = db;
