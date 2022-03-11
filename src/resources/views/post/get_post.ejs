@@ -23,13 +23,25 @@
       <div class="sidebar pt-2 pb-5">
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="text-center">
-            <button class="btn rounded-circle" id="btnLike"><i class="far fa-heart" aria-hidden="true"></i></button>
-            <div id="amountOfLike">7</div>
+            <button class="btn rounded-circle 
+            <% if(like){ %>
+              <% if(like.TypeLike == "like"){ %>
+                <%= "active" %>  
+              <% } %> 
+            <% } %> 
+            " data-post-id="<%= post.id %>" id="btnLike"><i class="far fa-heart" aria-hidden="true"></i></button>
+            <div id="amountOfLike"><%= amountOfLikes %></div>
           </li>
           <li class="text-center">
-            <button class="btn rounded-circle" id="btnDislike"><i class="fas fa-heart-broken"
+            <button class="btn rounded-circle 
+            <% if(like){ %>
+              <% if(like.TypeLike == "dislike"){ %>
+                <%= "active" %>  
+              <% } %> 
+            <% } %> 
+             " id="btnDislike" data-post-id="<%= post.id %>"><i class="fas fa-heart-broken"
                 aria-hidden="true"></i></button>
-            <div id="amountOfDislike">7</div>
+            <div id="amountOfDislike"><%= amountOfDisLikes %></div>
           </li>
           <li class="text-center">
             <button class="btn rounded-circle" id="btnBookmark"><i class="far fa-bookmark"
@@ -58,107 +70,33 @@
         </ul>
       </div>
       <div class="content row mt-3">
-        <div class="posts bg-white col-xl-9">
+        <% if(post) {%> 
+        <div class="post bg-white col-xl-9">
           <div class="post-header my-2">
             <div class="post-avatar rounded"
-              style="background-image: url('/images/posts/1/Luu_Diec_Phi_Co_Long_212022T194333.jpg')"></div>
+              style="background-image: url('<%= post.image %>')"></div>
             <div class="post-author px-3 d-flex align-items-center my-2">
               <div class="post-author__avatar rounded-circle icon-64"
-                style="background-image: url('/images/avatars/hlp.jpg');">
+                style="background-image: url('<%= post.User.avatar %>');">
               </div>
               <div class="post-author-info  ms-3">
-                <h5 class="post-author__name">hoang Linh</h5>
-                <div class="post-createdAt">Post At <span>03/06/2022</span></div>
+                <h5 class="post-author__name"><%= post.User.username %> </h5>
+                <div class="post-createdAt">Post At <span><%= post.createdAt %></span></div>
               </div>
             </div>
             <div class="post-main">
               <h1 class="post-main-title">
-                Important Javascript functions you have to know to be a better developer
+                <%= post.title %> 
               </h1>
+              <h5 class="text-secondary"><%= post.description %></h5>
               <div class="post-main-tags d-flex my-3">
-                <div class="post-tag">#post tag1</div>
-                <div class="post-tag">#post tag2</div>
-                <div class="post-tag">#post tag3</div>
-                <div class="post-tag">#post tag4</div>
+                <% post.Tags.forEach(tag=>{ %>
+                  <a class="post-tag" href="/search/tag/<%= tag.id %>">#<%= tag.name %></a>
+                <% }) %> 
               </div>
               <div class="ql-snow">
                 <div class="post-content ql-editor">
-                  <h1 class="ql-align-justify">Learn JavaScript Tutorial</h1>
-                  <p class="ql-align-justify"><span style="color: rgb(51, 51, 51);"><img
-                        src="https://static.javatpoint.com/images/javascript/javascript_logo.png"
-                        alt="JavaScript Tutorial" height="200" width="200"></span>Our&nbsp;<strong>JavaScript
-                      Tutorial</strong>&nbsp;is designed for beginners and professionals both. JavaScript is used to
-                    create client-side dynamic pages.</p>
-                  <p class="ql-align-justify">JavaScript is&nbsp;<em>an object-based scripting language</em>&nbsp;which
-                    is lightweight and cross-platform.</p>
-                  <p class="ql-align-justify">JavaScript is not a compiled language, but it is a translated language.
-                    The JavaScript Translator (embedded in the browser) is responsible for translating the JavaScript
-                    code for the web browser.</p>
-                  <h2 class="ql-align-justify">What is JavaScript</h2>
-                  <p class="ql-align-justify">JavaScript (js) is a light-weight object-oriented programming language
-                    which is used by several websites for scripting the webpages. It is an interpreted, full-fledged
-                    programming language that enables dynamic interactivity on websites when applied to an HTML
-                    document. It was introduced in the year 1995 for adding programs to the webpages in the Netscape
-                    Navigator browser. Since then, it has been adopted by all other graphical web browsers. With
-                    JavaScript, users can build modern web applications to interact directly without reloading the page
-                    every time. The traditional website uses js to provide several forms of interactivity and
-                    simplicity.</p>
-                  <p class="ql-align-center"><br></p>
-                  <p class="ql-align-justify">Although, JavaScript has no connectivity with Java programming language.
-                    The name was suggested and provided in the times when Java was gaining popularity in the market. In
-                    addition to web browsers, databases such as CouchDB and MongoDB uses JavaScript as their scripting
-                    and query language.</p>
-                  <h2 class="ql-align-justify">Features of JavaScript</h2>
-                  <p class="ql-align-justify">There are following features of JavaScript:</p>
-                  <ol>
-                    <li class="ql-align-justify">All popular web browsers support JavaScript as they provide built-in
-                      execution environments.</li>
-                    <li class="ql-align-justify">JavaScript follows the syntax and structure of the C programming
-                      language. Thus, it is a structured programming language.</li>
-                    <li class="ql-align-justify">JavaScript is a weakly typed language, where certain types are
-                      implicitly cast (depending on the operation).</li>
-                    <li class="ql-align-justify">JavaScript is an object-oriented programming language that uses
-                      prototypes rather than using classes for inheritance.</li>
-                    <li class="ql-align-justify">It is a light-weighted and interpreted language.</li>
-                    <li class="ql-align-justify">It is a case-sensitive language.</li>
-                    <li class="ql-align-justify">JavaScript is supportable in several operating systems including,
-                      Windows, macOS, etc.</li>
-                    <li class="ql-align-justify">It provides good control to the users over the web browsers.</li>
-                  </ol>
-                  <h2 class="ql-align-justify">History of JavaScript</h2>
-                  <p class="ql-align-justify">In 1993,&nbsp;<strong>Mosaic</strong>, the first popular web browser, came
-                    into existence. In the&nbsp;<strong>year 1994</strong>,&nbsp;<strong>Netscape</strong>&nbsp;was
-                    founded by&nbsp;<strong>Marc Andreessen</strong>. He realized that the web needed to become more
-                    dynamic. Thus, a ''glue language'' was believed to be provided to HTML to make web designing easy
-                    for designers and part-time programmers. Consequently, in 1995, the company
-                    recruited&nbsp;<strong>Brendan Eich</strong>&nbsp;intending to implement and embed Scheme
-                    programming language to the browser. But, before Brendan could start, the company merged
-                    with&nbsp;<strong>Sun Microsystems</strong>&nbsp;for adding Java into its Navigator so that it could
-                    compete with Microsoft over the web technologies and platforms. Now, two languages were there: Java
-                    and the scripting language. Further, Netscape decided to give a similar name to the scripting
-                    language as Java''s. It led to ''Javascript''. Finally, in May 1995, Marc Andreessen coined the
-                    first code of Javascript named ''<strong>Mocha</strong>''. Later, the marketing team replaced the
-                    name with ''<strong>LiveScript</strong>''. But, due to trademark reasons and certain other reasons,
-                    in December 1995, the language was finally renamed to ''JavaScript''. From then, JavaScript came
-                    into existence.</p>
-                  <h2 class="ql-align-justify">Application of JavaScript</h2>
-                  <p class="ql-align-justify">JavaScript is used to create interactive websites. It is mainly used for:
-                  </p>
-                  <ul>
-                    <li class="ql-align-justify">Client-side validation,</li>
-                    <li class="ql-align-justify">Dynamic drop-down menus,</li>
-                    <li class="ql-align-justify">Displaying date and time,</li>
-                    <li class="ql-align-justify">Displaying pop-up windows and dialog boxes (like an alert dialog box,
-                      confirm dialog box and prompt dialog box),</li>
-                    <li class="ql-align-justify">Displaying clocks etc.</li>
-                  </ul>
-                  <h3 class="ql-align-justify">JavaScript Example</h3>
-                  <p class="ql-align-justify"><br></p>
-                  <pre class="ql-syntax ql-align-justify" spellcheck="false">&lt;script&gt;&nbsp;&nbsp;
-document.write("Hello&nbsp;JavaScript&nbsp;by&nbsp;JavaScript");&nbsp;&nbsp;
-&lt;/script&gt;&nbsp;&nbsp;
-</pre>
-                  <p><br></p>
+                  <%- post.content %>
                 </div>
               </div>
             </div>
@@ -257,29 +195,30 @@ document.write("Hello&nbsp;JavaScript&nbsp;by&nbsp;JavaScript");&nbsp;&nbsp;
             </div>
           </div>
         </div>
+        <% } %> 
         <div class="col-xl-3">
           <div class="author bg-white p-3">
             <div class="author-header d-flex align-items-center mb-3">
-              <div class="icon-64 author__avatar" style="background-image: url('/images/avatars/hlp.jpg');"></div>
-              <h5 class="author__name ms-3">hoang linh</h5>
+              <div class="icon-64 author__avatar" style="background-image: url('<%= post.User.avatar %>');"></div>
+              <h5 class="author__name ms-3"><%= post.User.username %></h5>
             </div>
-            <button class="btn btn-primary w-100 ">Follow</button>
-            <div class="author-biography py-2 text-center">sink deeply into knowledge</div>
+            <button class="btn btn-primary w-100" data-action="follow" data-userId="<%= post.User.id %>">Follow</button>
+            <div class="author-biography py-2 text-center"><%= post.User.biography %></div>
             <div class="author-email">
               <h6>Email</h6>
-              <span>linh072217@gmail.com</span>
+              <span><%= post.User.email %></span>
             </div>
             <div class="author-gender">
               <h6>Gender</h6>
-              <span>male</span>
+              <span><%= (post.User.gender === 'm')?"Male":"Female" %></span>
             </div>
             <div class="author-age">
               <h6>Age</h6>
-              <span>22</span>
+              <span><%= post.User.age %></span>
             </div>
             <div class="author-gender">
               <h6>Address</h6>
-              <span>Giồng Riềng, Kiên Giang</span>
+              <span><%= post.User.address %></span>
             </div>
           </div>
         </div>

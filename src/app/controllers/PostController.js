@@ -1,5 +1,5 @@
 const db = require("../models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const fs = require('fs');
 const slugify = require("slugify");
 // const jwt = require("jsonwebtoken");
@@ -9,26 +9,56 @@ class PostController {
   async getPost(req, res) {
     try {
       let data = {
-        posts: null,
+        post: null,
         user: null,
         categories : null,
         tags: null,
+        like : null
       };
-      // let post = await db.Post.findOne({
-      //   attributes: "",
-      //   include: [{
-      //     model: db.User,
-      //   }, {
-      //     model: db.Category,
-      //     attributes: ["id", "name"]
-      //   }, {
-      //     model: db.Tag,
-      //     attributes: ["id", "name"]
-      //   }],
-      //   order: [["createdAt", "DESC"]]
-      // })
+      data.user = await db.User.findOne({
+        where: {
+          id:req.userId
+        }
+      }).catch(err=>{console.log(err)})
+      data.post = await db.Post.findOne({
+        where: {
+          slug: req.params.slug
+        },
+        include: [{
+          model: db.User,
+        }, {
+          model: db.Category,
+          attributes: ["id", "name"]
+        }, {
+          model: db.Tag,
+          attributes: ["id", "name"]
+        }],
+      }).catch(err=>{console.log(err);});
+      console.log(data.post);
+      if(data.post != null){
+        data.like = await db.Like.findOne({
+          where: {
+            PostId : data.post.id,
+            UserId : req.userId
+          }
+        }).catch(err=>{throw err});
+        data.amountOfLikes = await db.Like.count({
+          where: {
+            PostId : data.post.id,
+            TypeLike : "like" 
+          }
+        });
+        data.amountOfDisLikes = await db.Like.count({
+          where: {
+            PostId : data.post.id,
+            TypeLike : "dislike" 
+          }
+        });
+
+      }
       res.render("post/get_post", data)
     } catch (error) {
+      console.log(error);
       res.status(404).json({status:"failed", message:"you have an err"});
     }
   }
@@ -57,6 +87,7 @@ class PostController {
     console.log(req.body);
     if (req.body.title && req.body.description && req.body.content && req.body.status && req.userId) {
       try {
+        console.log(req.body);
         db.sequelize.transaction(async t => {
           let status = await db.Status.findOne({
             where: {
@@ -72,15 +103,13 @@ class PostController {
             UserId: req.userId,
             StatusId: status.id
           });
-          try {
-            await post.save({ transaction: t })
-          } catch (error) {
-            console.log(error);
-          }
+          post = await post.save({ transaction: t }).catch(err=>{
+            console.log(err);
+          })
           let categories = db.Category.bulkBuild([...req.body.categories].map((value, index) => {
             return { id: value };
           }));
-
+          // console.log(categories);
           await post.setCategories(categories, { transaction: t }).catch(err => {
             console.log(err);
           })
@@ -94,10 +123,9 @@ class PostController {
                 }
               });
               let tagDB = await post.addTags(tag, { transaction: t });
-              console.log(tagDB);
             }
             catch (err) {
-              console.log(err);
+              throw err;
             }
           }
         })

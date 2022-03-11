@@ -40,7 +40,7 @@
               <% if(categories){ %>
                 <% categories.forEach((value, index)=>{ %>
                   <div class="mb-2">
-                    <input type="checkbox" class="form-check-input" name="categories" id="category<%= value.id %>" value="<%= value.id %> ">
+                    <input type="checkbox" class="form-check-input" name="categories" id="category<%= value.id %>" value="<%= value.id %>">
                     <label for="category<%= value.id %>" class="form-check-label"><%= value.name %> </label>
                   </div>
                 <% }) %>

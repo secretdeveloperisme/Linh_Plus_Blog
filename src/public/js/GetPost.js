@@ -1,4 +1,12 @@
 $(()=>{
+  const $commentReplyBtns = $(".comment-reply-btn");
+  const $btnLike = $("#btnLike");
+  const $btnDisLike = $("#btnDislike");
+  const $btnBookmark = $("#btnBookmark");
+  const $btnCopy = $("#btnCopy");
+  const $amountOfLikes = $("#amountOfLike");
+  const $amountOfDisLikes = $("#amountOfDislike")
+  const $amountOfBookmark = $("#amountOfBookmark");
   let container = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -36,7 +44,6 @@ $(()=>{
 
   // let commentEditor = new Quill("#commentReplyEditor", quillOptions)
   // comment reply events
-  $commentReplyBtns = $(".comment-reply-btn");
   $commentReplyBtns.on("click",function (index, commentReplyBtn){
     $(this).parents(".comment-action").slideUp();
     let $formReply = $("<form method='post'></form>").attr("action", "/post/comment/"+$(this).data("comment-id")).addClass("py-2");
@@ -60,4 +67,61 @@ $(()=>{
       $formReply.append($commentContent).append($parentId).append($postSlug);
     })
   })
+  // add events : Like, Dislike, Bookmark, Copy
+  $btnLike.on("click", function(event){
+    let postId = $(this).data("post-id");
+    $.ajax({
+      url : "/react",
+      type : "POST",
+      data : {
+        type : "like",
+        postId
+      },
+      dataType : "json",
+      success : (response)=>{
+        if(response.status === "success"){
+          
+          if(response.isLike){
+            $btnLike.addClass("active");
+            if($btnDisLike.hasClass("active")){
+              $btnDisLike.removeClass("active");
+            }
+          }
+          else{
+            $btnLike.removeClass("active");
+          }
+          $amountOfLikes.text(response.amountOfLikes);
+          $amountOfDisLikes.text(response.amountOfDisLikes);
+        }
+      }
+    })
+  }) 
+  $btnDisLike.on("click", function(event){
+    let postId = $(this).data("post-id");
+    $.ajax({
+      url : "/react",
+      type : "POST",
+      data : {
+        type : "dislike",
+        postId
+      },
+      dataType : "json",
+      success : (response)=>{
+        if(response.status === "success"){
+          if(response.isDisLike){
+            $btnDisLike.addClass("active");
+            if($btnLike.hasClass("active")){
+              $btnLike.removeClass("active");
+            }
+          }
+          else{
+            $btnDisLike.removeClass("active");
+          }
+          console.log(response);
+          $amountOfLikes.text(response.amountOfLikes);
+          $amountOfDisLikes.text(response.amountOfDisLikes);
+        }
+      }
+    })
+  }) 
 })
