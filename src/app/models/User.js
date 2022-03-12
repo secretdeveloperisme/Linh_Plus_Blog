@@ -45,12 +45,11 @@ module.exports = (sequelize)=>{
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    age: {
-      type: DataTypes.INTEGER({length:3}),
+    dob: {
+      type: DataTypes.DATEONLY,
       allowNull:true,
       validate: {
-        max: 150,
-        min: 13
+       isDate: true,
       }
     }
   },
@@ -58,6 +57,18 @@ module.exports = (sequelize)=>{
     sequelize,
     createdAt: true,
     updatedAt: false,
+    hooks:{
+      beforeCreate: (user, option)=>{
+        let now = new Date();
+        now.setFullYear(now.getFullYear() - 8);
+        let dob = new Date(user.dob);
+        console.log(dob);
+        console.log(now);
+        if(dob > now){
+          throw new Error("Date of birth is not valid");
+        }
+      }
+    }
   })
   return User;
 }

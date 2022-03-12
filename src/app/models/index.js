@@ -13,6 +13,7 @@ const Like = require("./Like");
 const Comment = require("./Comment");
 const CommentLike = require("./CommentLike");
 const Status = require("./Status");
+const Bookmark = require("./Bookmark");
 
 const db = {};
 const sequelize = new Sequelize(
@@ -33,17 +34,18 @@ const sequelize = new Sequelize(
 )
 db.Role = Role(sequelize);
 db.User = User(sequelize);
-db.FollowUser = FollowUser(sequelize);
-db.UserRole = UserRole(sequelize);
 db.Status = Status(sequelize);
 db.Category = Category(sequelize);
 db.Tag = Tag(sequelize);
 db.Post = Post(sequelize);
+db.Comment = Comment(sequelize);
+db.FollowUser = FollowUser(sequelize);
+db.UserRole = UserRole(sequelize);
 db.PostCategory = PostCategory(sequelize);
 db.PostTag = PostTag(sequelize);
-db.Like = Like(sequelize);
-db.Comment = Comment(sequelize);
 db.CommentLike = CommentLike(sequelize);
+db.Like = Like(sequelize);
+db.Bookmark = Bookmark(sequelize);
 /* ======== association ======== */
 // User <=-=> Role
 db.User.belongsToMany(db.Role,{
@@ -111,5 +113,11 @@ db.Comment.belongsToMany(db.User,{
 db.User.belongsToMany(db.Comment,{
   through: db.CommentLike
 })
-
+// User <=-=> Post : user bookmarks post 
+db.User.belongsToMany(db.Post,{
+  through: db.Bookmark
+});
+db.Post.belongsToMany(db.User,{
+  through: db.Bookmark
+})
 module.exports = db;
