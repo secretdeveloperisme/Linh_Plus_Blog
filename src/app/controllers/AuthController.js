@@ -65,5 +65,9 @@ class AuthController {
     }
     
   }
+  async logout(req, res){
+    res.clearCookie("accessToken");
+    res.json({status:"success", message:"logout successfully"});
+  }
 }
 module.exports = new AuthController()
