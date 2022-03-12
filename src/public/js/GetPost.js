@@ -124,4 +124,30 @@ $(()=>{
       }
     })
   }) 
+  $btnBookmark.on("click", function(event){
+    let postId = $(this).data("post-id");
+    $.ajax({
+      url : "/react",
+      type : "POST",
+      data : {
+        type : "bookmark",
+        postId
+      },
+      dataType : "json",
+      success : (response)=>{
+        if(response.status === "success"){
+          if(response.isBookmark){
+            $btnBookmark.addClass("active");
+          }
+          else{
+            $btnBookmark.removeClass("active");
+          }
+          $amountOfBookmark.text(response.amountOfBookmarks);
+        }
+      }
+    })
+  }) 
+  $btnCopy.on("click", (event)=>{
+    navigator.clipboard.writeText(location.href);
+  })
 })

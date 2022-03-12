@@ -74,6 +74,28 @@ class ReactionController{
         });
         return res.json({status:"success", message:"like successfully", isDisLike, amountOfLikes,amountOfDisLikes})
       }
+      if(req.body.type === "bookmark"){
+        let isBookmark =  true;
+        let [like, initialized] = await db.Bookmark.findOrBuild({
+          where:{
+            PostId : req.body.postId,
+            UserId : req.userId,
+          }
+        }).catch(err=>{throw err});
+        if(initialized){
+          await like.save().catch(err=>{throw err});
+        }
+        else{
+          await like.destroy().catch(err=>{throw err})
+          isBookmark = false;
+        }
+        let amountOfBookmarks = await db.Bookmark.count({
+          where: {
+            PostId : req.body.postId,
+          }
+        });
+        return res.json({status:"success", message:"bookmark successfully", isBookmark, amountOfBookmarks})
+      }
       res.json({status:"success", message:"created"});
     } catch (err) {
       console.log(err);

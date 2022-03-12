@@ -44,9 +44,13 @@
             <div id="amountOfDislike"><%= amountOfDisLikes %></div>
           </li>
           <li class="text-center">
-            <button class="btn rounded-circle" id="btnBookmark"><i class="far fa-bookmark"
+            <button class="btn rounded-circle 
+            <% if(isBookmark) {%>
+              active
+            <% } %>
+            " id="btnBookmark" data-post-id="<%= post.id %>" ><i class="far fa-bookmark"
                 aria-hidden="true"></i></button>
-            <div id="amountBookmark">7</div>
+            <div id="amountOfBookmark"><%= amountOfBookmarks %></div>
           </li>
           <li class="text-center dropend">
             <button class="btn rounded-circle" data-bs-toggle="dropdown" arial-expanded="false"><i

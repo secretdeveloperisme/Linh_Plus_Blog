@@ -54,6 +54,16 @@ class PostController {
             TypeLike : "dislike" 
           }
         });
+        data.isBookmark = await db.Bookmark.findOne({
+          where: {
+            PostId : data.post.id
+          }
+        }).catch(err=>{throw err});
+        data.amountOfBookmarks = await db.Bookmark.count({
+          where: {
+            PostId : data.post.id
+          }
+        });
 
       }
       res.render("post/get_post", data)
