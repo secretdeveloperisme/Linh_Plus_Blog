@@ -43,7 +43,7 @@
             </form>
           </div>
           <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
-            <form class="row g-3 needs-validation" id="signupForm" action="/auth/signup" method="post" enctype="application/x-www-form-urlencoded" >
+            <form class="row g-3"  id="signupForm" action="/auth/signup" method="post" enctype="application/x-www-form-urlencoded" >
               <div class="col-6">
                 <div class="col-lg-12">
                   <label for="signupUsername" class="form-label">Username</label>
@@ -64,6 +64,8 @@
                 <div class="col-lg-12">
                   <label for="retypePassword" class="form-label">Retype Password</label>
                   <input type="password" autocomplete="on" id="retypePassword" required class="form-control" placeholder="input your retype password....">
+                  <div class="valid-feedback">Look good!</div>
+                  <div class="invalid-feedback">Retype password does not match password</div>
                 </div>
                 <div id="gender" class="p-2">
                   <div class="form-check form-check-inline">
@@ -72,7 +74,7 @@
                   </div>
                   <div class="form-check form-check-inline">
                     <input type="radio" name="gender" id="femaleGender" class="form-check-input" value="f">
-                    <label for="femaleGender" class="form-check-label">Male</label>
+                    <label for="femaleGender" class="form-check-label">Female</label>
                   </div>
                 </div>
                 <div class="col-lg-12">
@@ -81,21 +83,9 @@
                   <div class="valid-feedback">Look good!</div>
                   <div class="invalid-feedback">email is wrong format</div>
                 </div>
-                <div class="col-lg-12">
-                  <label for="age" class="form-label">Age<span class="badge bg-primary ms-2" id="ageOutput">15</span></label>
-                  <input type="range" name="age" required class="age-range" min="10" max="100" value="15" step="1" id="age" list="ageMark">
-                  <datalist id="ageMark">
-                    <option value="10"></option>
-                    <option value="20"></option>
-                    <option value="30"></option>
-                    <option value="40"></option>
-                    <option value="50"></option>
-                    <option value="60"></option>
-                    <option value="70"></option>
-                    <option value="80"></option>
-                    <option value="90"></option>
-                    <option value="100"></option>
-                  </datalist>
+                <div class="col-lg-12 mt-2">
+                  <label for="dob" class="form-label">Date of birth</label>
+                  <input type="date" name="dob" required class="dob" id="dob">
                 </div>
               </div>
               <div class="col-6">

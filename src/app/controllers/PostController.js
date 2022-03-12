@@ -140,7 +140,16 @@ class PostController {
   }
   // GET: /post/edit/:slug
   editPost(req, res) {
-    res.render("post/edit_post")
+    require("./../models").User.create({
+      username: "hoanglinh",
+      passwordHash : "HoangLinh@123",
+      gender:"m",
+      avatar: "none",
+      email: "hoanglinh@gmail.com",
+      dob: new Date(),
+    }).catch(err=>{console.log(err);})
+
+    // res.render("post/edit_post")
   }
   // POST : /post/image/
   uploadImage(req, res) {

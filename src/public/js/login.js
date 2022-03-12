@@ -6,9 +6,6 @@ $(()=>{
   const $loginDialogModal = $("#loginDialogModal");
   const $avatarPath = $("#avatarPath");
   const $signupForm = $("#signupForm");
-  // show age output 
-  const $ageInput = $("#age");
-  const $ageOutput = $("#ageOutput");
   // show avatar output
   const $avatarInput = $("#avatar");
   const $avatarOutput = $("#displayAvatar");
@@ -36,9 +33,6 @@ $(()=>{
   $signupTab.on("click", function(event){
     $loginDialogModal.addClass("modal-lg")
   })
-  $ageInput.on("input", function(event){
-    $ageOutput.text($ageInput.val());
-  })
   const warnValidEmail = (event)=>{
     let email  = $signupEmail.val();
     let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
@@ -52,6 +46,19 @@ $(()=>{
     }
   }
   $signupEmail.on("keyup", warnValidEmail)
+  const warningRetypePassword = (event)=>{
+    let retypePassword = $retypePassword.val();
+    let password = $signupPassword.val();
+    if(retypePassword !== password){
+      $retypePassword.siblings(".invalid-feedback").css("display", "block")
+      $retypePassword.siblings(".valid-feedback").css("display", "none")
+    }
+    else{
+      $retypePassword.siblings(".valid-feedback").css("display", "block")
+      $retypePassword.siblings(".invalid-feedback").css("display", "none")
+    }
+  }
+  $retypePassword.on("keyup", warningRetypePassword);
   const warnValidPassword = (event)=>{
     let password = $signupPassword.val();
     if(password.length < 8){

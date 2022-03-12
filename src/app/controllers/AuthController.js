@@ -43,7 +43,7 @@ class AuthController {
         gender: req.body.gender,
         address : req.body.address,
         biography: req.body.biography,
-        age : parseInt(req.body.age),
+        dob : new Date(req.body.dob),
         avatar : req.body.avatarPath
       });
       let role = await Role.findOne({
