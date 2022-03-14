@@ -13,7 +13,8 @@ class PostController {
         user: null,
         categories : null,
         tags: null,
-        like : null
+        like : null,
+        isFollow : null
       };
       data.user = await db.User.findOne({
         where: {
@@ -64,6 +65,12 @@ class PostController {
             PostId : data.post.id
           }
         });
+        data.isFollow = await db.FollowUser.findOne({
+          where : {
+            FollowerId : req.userId,
+            UserId : data.post.User.id
+          }
+        })
 
       }
       res.render("post/get_post", data)

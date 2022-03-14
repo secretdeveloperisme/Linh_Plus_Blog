@@ -206,7 +206,7 @@
               <div class="icon-64 author__avatar" style="background-image: url('<%= post.User.avatar %>');"></div>
               <h5 class="author__name ms-3"><%= post.User.username %></h5>
             </div>
-            <button class="btn btn-primary w-100" data-action="follow" data-userId="<%= post.User.id %>">Follow</button>
+            <button class="btn w-100 <%= isFollow?"btn-secondary":"btn-primary"%>" id="btnFollow" data-action="<%= isFollow?"unfollow":"follow"%>" data-user-id="<%= post.User.id %>"><%= isFollow?"unfollow":"follow"%></button>
             <div class="author-biography py-2 text-center"><%= post.User.biography %></div>
             <div class="author-email">
               <h6>Email</h6>
