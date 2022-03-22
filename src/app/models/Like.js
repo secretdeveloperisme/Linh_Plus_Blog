@@ -6,6 +6,7 @@ module.exports = (sequelize)=>{
     PostId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      unique: false,
       references: {
         model: "posts",
         key: "id"
@@ -15,6 +16,7 @@ module.exports = (sequelize)=>{
     UserId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      unique: false,
       references: {
         model: "users",
         key: "id"

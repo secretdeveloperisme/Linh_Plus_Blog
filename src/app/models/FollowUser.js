@@ -5,6 +5,7 @@ module.exports = (sequelize)=>{
   FollowUser.init({
     FollowerId: {
       type: DataTypes.INTEGER,
+      unique: false,
       primaryKey: true,
       references: {
         model: "users",
@@ -14,6 +15,7 @@ module.exports = (sequelize)=>{
     },
     UserId: {
       type: DataTypes.INTEGER,
+      unique: false,
       primaryKey: true,
       references: {
         model: "users",
@@ -24,7 +26,7 @@ module.exports = (sequelize)=>{
   },{
     sequelize,
     timestamps: false,
-    tableName: "follow_users"
+    tableName: "follow_users",
   })
   return FollowUser;
 }

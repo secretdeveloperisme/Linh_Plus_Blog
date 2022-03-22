@@ -164,6 +164,10 @@ $(() => {
     $btnWrapper.append($btnSubmitEdit).append($btnDismissEdit);
     $editEditor.after($btnWrapper);
     let editQuill  = new Quill($editEditor[0], quillOptions);
+    $btnDismissEdit.on("click", function (event){
+      $editEditor.closest(".comment-content")
+        .html(`<div class="ql-editor">${editQuill.root.innerHTML}<div>`);
+    })
     $btnSubmitEdit.on("click", function(event){
       $.ajax({
         type: "PATCH",

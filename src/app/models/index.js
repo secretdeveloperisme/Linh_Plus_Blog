@@ -58,14 +58,14 @@ db.Role.belongsToMany(db.User, {
 db.User.hasMany(db.Post);
 db.Post.belongsTo(db.User);
 // User <=-=> User : user follows user 
-db.User.belongsToMany(db.User,{
-  through: db.FollowUser,
-  as: "users"
-})
-db.User.belongsToMany(db.User,{
-  through: db.FollowUser,
-  as: "follower"
-})
+// db.User.belongsToMany(db.User,{
+//   through: db.FollowUser,
+//   as: "users"
+// })
+// db.User.belongsToMany(db.User,{
+//   through: db.FollowUser,
+//   as: "follower"
+// })
 // Post <=-=> Tag
 db.Post.belongsToMany(db.Tag,
   {

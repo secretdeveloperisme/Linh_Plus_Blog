@@ -63,5 +63,15 @@ class SiteController {
           })
       })
   }
+  async syncDB(req, res){
+    try{
+      require("../models").sequelize.sync({force: true})
+      .catch(err=>console.log(err))
+      res.json({status:"success", message:"sync database successfully"});
+    }
+    catch(err){
+      res.status(500).json({status:"failed", message:"syce database failed"});
+    }
+  }
 }
 module.exports = new SiteController();
