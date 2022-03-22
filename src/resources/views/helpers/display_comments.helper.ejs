@@ -1,0 +1,50 @@
+<% let deep = 0; %>
+<% function displayComment(comment) { %>
+  <div class="comment mt-2" data-comment-node="0">
+    <div class="d-flex comment-wrapper--deep-<%= deep++ %>">
+      <div class="icon-32 me-2"
+        style="background-image: url('<%= comment.user.avatar %>');"></div>
+      <div class="w-100 comment-inner">
+        <div class="comment-detail p-3 border border-bold w-100 ">
+          <div class="comment-header d-flex">
+            <h5 class="comment__author-name me-2">
+              <%= comment.user.username %>
+            </h5>
+            <div class="comment-createdAt">
+              <%- include("../helpers/format_date.helper.ejs", {timestamp: comment.createdAt}) %>
+            </div>
+            <% if(comment.user.id === user.id) {%>
+              <div class="comment-action dropdown ms-auto">
+                <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
+                <div class="dropdown-menu">
+                  <li class="dropdown-item btn-edit-comment" data-comment-id="<%= comment.id %>">Edit</li>
+                  <li class="dropdown-item btn-delete-comment" data-comment-id="<%= comment.id %>">Delete</li>
+                </div>
+              </div>
+            <% } %>  
+          </div>
+          <div class="comment-content ql-snow">
+            <div class="ql-editor p-0" style="white-space: normal">
+              <%- comment.content %>
+            </div>
+          </div>
+          <div class="comment-action">
+            <button class="btn comment-like-btn <%= comment.isLikeByUser?"active":"" %>" data-comment-id="<%= comment.id %>"><i class="far fa-heart"></i>
+              <span><%= comment.amountOfLike %></span> Likes</button>
+            <button class="btn comment-reply-btn" data-comment-id="<%= comment.id %>" data-post-id="<%= postId %>"><i
+                class="far fa-comment"></i> Reply</button>
+          </div>
+        </div>
+        <% if(comment.children !=null){ %>
+          <% for(let child of comment.children){ %>
+            <% displayComment(child); %>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<% for(let comment of comments) {%>
+  <% displayComment(comment) %>
+<% } %>
