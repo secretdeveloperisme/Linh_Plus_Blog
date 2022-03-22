@@ -53,3 +53,7 @@
   position: sticky;
   top: $navbarHeight;
 }
+.comment-like-btn.active, .comment-like-btn:hover{
+  color: $reactionLikeColor;
+  background-color: $reactionLikeColorBG;
+}

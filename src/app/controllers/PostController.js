@@ -1,7 +1,7 @@
 const db = require("../models");
-const { Op, where } = require("sequelize");
 const fs = require('fs');
 const slugify = require("slugify");
+const {convertHierarchyComments} = require("../utils/comments.util");
 // const jwt = require("jsonwebtoken");
 // const authConfig = require("../config/auth.config");
 class PostController {
@@ -71,7 +71,26 @@ class PostController {
             UserId : data.post.User.id
           }
         })
-
+        data.comments = await db.sequelize.query(`
+          select comments.id, comments.parent_id,
+            is_comment_like_by_user(comments.id,${req.userId}) as is_comment_like_by_user,
+            comments.post_id, comments.content, comments.createdAt,
+            users.id as user_id,users.username, users.avatar,
+            count(comment_likes.comment_id) as amount_of_likes
+          from
+          (comments left join comment_likes on comment_likes.comment_id = comments.id) 
+          inner join users on users.id = comments.user_id
+          where comments.post_id = ${data.post.id}
+          group by comments.id
+          order by comments.id ;
+        `, {type : db.Sequelize.QueryTypes.SELECT})
+          .catch(err=>{throw err});
+        data.comments = convertHierarchyComments(data.comments);
+        data.numberOfComments = await db.Comment.count({
+          where:{
+            PostId : data.post.id
+          }
+        })
       }
       res.render("post/get_post", data)
     } catch (error) {

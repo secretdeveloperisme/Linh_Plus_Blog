@@ -4,6 +4,7 @@ const me = require("./me");
 const post = require("./post");
 const react = require("./react");
 const follow = require("./follow");
+const comment = require("./comment");
 
 function route(app){
   app.use("/", siteRouter);
@@ -12,6 +13,7 @@ function route(app){
   app.use("/me", me);
   app.use("/react", react);
   app.use("/follow", follow);
+  app.use("/comment", comment);
 }
 
 module.exports = route;
