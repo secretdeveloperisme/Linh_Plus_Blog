@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const meController = require("../app/controllers/MeController");
+const {verifyToken} = require("../app/middlewares/AuthJWT");
 const multer = require('multer');
 const storage = multer.diskStorage({
   destination: function(req, file, cb){
@@ -19,5 +20,6 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 router.post("/upload/avatar", upload.single("avatar"),meController.uploadAvatar);
+router.get("/posts",verifyToken, meController.getPost);
 
 module.exports = router;

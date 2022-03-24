@@ -33,6 +33,7 @@ select comments.id, comments.parent_id,is_comment_like_by_user(comments.id,8) as
  (comments left join comment_likes on comment_likes.comment_id = comments.id) 
  inner join users on users.id = comments.user_id group by comments.id;
 
+UPDATE `linh_plus_blog`.`posts` SET `deletedAt` = null;
 
 alter table follow_users drop index follow_users_UserId_UserId_unique;
 

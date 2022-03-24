@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head") %> 
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <% if(user) {%> 
+      <%- include("../partials/nav",{user:user}) %>
+      <%}else {%> 
+      <%- include("../partials/nav") %>
+      <% } %> 
+    </header>
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5">
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-home" aria-hidden="true"></i>
+                Home
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="" class="nav-link link-dark d-flex active" aria-current="page">
+              <div>
+                <i class="fas fa-file-alt" aria-hidden="true"></i>
+                Posts
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.posts %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-tag" aria-hidden="true"></i>
+                Tags
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.tags %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-user" aria-hidden="true"></i>
+                Following Users
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.following_users %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-trash" aria-hidden="true"></i>
+                Trash
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.trash_posts %></span>
+            </a>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content">
+        <div class="posts px-4">
+          <div class="text-center">
+            <h1 class="mb-4">My posts</h1>
+            <a href="/me/trash/posts" class="btn btn-warning">My trash</a>
+            <a href="/post/write" class="btn btn-primary">New Post</a>
+          </div>
+          <div class="mt-4 mx-1 d-flex align-items-center">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="formCheckboxAll">
+              <label class="form-check-label" for="formCheckboxAll">
+                Select All
+              </label>
+            </div>
+            <select class="form-select-sm mx-2" aria-label="Select Action" id="selectAction">
+              <option selected value="">--Select Action--</option>
+              <option value="delete">Delete</option>
+            </select>
+            <button class="btn btn-sm btn-primary disabled" id="btnSubmitAll" >execution</button>
+          </div>
+          <table class="table">
+            <thead>
+              <th scope="col" colspan="2">order</th>
+              <th scope="col">title</th>
+              <th scope="col">status</th>
+              <th scope="col" colspan="2"></td>
+            </thead>
+            <tbody>
+              <% if(posts.length){ %>
+                <% posts.forEach((post, index)=>{ %>
+                <tr>
+                  <td scope="row"><input type="checkbox" name="" id="" data-id="<%= post.id %>" class="form-check-input checkbox-post"></td>
+                  <td scope="row"><%= index %></td>
+                  <td scope="row"><a href="/post/<%= post.slug %>"><%= post.title %></a></td>
+                  <td scope="row"><%- post.StatusId == 1?'<span class="badge bg-success">Public</span>':(post.StatusId === 2?'<span class="badge bg-danger">private</span>':"none") %></td>
+                  <td scope="row" class="">
+                    <a href="/post/edit/<%= post.slug %>" class="btn btn-secondary">edit</a>
+                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-id="<%= post.id %>">delete</a>
+                  </td>
+                </tr>
+                <% }) %>
+              <% } else{ %> 
+                <tr> 
+                  <td colspan="5">
+                  There are no posts
+                  </td>
+                </tr> 
+              <% } %>
+            </tbody>
+          </table>
+          <!-- modal delete -->
+          <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you sure want to delete ?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" id="btnDeletePost">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  modal valid form  -->
+          <div class="modal" tabindex="-1" id="modalValidForm">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">No Valid</h5>
+                </div>
+                <div class="modal-body">
+                  <p> you should input all form</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="col-xl-12">
+          <%- include("../partials/footer.ejs") %> 
+        </footer>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <%- include("../auth/login") %>
+  <script src="/js/home.js"></script>
+  <script src="/js/login.js"></script>
+  <script src="/js/me/posts.js"></script>
+</body>
+</html>

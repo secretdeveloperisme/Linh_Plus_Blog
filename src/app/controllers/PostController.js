@@ -174,19 +174,66 @@ class PostController {
     }
 
   }
-  // GET: /post/edit/:slug
+  // get: /post/edit/:slug
   editPost(req, res) {
-    require("./../models").User.create({
-      username: "hoanglinh",
-      passwordHash : "HoangLinh@123",
-      gender:"m",
-      avatar: "none",
-      email: "hoanglinh@gmail.com",
-      dob: new Date(),
-    }).catch(err=>{console.log(err);})
-
-    // res.render("post/edit_post")
+   // res.render("post/edit_post")
   }
+  // DELETE /post
+  async deletePost(req, res){
+    try{
+      if(req.body.id){
+        let post = await db.Post.findOne({
+          where: {
+            id : req.body.id
+          }
+        }).catch(err=>{ throw err });
+        if(post.UserId == req.userId){
+          await post.destroy().catch(err=>{throw err});
+          res.json({status:"success", message:"delete post successfully"});
+        }
+        else
+          res.json({status:"failed", message:"you are not post's owner"});
+      }
+      else
+        res.status(400).json({status:"failed", message:"post id is empty"})
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).json({status:"failed", message:"Server has an err"})
+    }
+  }
+  // POST : /post/handle_action
+  async handleAction(req, res){
+    try{
+      if(req.body.action === "delete"){
+        if(req.body.postIds){
+          let posts = await db.Post.findAll({
+            where : {
+              id : {
+                [db.Sequelize.Op.in] : req.body.postIds 
+              }
+            }
+          }).catch(err=>{ throw err });
+          let isValidOwner = posts.every(post=>post.UserId == req.userId);
+          if(isValidOwner){
+            posts.forEach(async post=>{
+              await post.destroy().catch(err=>{ throw err });
+            })
+            res.json({status:"success", message:"delete posts successfully"});
+          }
+          else
+            res.status(400).json({status:"failed", message:"some posts's owner are invalid owner"});
+        }
+      }
+      else{
+        res.status(400).json({status:"failed", message:"action is invalid"});
+      }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).json({status:"failed", message:"Server has an err"})
+    }
+  } 
   // POST : /post/image/
   uploadImage(req, res) {
     if (req.file) {
