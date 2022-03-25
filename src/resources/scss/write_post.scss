@@ -1,3 +1,4 @@
+@import "variables";
 .post-image{
   width: 100%;
   height: 100%;
@@ -13,3 +14,20 @@
 .tags:empty:focus:before{
   content: ""
 } 
+
+// custom post editor 
+#editor{
+  z-index: 2;
+}
+.ql-toolbar{
+  position: sticky;
+  top: $navbarHeight;
+  background: gainsboro;
+  color: white;
+  z-index: 3;
+}
+.btn-upload-wrapper{
+  z-index: 3;
+  position: fixed;
+  bottom: 0;
+}

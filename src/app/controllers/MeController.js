@@ -42,9 +42,6 @@ class MeController {
       data.amounts.trash_posts = await db.Post.count({
         where:{
           UserId: req.userId,
-          deletedAt: {
-            [db.Sequelize.Op.ne]: null
-          }
         },
         paranoid: false
       }).catch(err=>{throw err});
