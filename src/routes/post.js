@@ -33,7 +33,8 @@ router.delete("/", verifyToken, postController.deletePost);
 router.post("/handle_action",verifyToken, postController.handleAction);
 router.get("/write",verifyToken,postController.writePost);
 router.post("/write",verifyToken, postController.uploadPost);
-router.get("/edit/:slug", postController.editPost);
+router.get("/edit/:slug",verifyToken, postController.editPostUI);
+router.patch("/", verifyToken, postController.updatePost);
 router.post("/image", [verifyToken, upload.single("image")],postController.uploadImage);
 router.get("/:slug",verifyToken ,postController.getPost);
 

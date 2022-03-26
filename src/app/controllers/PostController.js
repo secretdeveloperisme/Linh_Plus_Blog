@@ -2,6 +2,7 @@ const db = require("../models");
 const fs = require('fs');
 const slugify = require("slugify");
 const {convertHierarchyComments} = require("../utils/comments.util");
+const res = require("express/lib/response");
 // const jwt = require("jsonwebtoken");
 // const authConfig = require("../config/auth.config");
 class PostController {
@@ -121,7 +122,7 @@ class PostController {
   // POST: /post/write
   async uploadPost(req, res) {
     console.log(req.body);
-    if (req.body.title && req.body.description && req.body.content && req.body.status && req.userId) {
+    if (req.body.title && req.body.content && req.body.status && req.userId) {
       try {
         console.log(req.body);
         db.sequelize.transaction(async t => {
@@ -175,8 +176,91 @@ class PostController {
 
   }
   // get: /post/edit/:slug
-  editPost(req, res) {
-   // res.render("post/edit_post")
+  async editPostUI(req, res) {
+    try {
+      let data = {
+        user: null,
+        post: null,
+        categories: null
+      }
+      data.user = await db.User.findOne({
+        where : {
+          id : req.userId
+        }
+      }).catch(err=>{throw err});
+      data.post = await db.Post.findOne({
+        where: {
+          slug : req.params.slug
+        },
+        include: [db.Tag, db.Category]
+      }).catch(err=>{ throw err});
+      data.categories = await db.Category.findAll()
+        .catch(err=>{throw err});
+      res.render("post/edit_post", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"Server has an err"})
+    }
+  }
+  // PATCH : /post
+  async updatePost(req, res){
+    if (req.body.title && req.body.content && req.body.status && req.userId) {
+      try {
+        db.sequelize.transaction(async t => {
+          let post = await db.Post.findOne({
+            where: {
+              id: req.body.id
+            }
+          });
+          if (post.UserId === req.userId){
+            let status = await db.Status.findOne({
+              where: {
+                name: req.body.status
+              }
+            })
+            post.title =  req.body.title ;
+            post.description =  req.body.description ;
+            post.content =  req.body.content ;
+            post.slug =  slugify(req.body.title, "_") ;
+            post.image =  req.body.imagePath || post.image;
+            post.UserId =  req.userId ;
+            post.StatusId =  status.id ;
+            post = await post.save({ transaction: t }).catch(err=>{
+              console.log(err);
+            })
+            let categories = db.Category.bulkBuild([...req.body.categories].map((value, index) => {
+              return { id: value };
+            }));
+            // console.log(categories);
+            await post.setCategories(categories, { transaction: t }).catch(err => {
+              console.log(err);
+            })
+            // insert tags 
+            for (let value of req.body.tags) {
+              try {
+                let [tag, isFound] = await db.Tag.findOrCreate({
+                  where: {
+                    name: value
+                  }
+                });
+                let tagDB = await post.addTags(tag, { transaction: t });
+              }
+              catch (err) {
+                throw err;
+              }
+            }
+          }
+          else{
+            res.status(400).json({status:"failed", message:"you are not post's owner"});
+          }
+          res.redirect(`/post/edit/${post.slug}`)
+        })
+      }
+      catch (err) {
+        console.log(err);
+        res.status(500).json({ status: "failed", message: "server has an error" })
+      }
+    }
   }
   // DELETE /post
   async deletePost(req, res){

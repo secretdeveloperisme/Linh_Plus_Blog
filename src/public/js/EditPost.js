@@ -67,62 +67,67 @@ $(()=>{
     // set scroll to the end if multiline
     target.scrollTop = target.scrollHeight; 
   }
+  function renderTags(){
+    let text = $tags.text();
+    let tags = text.match(/\w+/g);
+    if(tags !== null){
+      $tags.html("");
+      tags.forEach((value,index)=>{
+        // tag parent
+        let tagSpan = document.createElement("span");
+        $(tagSpan).attr("class","tag btn btn-sm btn-outline-info me-1 mb-1");
+        $(tagSpan).attr("contenteditable", "false");
+        let tagLabel = document.createElement("span");
+        // tag label 
+        $(tagLabel).text(value+" ");
+        // tag remove button
+        let tagRemove = document.createElement("span");
+        $(tagRemove).attr("class","text-danger");
+        $(tagRemove).html(`<i class="fas fa-times"></i>`);
+        $(tagRemove).on("click",(event)=>{
+          $(tagSpan).remove();
+        });
+        // input hidden
+        let tagInput = document.createElement("input");
+        $(tagInput).attr("type", "hidden");
+        $(tagInput).attr("name", "tags");
+        $(tagInput).val(value);
+        // combine all
+        $(tagSpan).append($(tagLabel));
+        $(tagSpan).append($(tagRemove));
+        $(tagSpan).append($(tagInput));
+        $tags.append($(tagSpan));
+        setCaretToEnd($tags[0]);
+      })
+    }
+  }
+  renderTags();
   $tags.on("keyup",(event)=>{
     if(event.which === 32){
-      let text = $tags.text();
-      let tags = text.match(/\w+/g);
-      if(tags !== null){
-        $tags.html("");
-        tags.forEach((value,index)=>{
-          // tag parent
-          let tagSpan = document.createElement("span");
-          $(tagSpan).attr("class","tag btn btn-sm btn-outline-info me-1 mb-1");
-          $(tagSpan).attr("contenteditable", "false");
-          let tagLabel = document.createElement("span");
-          // tag label 
-          $(tagLabel).text(value+" ");
-          // tag remove button
-          let tagRemove = document.createElement("span");
-          $(tagRemove).attr("class","text-danger");
-          $(tagRemove).html(`<i class="fas fa-times"></i>`);
-          $(tagRemove).on("click",(event)=>{
-            $(tagSpan).remove();
-          });
-          // input hidden
-          let tagInput = document.createElement("input");
-          $(tagInput).attr("type", "hidden");
-          $(tagInput).attr("name", "tags");
-          $(tagInput).val(value);
-          // combine all
-          $(tagSpan).append($(tagLabel));
-          $(tagSpan).append($(tagRemove));
-          $(tagSpan).append($(tagInput));
-          $tags.append($(tagSpan));
-          setCaretToEnd($tags[0]);
-        })
-
-      }
+      renderTags()
     }
   })
   $formUploadPost.on("submit",(event)=>{
     let postAvatar = $postImage[0].files[0];
-    let avatarPostForm = new FormData();
-    avatarPostForm.append("image", postAvatar);
-    let xhrPostImage = new XMLHttpRequest();
-    xhrPostImage.open("post","/post/image", false);
-    xhrPostImage.send(avatarPostForm);
-    if(xhrPostImage.status == 200){
-      let res = JSON.parse(xhrPostImage.responseText);
-      console.log(res);
-      if(res.status === "success"){
-        $imagePath.val(res.imagePath);
-        $content.val(editor.root.innerHTML);
+    $content.val(editor.root.innerHTML);
+    if(postAvatar){
+      let avatarPostForm = new FormData();
+      avatarPostForm.append("image", postAvatar);
+      let xhrPostImage = new XMLHttpRequest();
+      xhrPostImage.open("post","/post/image", false);
+      xhrPostImage.send(avatarPostForm);
+      if(xhrPostImage.status == 200){
+        let res = JSON.parse(xhrPostImage.responseText);
+        console.log(res);
+        if(res.status === "success"){
+          $imagePath.val(res.imagePath);
+        }
+        else{
+          event.preventDefault();
+        }
       }
-      else{
+      else
         event.preventDefault();
-      }
     }
-    else
-      event.preventDefault();
   })  
 })
