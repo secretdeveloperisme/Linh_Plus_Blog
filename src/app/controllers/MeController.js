@@ -40,10 +40,13 @@ class MeController {
       }).catch(err=>{throw err});
       
       data.amounts.trash_posts = await db.Post.count({
+        paranoid: false,
         where:{
           UserId: req.userId,
-        },
-        paranoid: false
+          DeletedAt : {
+            [db.Sequelize.Op.ne]: null
+          }
+        }
       }).catch(err=>{throw err});
       data.posts = await db.Post.findAll({
         where: {
@@ -52,6 +55,62 @@ class MeController {
       })
         .catch(err => { throw err });
       res.render("me/posts", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "server has an err" })
+    }
+  }
+  async getTrash(req, res) {
+    try {
+      let data = {
+        user: null,
+        posts : null,
+        amounts:{
+          posts: 0,
+          tags: 0,
+          following_users: 0,
+          trash_posts: 0
+        }
+      }
+      data.user = await db.User.findOne({
+        where: {
+          id: req.userId
+        }
+      }).catch(err => { throw err })
+      data.amounts.posts = await db.Post.count({
+        where: {
+          UserId : req.userId
+        }
+      }).catch(err=>{throw err});
+      data.amounts.tags = await db.Tag.count({
+        
+      }).catch(err=>{throw err});
+      data.amounts.following_users = await db.FollowUser.count({
+        where: {
+          FollowerId : req.userId
+        }
+      }).catch(err=>{throw err});
+      
+      data.amounts.trash_posts = await db.Post.count({
+        paranoid: false,
+        where:{
+          UserId: req.userId,
+          DeletedAt : {
+            [db.Sequelize.Op.ne]: null
+          }
+        }, 
+      }).catch(err=>{throw err});
+      data.posts = await db.Post.findAll({
+        paranoid: false,
+        where: {
+          UserId : req.userId,
+          DeletedAt : {
+            [db.Sequelize.Op.ne]: null
+          }
+        }
+      })
+        .catch(err => { throw err });
+      res.render("me/trash_posts", data);
     } catch (err) {
       console.log(err);
       res.status(500).json({ status: "failed", message: "server has an err" })

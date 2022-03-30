@@ -21,5 +21,6 @@ const upload = multer({storage: storage})
 
 router.post("/upload/avatar", upload.single("avatar"),meController.uploadAvatar);
 router.get("/posts",verifyToken, meController.getPost);
+router.get("/trash/posts", verifyToken, meController.getTrash)
 
 module.exports = router;

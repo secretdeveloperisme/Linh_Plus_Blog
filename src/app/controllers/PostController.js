@@ -1,7 +1,7 @@
 const db = require("../models");
 const fs = require('fs');
 const slugify = require("slugify");
-const {convertHierarchyComments} = require("../utils/comments.util");
+const { convertHierarchyComments } = require("../utils/comments.util");
 const res = require("express/lib/response");
 // const jwt = require("jsonwebtoken");
 // const authConfig = require("../config/auth.config");
@@ -12,16 +12,16 @@ class PostController {
       let data = {
         post: null,
         user: null,
-        categories : null,
+        categories: null,
         tags: null,
-        like : null,
-        isFollow : null
+        like: null,
+        isFollow: null
       };
       data.user = await db.User.findOne({
         where: {
-          id:req.userId
+          id: req.userId
         }
-      }).catch(err=>{console.log(err)})
+      }).catch(err => { console.log(err) })
       data.post = await db.Post.findOne({
         where: {
           slug: req.params.slug
@@ -35,41 +35,41 @@ class PostController {
           model: db.Tag,
           attributes: ["id", "name"]
         }],
-      }).catch(err=>{console.log(err);});
+      }).catch(err => { console.log(err); });
       console.log(data.post);
-      if(data.post != null){
+      if (data.post != null) {
         data.like = await db.Like.findOne({
           where: {
-            PostId : data.post.id,
-            UserId : req.userId
+            PostId: data.post.id,
+            UserId: req.userId
           }
-        }).catch(err=>{throw err});
+        }).catch(err => { throw err });
         data.amountOfLikes = await db.Like.count({
           where: {
-            PostId : data.post.id,
-            TypeLike : "like" 
+            PostId: data.post.id,
+            TypeLike: "like"
           }
         });
         data.amountOfDisLikes = await db.Like.count({
           where: {
-            PostId : data.post.id,
-            TypeLike : "dislike" 
+            PostId: data.post.id,
+            TypeLike: "dislike"
           }
         });
         data.isBookmark = await db.Bookmark.findOne({
           where: {
-            PostId : data.post.id
+            PostId: data.post.id
           }
-        }).catch(err=>{throw err});
+        }).catch(err => { throw err });
         data.amountOfBookmarks = await db.Bookmark.count({
           where: {
-            PostId : data.post.id
+            PostId: data.post.id
           }
         });
         data.isFollow = await db.FollowUser.findOne({
-          where : {
-            FollowerId : req.userId,
-            UserId : data.post.User.id
+          where: {
+            FollowerId: req.userId,
+            UserId: data.post.User.id
           }
         })
         data.comments = await db.sequelize.query(`
@@ -84,19 +84,19 @@ class PostController {
           where comments.post_id = ${data.post.id}
           group by comments.id
           order by comments.id ;
-        `, {type : db.Sequelize.QueryTypes.SELECT})
-          .catch(err=>{throw err});
+        `, { type: db.Sequelize.QueryTypes.SELECT })
+          .catch(err => { throw err });
         data.comments = convertHierarchyComments(data.comments);
         data.numberOfComments = await db.Comment.count({
-          where:{
-            PostId : data.post.id
+          where: {
+            PostId: data.post.id
           }
         })
       }
       res.render("post/get_post", data)
     } catch (error) {
       console.log(error);
-      res.status(404).json({status:"failed", message:"you have an err"});
+      res.status(404).json({ status: "failed", message: "you have an err" });
     }
   }
   // GET: /post/write/
@@ -140,7 +140,7 @@ class PostController {
             UserId: req.userId,
             StatusId: status.id
           });
-          post = await post.save({ transaction: t }).catch(err=>{
+          post = await post.save({ transaction: t }).catch(err => {
             console.log(err);
           })
           let categories = db.Category.bulkBuild([...req.body.categories].map((value, index) => {
@@ -166,7 +166,7 @@ class PostController {
             }
           }
         })
-        res.status(200).json({ status: "success", message: "upload post successfully" })
+        res.redirect("/me/posts")
       }
       catch (err) {
         console.log(err);
@@ -184,26 +184,26 @@ class PostController {
         categories: null
       }
       data.user = await db.User.findOne({
-        where : {
-          id : req.userId
+        where: {
+          id: req.userId
         }
-      }).catch(err=>{throw err});
+      }).catch(err => { throw err });
       data.post = await db.Post.findOne({
         where: {
-          slug : req.params.slug
+          slug: req.params.slug
         },
         include: [db.Tag, db.Category]
-      }).catch(err=>{ throw err});
+      }).catch(err => { throw err });
       data.categories = await db.Category.findAll()
-        .catch(err=>{throw err});
+        .catch(err => { throw err });
       res.render("post/edit_post", data);
     } catch (err) {
       console.log(err);
-      res.status(500).json({status:"failed", message:"Server has an err"})
+      res.status(500).json({ status: "failed", message: "Server has an err" })
     }
   }
   // PATCH : /post
-  async updatePost(req, res){
+  async updatePost(req, res) {
     if (req.body.title && req.body.content && req.body.status && req.userId) {
       try {
         db.sequelize.transaction(async t => {
@@ -212,20 +212,20 @@ class PostController {
               id: req.body.id
             }
           });
-          if (post.UserId === req.userId){
+          if (post.UserId === req.userId) {
             let status = await db.Status.findOne({
               where: {
                 name: req.body.status
               }
             })
-            post.title =  req.body.title ;
-            post.description =  req.body.description ;
-            post.content =  req.body.content ;
-            post.slug =  slugify(req.body.title, "_") ;
-            post.image =  req.body.imagePath || post.image;
-            post.UserId =  req.userId ;
-            post.StatusId =  status.id ;
-            post = await post.save({ transaction: t }).catch(err=>{
+            post.title = req.body.title;
+            post.description = req.body.description;
+            post.content = req.body.content;
+            post.slug = slugify(req.body.title, "_");
+            post.image = req.body.imagePath || post.image;
+            post.UserId = req.userId;
+            post.StatusId = status.id;
+            post = await post.save({ transaction: t }).catch(err => {
               console.log(err);
             })
             let categories = db.Category.bulkBuild([...req.body.categories].map((value, index) => {
@@ -250,8 +250,8 @@ class PostController {
               }
             }
           }
-          else{
-            res.status(400).json({status:"failed", message:"you are not post's owner"});
+          else {
+            res.status(400).json({ status: "failed", message: "you are not post's owner" });
           }
           res.redirect(`/post/edit/${post.slug}`)
         })
@@ -263,61 +263,156 @@ class PostController {
     }
   }
   // DELETE /post
-  async deletePost(req, res){
-    try{
-      if(req.body.id){
+  async deletePost(req, res) {
+    try {
+      if (req.body.id) {
         let post = await db.Post.findOne({
           where: {
-            id : req.body.id
+            id: req.body.id
           }
-        }).catch(err=>{ throw err });
-        if(post.UserId == req.userId){
-          await post.destroy().catch(err=>{throw err});
-          res.json({status:"success", message:"delete post successfully"});
+        }).catch(err => { throw err });
+        if (post.UserId == req.userId) {
+          await post.destroy({ force: false }).catch(err => { throw err });
+          res.json({ status: "success", message: "delete post successfully" });
         }
         else
-          res.json({status:"failed", message:"you are not post's owner"});
+          res.json({ status: "failed", message: "you are not post's owner" });
       }
       else
-        res.status(400).json({status:"failed", message:"post id is empty"})
+        res.status(400).json({ status: "failed", message: "post id is empty" })
     }
-    catch(err){
+    catch (err) {
       console.log(err);
-      res.status(500).json({status:"failed", message:"Server has an err"})
+      res.status(500).json({ status: "failed", message: "Server has an err" })
+    }
+  }
+  // DELETE /post/destroy
+  async destroyPost(req, res) {
+    try {
+      if (req.body.id) {
+        let post = await db.Post.findOne({
+          paranoid: false,
+          where: {
+            id: req.body.id
+          }
+        }).catch(err => { throw err });
+        if (post.UserId == req.userId) {
+          await post.destroy({ force: true }).catch(err => { throw err });
+          res.json({ status: "success", message: "destroy post successfully" });
+        }
+        else
+          res.json({ status: "failed", message: "you are not post's owner" });
+      }
+      else
+        res.status(400).json({ status: "failed", message: "post id is empty" })
+    }
+    catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "Server has an err" })
+    }
+  }
+  // PATCH /post/restore
+  async restorePost(req, res) {
+    try {
+      if (req.body.id) {
+        let post = await db.Post.findOne({
+          paranoid: false,
+          where: {
+            id: req.body.id
+          }
+        }).catch(err => { throw err });
+        console.log(post)
+        if (post.UserId == req.userId) {
+          await post.restore().catch(err => { throw err });
+          res.json({ status: "success", message: "restore post successfully" });
+        }
+        else
+          res.json({ status: "failed", message: "you are not post's owner" });
+      }
+      else
+        res.status(400).json({ status: "failed", message: "post id is empty" })
+    }
+    catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "Server has an err" })
     }
   }
   // POST : /post/handle_action
-  async handleAction(req, res){
-    try{
-      if(req.body.action === "delete"){
-        if(req.body.postIds){
+  async handleAction(req, res) {
+    try {
+      if (req.body.action === "delete") {
+        if (req.body.postIds) {
           let posts = await db.Post.findAll({
-            where : {
-              id : {
-                [db.Sequelize.Op.in] : req.body.postIds 
+            where: {
+              id: {
+                [db.Sequelize.Op.in]: req.body.postIds
               }
             }
-          }).catch(err=>{ throw err });
-          let isValidOwner = posts.every(post=>post.UserId == req.userId);
-          if(isValidOwner){
-            posts.forEach(async post=>{
-              await post.destroy().catch(err=>{ throw err });
+          }).catch(err => { throw err });
+          let isValidOwner = posts.every(post => post.UserId == req.userId);
+          if (isValidOwner) {
+            posts.forEach(async post => {
+              await post.destroy().catch(err => { throw err });
             })
-            res.json({status:"success", message:"delete posts successfully"});
+            res.json({ status: "success", message: "delete posts successfully" });
           }
           else
-            res.status(400).json({status:"failed", message:"some posts's owner are invalid owner"});
+            res.status(400).json({ status: "failed", message: "some posts's owner are invalid owner" });
         }
       }
-      else{
-        res.status(400).json({status:"failed", message:"action is invalid"});
-      }
+      else
+        if (req.body.action === "destroy") {
+          if (req.body.postIds) {
+            let posts = await db.Post.findAll({
+              paranoid: false,
+              where: {
+                id: {
+                  [db.Sequelize.Op.in]: req.body.postIds
+                }
+              }
+            }).catch(err => { throw err });
+            let isValidOwner = posts.every(post => post.UserId == req.userId);
+            if (isValidOwner) {
+              posts.forEach(async post => {
+                await post.destroy({ force: true }).catch(err => { throw err });
+              })
+              res.json({ status: "success", message: "destroy posts successfully" });
+            }
+            else
+              res.status(400).json({ status: "failed", message: "some posts's owner are invalid owner" });
+          }
+        }
+        else
+          if (req.body.action === "restore") {
+            if (req.body.postIds) {
+              let posts = await db.Post.findAll({
+                paranoid: false,
+                where: {
+                  id: {
+                    [db.Sequelize.Op.in]: req.body.postIds
+                  }
+                }
+              }).catch(err => { throw err });
+              let isValidOwner = posts.every(post => post.UserId == req.userId);
+              if (isValidOwner) {
+                posts.forEach(async post => {
+                  await post.restore().catch(err => { throw err });
+                })
+                res.json({ status: "success", message: "restore posts successfully" });
+              }
+              else
+                res.status(400).json({ status: "failed", message: "some posts's owner are invalid owner" });
+            }
+          }
+          else {
+            res.status(400).json({ status: "failed", message: "action is invalid" });
+          }
     }
-    catch(err){
+    catch (err) {
       console.log(err);
-      res.status(500).json({status:"failed", message:"Server has an err"})
+      res.status(500).json({ status: "failed", message: "Server has an err" })
     }
-  } 
+  }
   // POST : /post/image/
   uploadImage(req, res) {
     if (req.file) {
