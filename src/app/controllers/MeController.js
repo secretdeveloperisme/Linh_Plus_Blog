@@ -116,5 +116,48 @@ class MeController {
       res.status(500).json({ status: "failed", message: "server has an err" })
     }
   }
+  async getFollowUser(req, res){
+    try {
+      let data = {
+        user: null,
+        following_users: null,
+        amounts:{
+          posts: 0,
+          tags: 0,
+          following_users: 0,
+          trash_posts: 0
+        }
+      }
+      data.user = await db.User.findOne({
+        where: {
+          id: req.userId
+        }
+      }).catch(err => { throw err })
+      data.amounts.posts = await db.Post.count({
+        where: {
+          UserId : req.userId
+        }
+      }).catch(err=>{throw err});
+      data.amounts.tags = await db.Tag.count({
+        
+      }).catch(err=>{throw err});
+      data.amounts.following_users = await db.FollowUser.count({
+        where: {
+          FollowerId : req.userId
+        }
+      }).catch(err=>{throw err});
+      data.following_users = await db.sequelize.query(`
+        SELECT * FROM follow_users 
+        INNER JOIN users
+        ON follow_users.user_id = users.id
+        WHERE follow_users.follower_id = ${req.userId};
+      `,{type: db.Sequelize.QueryTypes.SELECT});
+      console.log(data.following_users) 
+      res.render("me/follow_users", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "server has an err" })
+    }
+  }
 }
 module.exports = new MeController();
