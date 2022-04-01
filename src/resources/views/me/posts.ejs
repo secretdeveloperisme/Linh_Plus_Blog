@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <%- include("../partials/head") %> 
-  <title>Trash</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -27,12 +26,12 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/me/posts" class="nav-link link-dark d-flex active" aria-current="page">
+            <a href="" class="nav-link link-dark d-flex active" aria-current="page">
               <div>
                 <i class="fas fa-file-alt" aria-hidden="true"></i>
                 Posts
               </div>
-              <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.posts %></span>
+              <span class="badge ms-auto bg-primary rounded-pill" id="postAmount"><%= amounts.posts %></span>
             </a>
           </li>
           <li class="nav-item">
@@ -53,13 +52,13 @@
               <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.following_users %></span>
             </a>
           </li>
-          <li class="nav-item ">
-            <a  href="/me/trash/posts" class="nav-link link-dark d-flex " aria-current="page">
+          <li class="nav-item">
+            <a href="/me/trash/posts" class="nav-link link-dark d-flex" aria-current="page">
               <div>
                 <i class="fas fa-trash" aria-hidden="true"></i>
                 Trash
               </div>
-              <span class="badge ms-auto bg-primary rounded-pill"><%= amounts.trash_posts %></span>
+              <span class="badge ms-auto bg-primary rounded-pill" id="trashPostAmount"><%= amounts.trash_posts %></span>
             </a>
           </li>
           <li class="nav-connect">
@@ -75,8 +74,8 @@
       <div class="content">
         <div class="posts px-4">
           <div class="text-center">
-            <h1 class="mb-4">My Posts</h1>
-            <a href="/me/posts" class="btn btn-warning">My post</a>
+            <h1 class="mb-4">My posts</h1>
+            <a href="/me/trash/posts" class="btn btn-warning">My trash</a>
             <a href="/post/write" class="btn btn-primary">New Post</a>
           </div>
           <div class="mt-4 mx-1 d-flex align-items-center">
@@ -88,8 +87,7 @@
             </div>
             <select class="form-select-sm mx-2" aria-label="Select Action" id="selectAction">
               <option selected value="">--Select Action--</option>
-              <option value="restore">Restore</option>
-              <option value="destroy">Destroy</option>
+              <option value="delete">Delete</option>
             </select>
             <button class="btn btn-sm btn-primary disabled" id="btnSubmitAll" >execution</button>
           </div>
@@ -109,8 +107,8 @@
                   <td scope="row"><a href="/post/<%= post.slug %>"><%= post.title %></a></td>
                   <td scope="row"><%- post.StatusId == 1?'<span class="badge bg-success">Public</span>':(post.StatusId === 2?'<span class="badge bg-danger">private</span>':"none") %></td>
                   <td scope="row" class="">
-                    <a data-id="<%= post.id %>" class="btn btn-primary btn-restore">restore</a>
-                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#destroyPostModal" data-id="<%= post.id %>">destroy</a>
+                    <a href="/post/edit/<%= post.slug %>" class="btn btn-secondary">edit</a>
+                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-id="<%= post.id %>">delete</a>
                   </td>
                 </tr>
                 <% }) %>
@@ -124,19 +122,19 @@
             </tbody>
           </table>
           <!-- modal delete -->
-          <div class="modal fade" id="destroyPostModal" tabindex="-1" aria-labelledby="destroyPostModal">
+          <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModal">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Delete Permanently</h5>
+                  <h5 class="modal-title">Delete</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <p>Do you sure want to delete permanently?</p>
+                  <p>Do you sure want to delete ?</p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-danger" id="btnDestroyPost">Destroy</button>
+                  <button type="button" class="btn btn-danger" id="btnDeletePost">Delete</button>
                 </div>
               </div>
             </div>
@@ -174,6 +172,6 @@
   <%- include("../auth/login") %>
   <script src="/js/home.js"></script>
   <script src="/js/login.js"></script>
-  <script src="/js/me/trash.js"></script>
+  <script src="/js/me/posts.js"></script>
 </body>
 </html>

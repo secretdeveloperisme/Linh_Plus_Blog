@@ -1,9 +1,15 @@
-$(function (event) {
+$(function () {
   let $cbxAll = $("#formCheckboxAll");
   let $chxPosts = $(".checkbox-post");
   let $btnSubmitAll = $("#btnSubmitAll");
   let $selectAction = $("#selectAction");
   let $modalValidForm = $("#modalValidForm");
+  let $postAmount = $("#postAmount");
+  let $trashPostAmount = $("#trashPostAmount");
+  function changePostAmount(amountPost = 0, amountTrashPost = 0){
+    $postAmount.text(parseInt($postAmount.text()) + amountPost)
+    $trashPostAmount.text(parseInt($trashPostAmount.text()) + amountTrashPost) 
+  }
   $modalValidForm.find("button").on("click", function(e){
     $modalValidForm.modal("hide")
   })
@@ -37,6 +43,7 @@ $(function (event) {
             if(response.status === "success"){
               $(".checkbox-post").each((index, element)=>{
                 if(postIds.includes($(element).data("id"))){
+                  changePostAmount(-1,1);
                   $(element).parents().filter("tr").remove();
                 }
               })
@@ -45,28 +52,27 @@ $(function (event) {
           
         })
       }
-    }
-  })
-  $(() => {
-    $('#deletePostModal').on('show.bs.modal', function (event) {
-      let $button = $(event.relatedTarget);
-      let id = $button.data('id');
-      let $btnDeletePost = $('#btnDeletePost');
-      $btnDeletePost.on('click', function (event) {
-        $.ajax({
-          url: `/post`,
-          type: 'DELETE',
-          data: {
-           id,
-          },
-          dataType: 'json',
-          success: (response) => {
-            if (response.status == 'success') {
-              $button.parents().filter('tr').remove();
-              $('#deletePostModal').modal('hide');
-            }
-          },
-        });
+    }  
+  });
+  $('#deletePostModal').on('show.bs.modal', function (event) {
+    let $button = $(event.relatedTarget);
+    let id = $button.data('id');
+    let $btnDeletePost = $('#btnDeletePost');
+    $btnDeletePost.on('click', function (event) {
+      $.ajax({
+        url: `/post`,
+        type: 'DELETE',
+        data: {
+         id,
+        },
+        dataType: 'json',
+        success: (response) => {
+          if (response.status == 'success') {
+            $button.parents().filter('tr').remove();
+            changePostAmount(-1, 1);
+            $('#deletePostModal').modal('hide');
+          }
+        },
       });
     });
   });

@@ -5,6 +5,12 @@ $(function (event) {
   let $selectAction = $("#selectAction");
   let $btnRestores = $(".btn-restore");
   let $modalValidForm = $("#modalValidForm");
+  let $postAmount = $("#postAmount");
+  let $trashPostAmount = $("#trashPostAmount");
+  function changePostAmount(amountPost = 0, amountTrashPost = 0){
+    $postAmount.text(parseInt($postAmount.text()) + amountPost)
+    $trashPostAmount.text(parseInt($trashPostAmount.text()) + amountTrashPost) 
+  }
   $modalValidForm.find("button").on("click", function(e){
     $modalValidForm.modal("hide")
   })
@@ -31,6 +37,7 @@ $(function (event) {
       success: function (response) {
         if(response.status === "success"){
           $($element).parents().filter("tr").remove();
+          changePostAmount(1, -1);
         }
       }
     });
@@ -53,6 +60,12 @@ $(function (event) {
           dataType: "json",
           success: function(response){
             if(response.status === "success"){
+              if(action === "restore"){
+                changePostAmount(postIds.length, -postIds.length);
+              }
+              else if(action === "destroy"){
+                changePostAmount(0, -postIds.length);
+              }
               $(".checkbox-post").each((index, element)=>{
                 if(postIds.includes($(element).data("id"))){
                   $(element).parents().filter("tr").remove();
@@ -65,26 +78,25 @@ $(function (event) {
       }
     }
   })
-  $(() => {
-    $('#destroyPostModal').on('show.bs.modal', function (event) {
-      let $button = $(event.relatedTarget);
-      let id = $button.data('id');
-      let $btnDestroyPost = $('#btnDestroyPost');
-      $btnDestroyPost.on('click', function (event) {
-        $.ajax({
-          url: `/post/destroy`,
-          type: 'DELETE',
-          data: {
-           id,
-          },
-          dataType: 'json',
-          success: (response) => {
-            if (response.status == 'success') {
-              $button.parents().filter('tr').remove();
-              $('#destroyPostModal').modal('hide');
-            }
-          },
-        });
+  $('#destroyPostModal').on('show.bs.modal', function (event) {
+    let $button = $(event.relatedTarget);
+    let id = $button.data('id');
+    let $btnDestroyPost = $('#btnDestroyPost');
+    $btnDestroyPost.on('click', function (event) {
+      $.ajax({
+        url: `/post/destroy`,
+        type: 'DELETE',
+        data: {
+          id,
+        },
+        dataType: 'json',
+        success: (response) => {
+          if (response.status == 'success') {
+            $button.parents().filter('tr').remove();
+            changePostAmount(0, -1)
+            $('#destroyPostModal').modal('hide');
+          }
+        },
       });
     });
   });
