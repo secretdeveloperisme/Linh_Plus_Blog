@@ -23,5 +23,6 @@ router.post("/upload/avatar", upload.single("avatar"),meController.uploadAvatar)
 router.get("/posts",verifyToken, meController.getPost);
 router.get("/trash/posts", verifyToken, meController.getTrash);
 router.get("/following_users", verifyToken, meController.getFollowUser);
+router.get("/tags",verifyToken, meController.getTag);
 
 module.exports = router;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <%- include("../partials/head") %> 
-  <title>Following Users</title>
+  <title>Tags</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -36,7 +36,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/me/tags" class="nav-link link-dark d-flex" aria-current="page">
+            <a href="/me/tags" class="nav-link link-dark d-flex active" aria-current="page">
               <div>
                 <i class="fas fa-tag" aria-hidden="true"></i>
                 Tags
@@ -45,7 +45,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/me/following_users" class="nav-link link-dark d-flex active" aria-current="page">
+            <a href="/me/following_users" class="nav-link link-dark d-flex" aria-current="page">
               <div>
                 <i class="fas fa-user" aria-hidden="true"></i>
                 Following Users
@@ -54,7 +54,7 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a href="/me/trash/posts" class="nav-link link-dark d-flex" aria-current="page">
+            <a href="/trash/posts" class="nav-link link-dark d-flex" aria-current="page">
               <div>
                 <i class="fas fa-trash" aria-hidden="true"></i>
                 Trash
@@ -75,14 +75,13 @@
       <div class="content">
         <div class="posts px-4">
           <div class="text-center">
-            <h1 class="mb-4">Following Users</h1>
+            <h1 class="mb-4">Tags</h1>
           </div>
           <div class="row g-3">
-            <% following_users.forEach(following_users=>{ %>
+            <% tags.forEach(tag=>{ %>
               <div class="col-xl-4">
-                <a href="/user/<%= following_users.username %>" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
-                  <div class="icon-64" style="background-image: url('<%= following_users.avatar %>');"></div>
-                  <h3><%= following_users.username%></h3>
+                <a href="/tag/<%= tag.name %>" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
+                  <h3>#<%= tag.name%></h3>
                 </a>
               </div>
             <% }) %>
