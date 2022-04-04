@@ -1,0 +1,24 @@
+@import "_variables";
+.profile-wrapper{
+  background: linear-gradient(180deg, $profile-brand-color 8rem, transparent 8rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profile{
+  margin-top: $avatarSizeLarge - 32px;
+  width: 1024px;
+  &-header{
+    background-color: white; 
+  }
+   
+  &-header__top{
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  &-header__avatar{
+    margin-top: -$avatarSizeLarge / 2;
+    background-color: $profile-brand-color;
+  }
+}

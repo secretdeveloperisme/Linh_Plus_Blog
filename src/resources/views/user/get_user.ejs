@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head") %> 
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/user.css">
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <% if(user) {%> 
+      <%- include("../partials/nav",{user:user}) %>
+      <%}else {%> 
+      <%- include("../partials/nav") %>
+      <% } %> 
+    </header>
+    <div class="main">
+      <div class="profile-wrapper">
+        <div class="profile">
+          <div class="profile-header rounded p-3 shadow">
+            <div class="profile-header__top">
+              <div class="p-2 profile-header__avatar rounded-circle">
+                <div class="icon-128" style="background-image: url('<%= targetUser.avatar %>');"></div>
+              </div>
+            </div>
+            <div class="profile-header__actions d-flex">
+              <button class="btn ms-auto <%= isFollowed?"btn-secondary":"btn-primary" %>" id="btnFollow" data-action="<%= isFollowed?"unfollow":"follow" %>" data-user-id="<%= targetUser.id %>"><%= isFollowed?"unfollow":"follow" %></button>
+            </div>
+            <div class="profile-header__detail">
+              <h1 class="text-center"><%= targetUser.username %> </h1>
+              <h5 class="text-center">
+                <%= targetUser.biography %>
+              </h5>
+              <div class="row">
+                <div class="col-3 text-center">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <%= targetUser.address %>
+                </div>
+                <div class="col-3 text-center">
+                  <i class="fas fa-envelope"></i>
+                  <%= targetUser.email %> 
+                </div>
+                <div class="col-3 text-center">
+                  <i class="fas fa-birthday-cake"></i>
+                  <%= targetUser.dob %> 
+                </div>
+                <div class="col-3 text-center">
+                  <i class="far fa-calendar-plus"></i>
+                  Joined <%- include("../helpers/format_date.helper.ejs",{timestamp: targetUser.createdAt}) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="row g-2">
+              <div class="col-3">
+                <div class="p-2 shadow bg-white rounded">
+                  <h3 class="text-center">Statistics</h3>
+                  <div>
+                    <i class="fas fa-file-alt"></i>
+                    <span><%= statistics.amountOfPublishedPosts %></span>
+                    posts published
+                  </div>
+                  <div>
+                    <i class="fas fa-comment"></i>
+                    <span><%= statistics.amountOfWrittenComments %></span>
+                    comment written 
+                  </div>
+                  <div>
+                    <i class="fas fa-tag"></i>
+                    <span><%= statistics.amountOfFollowedTags %></span>
+                    tags followed 
+                  </div>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="posts">
+                  <% posts.forEach(post=>{ %>
+                    <div class="post-item shadow bg-white rounded p-2 mb-2">
+                      <a href="/post/<%= post.slug %>" class="text-decoration-none text-black">
+                        <div class="post-header d-flex">
+                          <div class="icon-32 me-2" style="background-image: url('<%= post.user.avatar %>')"></div>
+                          <div class="d-flex flex-column">
+                            <h6><%= post.user.username %></h6>
+                            <span><%- include("../helpers/format_date.helper.ejs", {timestamp: post.createdAt})%></span>
+                          </div>
+                        </div>
+                        <div class="post-detail">
+                          <h2 class=""><%= post.title %></h2>
+                          <div class="post-tags">
+                            <% post.tags.forEach(tag=>{ %>
+                              <a href="/tags/<%= tag.name %>">#<span><%= tag.name %></span></a>
+                            <% }) %>
+                          </div>
+                          <div class="d-flex">
+                            <a href="/post/<%= post.slug %>#btnLike" class="btn btn-link text-decoration-none text-black">
+                              <i class="far fa-heart"></i>
+                              <span><%= post.numberOfReactions %></span>
+                              reactions
+                            </a>
+                            <a href="/post/<%= post.slug %>#commentEditor" class="btn btn-link text-decoration-none text-black">
+                              <i class="far fa-comment"></i>
+                              <span><%= post.numberOfComments %></span>
+                              comment
+                            </a>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <%- include("../auth/login") %>
+  <script src="/js/home.js"></script>
+  <script src="/js/login.js"></script>
+  <script src="/js/user/GetUser.js"></script>
+</body>
+</html>
