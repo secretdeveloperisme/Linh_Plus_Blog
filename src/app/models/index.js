@@ -14,6 +14,7 @@ const Comment = require("./Comment");
 const CommentLike = require("./CommentLike");
 const Status = require("./Status");
 const Bookmark = require("./Bookmark");
+const FollowTag = require("./FollowTag");
 
 const db = {};
 const sequelize = new Sequelize(
@@ -46,6 +47,7 @@ db.PostTag = PostTag(sequelize);
 db.CommentLike = CommentLike(sequelize);
 db.Like = Like(sequelize);
 db.Bookmark = Bookmark(sequelize);
+db.FollowTag = FollowTag(sequelize);
 /* ======== association ======== */
 // User <=-=> Role
 db.User.belongsToMany(db.Role,{
@@ -76,6 +78,18 @@ db.Post.belongsToMany(db.Tag,
 db.Tag.belongsToMany(db.Post,
   {
     through: db.PostTag
+  }
+);
+// User <=-=> Tag
+db.User.belongsToMany(db.Tag,
+  {
+    through: db.FollowTag,
+    
+  }
+);
+db.Tag.belongsToMany(db.User,
+  {
+    through: db.FollowTag
   }
 );
 // Post <=--> Status
