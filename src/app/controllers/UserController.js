@@ -41,6 +41,11 @@ class UserController{
             UserId : data.targetUser.id,
           }
         }).catch(err=>{throw err});
+        data.statistics.amountOfFollowedTags = await db.FollowTag.count({
+          where:{
+            UserId : data.targetUser.id
+          }
+        })
         data.posts = await db.Post.findAll({
           where: {
             UserId : data.targetUser.id,

@@ -30,8 +30,10 @@ class MeController {
           UserId : req.userId
         }
       }).catch(err=>{throw err});
-      data.amounts.tags = await db.Tag.count({
-        
+      data.amounts.tags = await db.FollowTag.count({
+        where: {
+          UserId: req.userId
+        }
       }).catch(err=>{throw err});
       data.amounts.following_users = await db.FollowUser.count({
         where: {
@@ -82,8 +84,10 @@ class MeController {
           UserId : req.userId
         }
       }).catch(err=>{throw err});
-      data.amounts.tags = await db.Tag.count({
-        
+      data.amounts.tags = await db.FollowTag.count({
+        where: {
+          UserId: req.userId
+        }
       }).catch(err=>{throw err});
       data.amounts.following_users = await db.FollowUser.count({
         where: {
@@ -138,8 +142,10 @@ class MeController {
           UserId : req.userId
         }
       }).catch(err=>{throw err});
-      data.amounts.tags = await db.Tag.count({
-        
+      data.amounts.tags = await db.FollowTag.count({
+        where: {
+          UserId: req.userId
+        }
       }).catch(err=>{throw err});
       data.amounts.following_users = await db.FollowUser.count({
         where: {
@@ -181,15 +187,17 @@ class MeController {
           UserId : req.userId
         }
       }).catch(err=>{throw err});
-      data.amounts.tags = await db.Tag.count({
-        
+      data.amounts.tags = await db.FollowTag.count({
+        where: {
+          UserId: req.userId
+        }
       }).catch(err=>{throw err});
       data.amounts.following_users = await db.FollowUser.count({
         where: {
           FollowerId : req.userId
         }
       }).catch(err=>{throw err});
-      data.tags = await db.Tag.findAll()
+      data.tags = await data.user.getTags()
         .catch(err=>{throw err});
       res.render("me/tags", data);
     } catch (err) {
