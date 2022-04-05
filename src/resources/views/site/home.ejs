@@ -31,7 +31,7 @@
             <ul id="categoryList" class="collapse show mr-2 list-group list-group-flush">
               <% if(categories){ %>
                 <% categories.forEach(category=>{ %>
-                  <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="/search/category/<%= category.id %>"><%= category.name %> </a></li>
+                  <li class="list-group-item list-group-item-action"><a class="text-decoration-none" href="/category/<%= category.name %>"><%= category.name %> </a></li>
               <%  }) %>
               <% } %>
             </ul>

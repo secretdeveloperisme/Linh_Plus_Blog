@@ -7,6 +7,7 @@ const follow = require("./follow");
 const comment = require("./comment");
 const user = require("./user");
 const tag = require("./tag");
+const category = require("./category");
 
 function route(app){
   app.use("/", siteRouter);
@@ -18,6 +19,7 @@ function route(app){
   app.use("/comment", comment);
   app.use("/user", user);
   app.use("/tag", tag);
+  app.use("/category", category);
 }
 
 module.exports = route;
