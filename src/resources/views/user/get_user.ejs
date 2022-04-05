@@ -90,7 +90,7 @@
                           <h2 class=""><%= post.title %></h2>
                           <div class="post-tags">
                             <% post.tags.forEach(tag=>{ %>
-                              <a href="/tags/<%= tag.name %>">#<span><%= tag.name %></span></a>
+                              <a href="/tag/<%= tag.name %>">#<span><%= tag.name %></span></a>
                             <% }) %>
                           </div>
                           <div class="d-flex">

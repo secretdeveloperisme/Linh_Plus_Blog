@@ -44,7 +44,7 @@
             <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
               <% if(tags){ %>
                 <% tags.forEach(tag=>{ %>
-                  <li class="list-group-item list-group-item-action"><a href="/search/tag/<%= tag.id %>" class="text-decoration-none"><%= tag.name %></a></li>
+                  <li class="list-group-item list-group-item-action"><a href="/tag/<%= tag.name %>" class="text-decoration-none"><%= tag.name %></a></li>
               <%  }) %>
               <% } %>
             </ul>
@@ -80,7 +80,7 @@
                     <div class="post-content">
                       <div class="post-tag">
                         <% post.Tags.forEach((tag,index)=>{ %> 
-                          <a href="/search/tag/<%= tag.id %>" class="tag-link">#<%= tag.name %> </a>
+                          <a href="/tag/<%= tag.name %>" class="tag-link">#<%= tag.name %> </a>
                         <% }) %>
                       </div>
                       <h6 class="post-title">

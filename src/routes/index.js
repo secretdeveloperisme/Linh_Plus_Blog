@@ -6,6 +6,7 @@ const react = require("./react");
 const follow = require("./follow");
 const comment = require("./comment");
 const user = require("./user");
+const tag = require("./tag");
 
 function route(app){
   app.use("/", siteRouter);
@@ -16,6 +17,7 @@ function route(app){
   app.use("/follow", follow);
   app.use("/comment", comment);
   app.use("/user", user);
+  app.use("/tag", tag);
 }
 
 module.exports = route;
