@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../partials/head") %>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <title>Edit User</title>
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <% if(user) {%>
+        <%- include("../partials/nav",{user:user}) %>
+          <%}else {%>
+            <%- include("../partials/nav") %>
+              <% } %>
+    </header>
+    <div class="main">
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="nav d-block">
+              <a href="#" class="nav-link btn btn-primary text-white d-block">
+                <i class="fas fa-smile"></i>
+                <span>Profile</span>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="shadow rounded p-3 bg-white">
+              <h1>User</h1>
+              <form class="row g-3" id="updateForm" action="/user/update" method="post"
+                enctype="application/x-www-form-urlencoded">
+                <div class="col-6">
+                  <div class="col-lg-12">
+                    <label for="updateUsername" class="form-label">Username</label>
+                    <input type="text" id="updateUsername" required name="username" class="form-control"
+                      placeholder="input your username...." value="<%= user.username %>">
+                    <div class="valid-feedback">
+                      Look good!
+                    </div>
+                  </div>
+                  <div id="gender" class="p-2">
+                    <div class="form-check form-check-inline">
+                      <input type="radio" name="gender" id="maleGender" class="form-check-input" value="m" <%= user.gender==="m"?"checked":"" %>>
+                      <label for="maleGender" class="form-check-label">Male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input type="radio" name="gender" id="femaleGender" class="form-check-input" value="f" <%= user.gender==="f"?"checked":"" %> >
+                      <label for="femaleGender" class="form-check-label">Female</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" id="email" name="email" required class="form-control"
+                      placeholder="input your email....@gmail.com" value="<%= user.email %>">
+                    <div class="valid-feedback">Look good!</div>
+                    <div class="invalid-feedback">email is wrong format</div>
+                  </div>
+                  <div class="col-lg-12 mt-2">
+                    <label for="dob" class="form-label">Date of birth</label>
+                    <input type="date" name="dob" required class="dob" id="dob" value="<%= user.dob %>">
+                  </div>
+                  <div class="col-12">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" id="address" name="address" class="form-control"
+                      placeholder="input your phone number...." value="<%= user.address %>">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="col-12">
+                    <label for="biography" class="form-label">Biography</label>
+                    <textarea type="text" id="biography" name="biography" rows="3" class="form-control"
+                      placeholder="input your biography...." ><%= user.biography %></textarea>
+                  </div>
+                  <div class="col-12 m-3">
+                    <input type="file" name="avatar" hidden class="custom-file-input" accept="image/*" id="avatar">
+                    <label class="d-flex flex-column text-center" for="avatar" style="width: fit-content;">
+                      <img class="border-danger img-thumbnail" id="displayAvatar"
+                        style="width: 128px; height: 128px; object-fit: contain;" src="<%= user.avatar %>">
+                      Avatar
+                    </label>
+                    <input type="hidden" name="avatarPath" id="avatarPath">
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-primary" id="btnSave">Save Changes</button>
+                </div>
+              </form>
+            </div>
+            <div class="mt-3 rounded shadow p-3 bg-white">
+              <h1>Change Password</h1>
+              <form action="/edit/change_password" id="changePasswordForm">
+                <div class="">
+                  <label for="oldPassword" class="form-label">Old Password</label>
+                  <input type="password" autocomplete="on" id="oldPassword"required name="oldPassword" class="form-control" placeholder="input your password....">
+                  <div class="valid-feedback">Look good!</div>
+                  <div class="invalid-feedback">Retype password does not match password</div>
+                </div>
+                <div class="mt-3">
+                  <label for="signupPassword" class="form-label">New Password</label>
+                  <input type="password" name="newPassword" autocomplete="on" id="signupPassword" required class="form-control newPassword" placeholder="input your retype password....">
+                  <span id="lower" class="check-valid invalid"><i class="fas fa-dot-circle"></i>A <b>lowercase</b> letter</span>
+                  <span id="capital" class="check-valid invalid"><i class="fas fa-dot-circle"></i>A <b>capital (uppercase)</b> letter</span>
+                  <span id="number" class="check-valid invalid"><i class="fas fa-dot-circle"></i>A <b>number</b></span>
+                  <span id="length" class="check-valid invalid"><i class="fas fa-dot-circle"></i>Minimum <b>8 characters</b></span>
+                  <span id="special" class="check-valid invalid"><i class="fas fa-dot-circle"></i>one or more <b>special</b> characters</span>
+                </div>
+                <button class="btn btn-primary mt-3" id="btnChangePassword">Change Password</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- Modal Update-->
+  <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1021">
+    <div id="updateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="toast-icon fas fa-check text-primary" ></i>
+        <strong class="me-auto toast-title ms-3">Bootstrap</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Hello, world! This is a toast message.
+      </div>
+    </div>
+  </div>
+  <%- include("../auth/login") %>
+    <script src="/js/home.js"></script>
+    <script src="/js/login.js"></script>
+    <script src="/js/user/UpdateUser.js"></script>
+</body>
+
+</html>

@@ -1,4 +1,5 @@
 const db = require("../models");
+const bcryptjs = require("bcryptjs");
 class UserController{
   async getUser(req, res){
     try {
@@ -76,6 +77,72 @@ class UserController{
       console.log(err);
       res.status(500).json({ status: "failed", message: "Server has an err" })
     }
+  }
+  async editUser(req, res){
+    try {
+      let data = {
+        user: null
+      }
+      data.user = await db.User.findOne({
+        where:{
+          id : req.userId
+        }
+      }).catch(err=>{throw err});
+      res.render("user/edit_user", data)
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "Server has an err" })
     }
+  }
+  async updateUser(req, res){
+    try {
+      if(req.body.username){
+        let user = await db.User.findOne({
+          where: {
+            id : req.userId
+          }
+        }).catch(err=>{throw err});
+        user.username = req.body.username;
+        user.gender = req.body.gender || user.gender;
+        user.avatar = req.body.avatarPath || user.avatar;
+        user.email = req.body.email || user.email;
+        user.dob = req.body.dob || user.dob;
+        user.biography = req.body.biography || user.biography;
+        user.address = req.body.address || user.address;
+        await user.save().catch(err=>{throw err})
+        res.json({status:"success", message:"update user successfully"})
+      }
+      else{
+        res.status(400).json({status:"failed", message:"username is empty "} )
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "Server has an err" })
+    }
+  }
+  async changePassword(req, res){
+    try {
+      if(!req.body.oldPassword){
+        return res.status(400).json({status:"failed", message:"old password is empty"})
+      }
+      if(!req.body.newPassword){
+        return res.status(400).json({status:"failed", message:"new password is empty"})
+      }
+      let user = await db.User.findOne({
+        where: {
+          id : req.userId
+        }
+      }).catch(err=>{throw err});
+      if(!bcryptjs.compareSync(req.body.oldPassword, user.passwordHash)){
+        return res.status(400).json({status:"failed", message:"your old password is not the same"})
+      }
+      user.passwordHash = req.body.newPassword;
+      await user.save().catch(err=>{throw err});
+      res.json({status: "success", "message": "update password successfully"})
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "Server has an err" })
+    }
+  }
 }
 module.exports = new UserController();
