@@ -37,9 +37,22 @@ UPDATE `linh_plus_blog`.`posts` SET `deletedAt` = null;
 
 alter table follow_users drop index follow_users_UserId_UserId_unique;
 
-delete from posts ;
+-- delete from posts ; 
 
-
+declare procedure 
+delimiter ??
+create procedure get_popular_posts()
+begin
+select posts.id,title,slug,createdAt, count(id) as number_of_likes
+	from posts 
+    inner join likes on posts.id = likes.post_id
+    where type_like = "like"
+    group by posts.id,title,slug,createdAt
+    order by number_of_likes DESC
+    limit 0, 5;
+end??
+drop procedure get_popular_posts;
+call get_popular_posts();
 -- declare functions 
 delimiter ??
 create function is_comment_like_by_user( comment_id int, user_id int)

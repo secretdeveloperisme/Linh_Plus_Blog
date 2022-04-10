@@ -111,76 +111,30 @@
               <h4>Bài viết phổ biến</h4>
             </div>
             <div class="popular-post-list">
-              <div class="popular-post-item d-flex p-2">
-                <div class="popular-post-item-order">
-                  
-                </div>
-                <div class="post-content">
-                  <h6 class="post-title">
-                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
-                  </h6>
-                  <div class="post-tag">
-                    <a href="" class="tag-link">#facebook</a>
-                    <a href="" class="tag-link">#programming</a>
+              <% popularPosts.forEach(popularPost=>{ %> 
+                <div class="popular-post-item d-flex p-2">
+                  <div class="popular-post-item-order">
                   </div>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
+                  <div class="post-content">
+                    <h6 class="post-title">
+                      <a href="/post/<%= popularPost.slug %>" class="text-decoration-none text-dark"><%= popularPost.title%></a>
+                    </h6>
+                    <div class="post-tag">
+                      <% popularPost.tags.forEach(tag=>{%>
+                        <a href="/tag/<%= tag.name %>" class="tag-link">#<%= tag.name %></a>
+                      <% }) %> 
                     </div>
-                    <div class="post-published">
-                      02/18/2022
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-              <div class="popular-post-item d-flex p-2">
-                <div class="popular-post-item-order">
-                  
-                </div>
-                <div class="post-content">
-                  <h6 class="post-title">
-                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
-                  </h6>
-                  <div class="post-tag">
-                    <a href="" class="tag-link">#facebook</a>
-                    <a href="" class="tag-link">#programming</a>
-                  </div>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
-                    </div>
-                    <div class="post-published">
-                      02/18/2022
+                    <div class="post-info ">
+                      <div class="post-author">
+                        <a href="/user/<%= popularPost.author.username %>" class="text-decoration-none text-secondary"><%= popularPost.author.username %></a>
+                      </div>
+                      <div class="post-published">
+                        <%- include("../helpers/format_date.helper.ejs",{timestamp: popularPost.createdAt}) %>
+                      </div>
                     </div>
                   </div>
-                  
                 </div>
-              </div>
-              <div class="popular-post-item d-flex p-2">
-                <div class="popular-post-item-order">
-                  
-                </div>
-                <div class="post-content">
-                  <h6 class="post-title">
-                    <a href="" class="text-decoration-none text-dark">Từ nay tôi sẽ tiến bộ hơn ngày hôm qua</a>
-                  </h6>
-                  <div class="post-tag">
-                    <a href="" class="tag-link">#facebook</a>
-                    <a href="" class="tag-link">#programming</a>
-                    <a href="" class="tag-link">#book</a>
-                  </div>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a href="" class="text-decoration-none text-secondary">Hoang Linh</a>
-                    </div>
-                    <div class="post-published">
-                      02/18/2022
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
+              <% }) %>
             </div>
 
           </div>
