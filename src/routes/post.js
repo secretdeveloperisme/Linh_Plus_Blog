@@ -38,6 +38,8 @@ router.post("/write",verifyToken, postController.uploadPost);
 router.get("/edit/:slug",verifyToken, postController.editPostUI);
 router.patch("/", verifyToken, postController.updatePost);
 router.post("/image", [verifyToken, upload.single("image")],postController.uploadImage);
+router.get("/get_all_posts", postController.getAllPostsPerPage);
+router.get("/get_followed_posts", verifyToken,postController.getFollowedPostByPage);
 router.get("/:slug",verifyToken ,postController.getPost);
 
 module.exports = router;

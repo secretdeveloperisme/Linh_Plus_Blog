@@ -16,7 +16,7 @@ show index from likes;
 
 SHOW CREATE TABLE likes;
 SHOW CREATE TABLE follow_users;
-
+-- select query
 select * from users;
 select * from posts;
 select * from categories;
@@ -32,14 +32,27 @@ select comments.id, comments.parent_id,is_comment_like_by_user(comments.id,8) as
   from
  (comments left join comment_likes on comment_likes.comment_id = comments.id) 
  inner join users on users.id = comments.user_id group by comments.id;
+-- get posts that are 
+select  distinct posts.id as post_id,posts.createdAt as createdAt, posts.user_id as UserId from users
+	inner join followtags on users.id = followtags.user_id
+    inner join tags on followtags.tag_id = tags.id
+	inner join post_tags on post_tags.TagId = tags.id
+    inner join posts on post_tags.post_id = posts.id
+    where users.id = 2
+union 
+select distinct posts.id as post_id, posts.createdAt as createdAt, posts.user_id  as UserId from users
+	inner join follow_users on follow_users.follower_id = users.id
+    inner join posts on posts.user_id = follow_users.user_id
+    where users.id = 2
+order by createdAt desc
+limit 0,5
+-- UPDATE `linh_plus_blog`.`posts` SET `deletedAt` = null;
 
-UPDATE `linh_plus_blog`.`posts` SET `deletedAt` = null;
-
-alter table follow_users drop index follow_users_UserId_UserId_unique;
+-- alter table follow_users drop index follow_users_UserId_UserId_unique;
 
 -- delete from posts ; 
 
-declare procedure 
+-- declare procedure 
 delimiter ??
 create procedure get_popular_posts()
 begin

@@ -423,7 +423,101 @@ class PostController {
       res.status(500).json({ status: "failed", message: "upload post image failed" });
     }
   }
-
-
+  // get posts that relate user 
+  async getFollowedPosts(userId, start, numberOfPostsPerPage){
+    let posts = await db.sequelize.query(`
+      select  distinct posts.id as id, posts.title,posts.slug, posts.image, posts.createdAt as createdAt, posts.user_id as UserId from users
+      inner join followtags on users.id = followtags.user_id
+        inner join tags on followtags.tag_id = tags.id
+      inner join post_tags on post_tags.TagId = tags.id
+        inner join posts on post_tags.post_id = posts.id
+        where users.id = ${userId}
+      union 
+      select distinct posts.id as id, posts.title,posts.slug ,posts.image, posts.createdAt as createdAt, posts.user_id as UserId from users
+        inner join follow_users on follow_users.follower_id = users.id
+          inner join posts on posts.user_id = follow_users.user_id
+          where users.id =  ${userId}
+      order by createdAt desc
+      limit ${start},${numberOfPostsPerPage}
+    `, {
+      type: db.Sequelize.QueryTypes.SELECT,
+      raw: false,
+      model: db.Post
+    }).catch(err => { throw err })
+    for(let post of posts){
+      post["User"] = await post.getUser().catch(err=>{throw err});
+      post["Tags"] = await post.getTags().catch(err=>{throw err});
+    }
+    return posts;
+  }
+  async getAllPosts(start, numberOfPostsPerPage){
+    let posts = await db.Post.findAll({
+      attributes: ["id", "title", "slug", "image", "createdAt"],
+      include: [{
+        model: db.User,
+        attributes: ["username"]
+      }, {
+        model: db.Category,
+        attributes: ["id", "name"]
+      }, {
+        model: db.Tag,
+        attributes: ["id", "name"]
+      }],
+      order: [["createdAt", "DESC"]],
+      limit: [start, numberOfPostsPerPage+1]
+    })
+    return posts;
+  }
+  async getAllPostsPerPage(req, res){
+    try{
+      const amountOfPostsPerPage = 3;
+      if(req.query.page){
+        if(req.query.page < 1){
+          req.query.page = 1
+        }
+        let start = (amountOfPostsPerPage*req.query.page) - amountOfPostsPerPage;
+        let posts = await new PostController().getAllPosts(start, amountOfPostsPerPage);
+        posts = posts.map(post=>{
+          post.dataValues["User"] = post.User;
+          post.dataValues["Tags"] = post.Tags;
+          return post;
+        })
+        res.json({status:"success", message:"get all post per page successfully", posts});
+      }
+      else{
+        res.status(400).json({status:"failed", message:"page is not set"})
+      }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an err"}) 
+    }
+  }
+  // GET: /post/page
+  async getFollowedPostByPage(req, res){
+    try{
+      const amountOfPostsPerPage = 3;
+      if(req.query.page){
+        if(req.query.page < 1){
+          req.query.page = 1
+        }
+        let start = (amountOfPostsPerPage*req.query.page) - amountOfPostsPerPage;
+        let posts = await new PostController().getFollowedPosts(req.userId, start, amountOfPostsPerPage+1);
+        posts = posts.map(post=>{
+          post.dataValues["User"] = post.User;
+          post.dataValues["Tags"] = post.Tags;
+          return post;
+        })
+        res.json({status:"success", message:"get followed posts per page successfully", posts});
+      }
+      else{
+        res.status(400).json({status:"failed", message:"page is not set"})
+      }
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an err"}) 
+    }
+  }
 }
 module.exports = new PostController();
