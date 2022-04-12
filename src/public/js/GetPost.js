@@ -17,6 +17,7 @@ $(() => {
   const $btnDeleteComments = $(".btn-delete-comment");
   const $modalCheckDeleteComment = $("#checkDeleteComment");
   const $totalOfComments = $("#totalOfComments");
+  const $progressBar = $("#progressBar");
   let container = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -51,6 +52,14 @@ $(() => {
     theme: "snow",
   }
   let commentEditor = new Quill("#commentEditor", quillOptions)
+  // add progress bar 
+  function updateProgress (){
+    let currentPosition = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let progress = (currentPosition/height)*100 + "%"
+    $progressBar.css("width", progress)
+  }
+  $(window).on("scroll", updateProgress)
   // update total Of Comments
   function updateTotalOfComments(amount){
     $totalOfComments.text(Number.parseInt($totalOfComments.text()) + amount)
