@@ -6,7 +6,7 @@
   align-items: center;
 }
 .profile{
-  margin-top: $avatarSizeLarge - 32px;
+  margin-top: calc($avatarSizeLarge - 32px);
   width: 1024px;
   &-header{
     background-color: white; 

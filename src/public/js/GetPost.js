@@ -1,3 +1,5 @@
+import {formatDate} from "../js/utils/format_date.js";
+
 $(() => {
   const $btnLike = $("#btnLike");
   const $btnDisLike = $("#btnDislike");
@@ -14,6 +16,7 @@ $(() => {
   const $btnEditComments= $(".btn-edit-comment");
   const $btnDeleteComments = $(".btn-delete-comment");
   const $modalCheckDeleteComment = $("#checkDeleteComment");
+  const $totalOfComments = $("#totalOfComments");
   let container = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -48,6 +51,10 @@ $(() => {
     theme: "snow",
   }
   let commentEditor = new Quill("#commentEditor", quillOptions)
+  // update total Of Comments
+  function updateTotalOfComments(amount){
+    $totalOfComments.text(Number.parseInt($totalOfComments.text()) + amount)
+  }
   // comment reply events
   function replyComment() {
     let $target = $(this);
@@ -94,7 +101,7 @@ $(() => {
                         ${response.commentOwner.username}
                       </h5>
                       <div class="comment-createdAt">
-                        ${response.comment.createdAt}
+                        ${formatDate(response.comment.createdAt)}
                       </div>
                       <div class="comment-action dropdown ms-auto">
                         <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
@@ -150,6 +157,7 @@ $(() => {
             })
             let $btnReplyComment = $(`#reply-comment-id-${response.comment.id}`);
             $btnReplyComment.on("click", replyComment);
+            updateTotalOfComments(1);
           }
         }
       });
@@ -203,6 +211,7 @@ $(() => {
           if(response.status === "success"){
             $modalCheckDeleteComment.modal("hide");
             $btnDeleteComment.closest(".comment").slideUp();
+            updateTotalOfComments(-1);
           }
         }
       });
@@ -374,7 +383,7 @@ $(() => {
                       ${response.commentOwner.username}
                     </h5>
                     <div class="comment-createdAt">
-                      ${response.comment.createdAt}
+                      ${formatDate(response.comment.createdAt)}
                     </div>
                     <div class="comment-action dropdown ms-auto">
                       <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
@@ -430,6 +439,7 @@ $(() => {
           })
           let $btnReplyComment = $(`#reply-comment-id-${response.comment.id}`);
           $btnReplyComment.on("click", replyComment);
+          updateTotalOfComments(1);
         }
       }
     });

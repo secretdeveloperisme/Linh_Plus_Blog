@@ -152,6 +152,8 @@ class PostController {
           })
 
           // insert tags 
+          if(typeof req.body.tags === "string")
+            req.body.tags = [req.body.tags];
           for (let value of req.body.tags) {
             try {
               let [tag, isFound] = await db.Tag.findOrCreate({
