@@ -429,9 +429,9 @@ class PostController {
   async getFollowedPosts(userId, start, numberOfPostsPerPage){
     let posts = await db.sequelize.query(`
       select  distinct posts.id as id, posts.title,posts.slug, posts.image, posts.createdAt as createdAt, posts.user_id as UserId from users
-      inner join followtags on users.id = followtags.user_id
-        inner join tags on followtags.tag_id = tags.id
-      inner join post_tags on post_tags.TagId = tags.id
+      inner join follow_tags on users.id = follow_tags.user_id
+        inner join tags on follow_tags.tag_id = tags.id
+      inner join post_tags on post_tags.tag_id = tags.id
         inner join posts on post_tags.post_id = posts.id
         where users.id = ${userId}
       union 

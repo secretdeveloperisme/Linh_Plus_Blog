@@ -19,7 +19,7 @@ module.exports = (sequelize)=>{
         model: "tags",
         key: "id"
       },
-      filed : "tag_id"
+      field : "tag_id"
     }
   },{
     sequelize,

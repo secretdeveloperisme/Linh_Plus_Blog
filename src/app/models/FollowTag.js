@@ -23,7 +23,8 @@ module.exports = (sequelize)=>{
     }
   },{
     sequelize,
-    timestamps: false
+    timestamps: false,
+    tableName: "follow_tags"
   })
   return FollowTag;
 }

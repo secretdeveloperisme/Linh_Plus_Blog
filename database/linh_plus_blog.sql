@@ -3,6 +3,12 @@ create database linh_plus_blog;
 use linh_plus_blog;
 drop database linh_plus_blog;
 
+/* ======= alter table =======  */
+alter table posts add fulltext(title);
+alter table tags add fulltext(name);
+alter table users add fulltext(username);
+
+/* ======= discribe table information =======  */
 describe post_tags;
 describe posts;
 describe comments;
@@ -16,7 +22,7 @@ show index from likes;
 
 SHOW CREATE TABLE likes;
 SHOW CREATE TABLE follow_users;
--- select query
+/* ======= Select Query ======= */
 select * from users;
 select * from posts;
 select * from categories;
@@ -25,18 +31,19 @@ select * from linh_plus_blog.post_tags;
 select * from linh_plus_blog.tags;
 select * from linh_plus_blog.likes;
 select * from comments;
-select comments.id, comments.parent_id,is_comment_like_by_user(comments.id,8) as is_comment_like_by_user,
+-- select comment and user, is comment like by user 
+select comments.id, comments.parent_id, is_comment_like_by_user(comments.id,1) as is_comment_like_by_user,
 	comments.post_id, comments.content, comment_likes.user_id,
     users.id as user_id,users.username, users.avatar,
     count(comment_likes.comment_id) as number_of_likes
   from
  (comments left join comment_likes on comment_likes.comment_id = comments.id) 
  inner join users on users.id = comments.user_id group by comments.id;
--- get posts that are 
+-- get posts that are user followed user or tag  
 select  distinct posts.id as post_id,posts.createdAt as createdAt, posts.user_id as UserId from users
-	inner join followtags on users.id = followtags.user_id
-    inner join tags on followtags.tag_id = tags.id
-	inner join post_tags on post_tags.TagId = tags.id
+	inner join follow_tags on users.id = follow_tags.user_id
+    inner join tags on follow_tags.tag_id = tags.id
+	inner join post_tags on post_tags.tag_id = tags.id
     inner join posts on post_tags.post_id = posts.id
     where users.id = 2
 union 
@@ -46,13 +53,17 @@ select distinct posts.id as post_id, posts.createdAt as createdAt, posts.user_id
     where users.id = 2
 order by createdAt desc
 limit 0,5
--- UPDATE `linh_plus_blog`.`posts` SET `deletedAt` = null;
-
--- alter table follow_users drop index follow_users_UserId_UserId_unique;
-
--- delete from posts ; 
-
--- declare procedure 
+-- search posts
+	select * from posts 
+    where match(title)
+    against ("toi ten linh")
+	
+    select * 
+    from 
+    tags inner join post_tags on tags.id = post_tags.tag_id
+    
+    
+/* ====== declare procedure ===== */
 delimiter ??
 create procedure get_popular_posts()
 begin
