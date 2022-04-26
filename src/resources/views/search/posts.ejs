@@ -24,9 +24,8 @@
           <div class="col-3">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               <button class="nav-link active" id="v-pills-posts-tab" data-bs-toggle="pill" data-bs-target="#v-pills-posts" type="button" role="tab" aria-controls="v-pills-posts" aria-selected="true">Posts</button>
-              <button class="nav-link" id="v-pills-user-tab" data-bs-toggle="pill" data-bs-target="#v-pills-user" type="button" role="tab" aria-controls="v-pills-user" aria-selected="false">user</button>
-              <button class="nav-link" id="v-pills-tags-tab" data-bs-toggle="pill" data-bs-target="#v-pills-tags" type="button" role="tab" aria-controls="v-pills-tags" aria-selected="false">tags</button>
-              <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+              <button class="nav-link" id="btnTabUser" data-bs-toggle="pill" data-bs-target="#userTabContent" type="button" role="tab" aria-controls="userTabContent" aria-selected="false">user</button>
+              <button class="nav-link" id="btnTabTag" data-bs-toggle="pill" data-bs-target="#tagTabContent" type="button" role="tab" aria-controls="tagTabContent" aria-selected="false">tags</button>
             </div>
           </div>
           <div class="col-9">
@@ -71,9 +70,15 @@
                   <button id="btnMore" class="btn btn-primary">More</button>
                 </div>
               </div>
-              <div class="tab-pane fade" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">...</div>
-              <div class="tab-pane fade" id="v-pills-tags" role="tabpanel" aria-labelledby="v-pills-tags-tab">...</div>
-              <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+              <div class="tab-pane fade" id="userTabContent" role="tabpanel" aria-labelledby="btnTabUser">
+                <div class="users row g-3">
+                  
+                </div>
+              </div>
+              <div class="tab-pane fade" id="tagTabContent" role="tabpanel" aria-labelledby="btnTabTag">
+                <div class="tags row g-3">
+                </div>
+              </div>
             </div>
             
           </div>

@@ -3,7 +3,12 @@ import {formatDate} from '../utils/format_date.js';
 $(()=>{
   const $querySearch = $("#querySearch");
   const $btnMore = $("#btnMore");
-  const $postsList = $("#postsList")
+  const $postsList = $("#postsList");
+  const $btnTabUser = $("#btnTabUser");
+  const $userTabContent = $("#userTabContent");
+  const $usersList = $(".users");
+  const $btnTabTag = $("#btnTabTag");
+  const $tagsList = $(".tags")
   // display query search 
   let querySearchValue = getQueryFromMUrl("query", window.location.search)
   $querySearch.html(querySearchValue)  
@@ -71,5 +76,59 @@ $(()=>{
       }
     });
   })
-
+  // add event for tab user
+  $btnTabUser.on("click", function (event){
+    $.ajax({
+      type: "GET",
+      url: "/search/get_users",
+      data: {
+        username: querySearchValue
+      },
+      dataType: "json",
+      success: function (response) {
+        if(response.status ==="success"){
+          $usersList.html("");
+          console.log(response)
+          let tagUsers = response.users.map(user=>{
+            return (`
+              <div class="col-xl-4">
+                <a href="/user/${user.username}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
+                  <div class="icon-64" style="background-image: url('${user.avatar}');"></div>
+                  <h3>${user.username}</h3>
+                </a>
+              </div>
+            `)
+          });
+          $usersList.html(tagUsers.join(""));
+        }
+      }
+    });
+  })
+  // add event for tab tag
+  $btnTabTag.on("click", function (event){
+    $.ajax({
+      type: "GET",
+      url: "/search/get_tags",
+      data: {
+        name: querySearchValue
+      },
+      dataType: "json",
+      success: function (response) {
+        if(response.status ==="success"){
+          $tagsList.html("");
+          console.log(response)
+          let tags = response.tags.map(tag=>{
+            return (`
+              <div class="col-xl-4">
+                <a href="/tag/${tag.name}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
+                  <h3>#${tag.name}</h3>
+                </a>
+              </div>
+            `)
+          });
+          $tagsList.html(tags.join(""));
+        }
+      }
+    });
+  })
 })

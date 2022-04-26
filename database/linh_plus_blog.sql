@@ -1,4 +1,3 @@
-show tables;
 create database linh_plus_blog;
 use linh_plus_blog;
 drop database linh_plus_blog;
@@ -52,7 +51,7 @@ select distinct posts.id as post_id, posts.createdAt as createdAt, posts.user_id
     inner join posts on posts.user_id = follow_users.user_id
     where users.id = 2
 order by createdAt desc
-limit 0,5
+limit 0,5;
 -- search posts
 	select posts.id, title, slug, image, posts.createdAt , users.username
     from posts 
@@ -65,8 +64,12 @@ limit 0,5
     inner join posts on post_tags.post_id = posts.id
     inner join users on posts.user_id = users.id
     where match(tags.name)
-    against ("git")
-    
+    against ("git");
+-- search users
+	select usernane, avatar
+    from users
+    where match(username)
+    against ("hoanglinh");
 	
 /* ====== declare procedure ===== */
 delimiter ??

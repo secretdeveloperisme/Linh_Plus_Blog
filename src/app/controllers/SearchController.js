@@ -69,5 +69,38 @@ class SearchController{
       res.status(500).json({status: "failed", message: "server has an err"}) 
     }
   }
+  async searchUsers(req, res){
+    try{
+      let users = await db.User.findAll({
+        attributes: ["username", "avatar"],
+        where :{
+          username : {
+            [db.Sequelize.Op.like]: `%${req.query.username}%`
+          }
+        }
+      }).catch(err=>{throw err});
+      res.json({status:"success", message:"search users successfully", users});
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).json({status: "failed", message: "server has an err"}) 
+    }
+  }
+  async searchTags(req, res){
+    try{
+      let tags = await db.Tag.findAll({
+        where :{
+          name : {
+            [db.Sequelize.Op.like]: `%${req.query.name}%`
+          }
+        }
+      }).catch(err=>{throw err});
+      res.json({status:"success", message:"search tags successfully", tags});
+    }
+    catch(err){
+      console.log(err);
+      res.status(500).json({status: "failed", message: "server has an err"}) 
+    }
+  }
 }
 module.exports = new SearchController();
