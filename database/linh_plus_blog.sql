@@ -54,15 +54,20 @@ select distinct posts.id as post_id, posts.createdAt as createdAt, posts.user_id
 order by createdAt desc
 limit 0,5
 -- search posts
-	select * from posts 
+	select posts.id, title, slug, image, posts.createdAt , users.username
+    from posts 
+    inner join users on posts.user_id = users.id
     where match(title)
-    against ("toi ten linh")
-	
-    select * 
-    from 
+    against ("javascdriptsdfssdf")
+	union distinct
+    select posts.id, posts.title, posts.slug, posts.image, posts.createdAt,users.username  from 
     tags inner join post_tags on tags.id = post_tags.tag_id
+    inner join posts on post_tags.post_id = posts.id
+    inner join users on posts.user_id = users.id
+    where match(tags.name)
+    against ("git")
     
-    
+	
 /* ====== declare procedure ===== */
 delimiter ??
 create procedure get_popular_posts()
@@ -94,4 +99,38 @@ begin
 	end if;
 end??
 drop function is_comment_like_by_user;
-select is_comment_like_by_user(89, 9) as xxx;
+select is_comment_like_by_user(89, 9) as xxx;users
+-- function amount_like;
+delimiter $$
+create function amount_likes(post_id int)
+returns int
+deterministic
+begin 
+	declare amount int default 0;
+    set amount = (
+		select count(likes.post_id) 
+		from likes
+		where likes.post_id = post_id
+        and 
+        likes.type_like = "like"
+    );
+    return amount;
+end$$
+select amount_likes(10);
+drop function amount_likes;
+-- function amount_comment;
+delimiter $$
+create function amount_comments(post_id int)
+returns int
+deterministic
+begin 
+	declare amount int default 0;
+    set amount = (
+		select count(comments.post_id) 
+		from comments
+		where comments.post_id = post_id
+    );
+    return amount;
+end$$
+select amount_comments(7);
+drop function amount_comments;

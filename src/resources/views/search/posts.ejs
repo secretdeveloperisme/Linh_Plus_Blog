@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../partials/head") %>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Search Posts</title>
+</head>
+
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <% if(user) {%>
+        <%- include("../partials/nav",{user:user}) %>
+          <%}else {%>
+            <%- include("../partials/nav") %>
+              <% } %>
+    </header>
+    <div class="main">
+      <div class="container mt-3">
+        <h1>search result for <span id="querySearch">None</span></h1>
+        <div class="row">
+          <div class="col-3">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="nav-link active" id="v-pills-posts-tab" data-bs-toggle="pill" data-bs-target="#v-pills-posts" type="button" role="tab" aria-controls="v-pills-posts" aria-selected="true">Posts</button>
+              <button class="nav-link" id="v-pills-user-tab" data-bs-toggle="pill" data-bs-target="#v-pills-user" type="button" role="tab" aria-controls="v-pills-user" aria-selected="false">user</button>
+              <button class="nav-link" id="v-pills-tags-tab" data-bs-toggle="pill" data-bs-target="#v-pills-tags" type="button" role="tab" aria-controls="v-pills-tags" aria-selected="false">tags</button>
+              <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+              <div class="tab-pane fade show active" id="v-pills-posts" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                <div class="posts" id="postsList">
+                  <% posts.forEach(post=>{ %>
+                    <div class="post-item shadow bg-white rounded p-2 mb-2">
+                      <a href="/post/<%= post.slug %>" class="text-decoration-none text-black">
+                        <div class="post-header d-flex">
+                          <div class="icon-32 me-2" style="background-image: url('<%= post.user_avatar %>')"></div>
+                          <div class="d-flex flex-column">
+                            <h6><%= post.user_username %></h6>
+                            <span><%- include("../helpers/format_date.helper.ejs", {timestamp: post.createdAt})%></span>
+                          </div>
+                        </div>
+                        <div class="post-detail">
+                          <h2 class=""><%= post.title %></h2>
+                          <div class="post-tags">
+                            <% post.tags.forEach(tag=>{ %>
+                              <a href="/tag/<%= tag.name %>">#<span><%= tag.name %></span></a>
+                            <% }) %>
+                          </div>
+                          <div class="d-flex">
+                            <a href="/post/<%= post.slug %>#btnLike" class="btn btn-link text-decoration-none text-black">
+                              <i class="far fa-heart"></i>
+                              <span><%= post.amount_likes %></span>
+                              reactions
+                            </a>
+                            <a href="/post/<%= post.slug %>#commentEditor" class="btn btn-link text-decoration-none text-black">
+                              <i class="far fa-comment"></i>
+                              <span><%= post.amount_comments %></span>
+                              comment
+                            </a>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  <% }) %>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button id="btnMore" class="btn btn-primary">More</button>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">...</div>
+              <div class="tab-pane fade" id="v-pills-tags" role="tabpanel" aria-labelledby="v-pills-tags-tab">...</div>
+              <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <%- include("../auth/login") %>
+    <script src="/js/login.js"></script>
+    <script type="module" src="/js/search/Search.js"></script>
+</body>
+
+</html>

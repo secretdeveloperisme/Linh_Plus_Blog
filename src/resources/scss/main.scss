@@ -144,3 +144,20 @@ body{
 .age-range{
   width: 100%;
 }
+
+// search
+.input-search-group{
+  position: relative;
+  width: 80%;
+}
+.auto-complete-search{
+  display: block;
+  top: 100%;
+  position: absolute;
+  width: 100%;
+  background-color: var(--dropdown-content-color);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  animation: appear .5s ease;
+  transform-origin: 50% 0;
+  z-index: 1;
+}
