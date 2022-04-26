@@ -9,8 +9,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 container-fluid">
-        <form class="d-flex container input-group">
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+        <form action="/search" method="get" class="d-flex input-group">
+          <div class="d-flex input-search-group" >
+            <input class="form-control" id="searchInput" type="search" name="query" placeholder="Search" aria-label="Search">
+            <div class="list-group auto-complete-search" id="autocompleteSearchPosts">
+            </div>
+          </div>
           <button class="btn btn-outline-success input-group-append" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
         </form>
         <% if(user) { %>
