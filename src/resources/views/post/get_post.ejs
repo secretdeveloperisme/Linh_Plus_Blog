@@ -101,6 +101,7 @@
                   <a class="post-tag" href="/search/tag/<%= tag.id %>">#<%= tag.name %></a>
                 <% }) %> 
               </div>
+              <h5 class="text-warning"><%- include("../helpers/calculate_reading_time.ejs",{text : post.content}) %> min read</h5>
               <div class="ql-snow">
                 <div class="post-content ql-editor">
                   <%- post.content %>
