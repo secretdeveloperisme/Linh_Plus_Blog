@@ -23,7 +23,7 @@ class AuthController {
           httpOnly: true,
           maxAge: 24*60*60*1000
         });
-        res.redirect("/");
+        res.status(200).json({status:"success", message:"login successfully"} )
       }
       else{
         res.status(400).json({status:"failed", message:"Invalid password"})

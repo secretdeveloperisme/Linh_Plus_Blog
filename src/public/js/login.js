@@ -1,11 +1,16 @@
 $(()=>{
   const $btnLogin = $("#btnLogin");
+  const $btnLoginForm = $("#btnLoginForm");
   const $btnSignup = $("#btnSignup");
+  const $btnSignupForm = $("#btnSignupForm");
   const $loginTab = $("#loginTab");
   const $signupTab = $("#signupTab");
   const $loginDialogModal = $("#loginDialogModal");
   const $avatarPath = $("#avatarPath");
   const $signupForm = $("#signupForm");
+  const $loginForm = $("#loginForm");
+  const $loginToast = $("#loginToast");
+
   // show avatar output
   const $avatarInput = $("#avatar");
   const $avatarOutput = $("#displayAvatar");
@@ -98,7 +103,31 @@ $(()=>{
   }
   $signupPassword.on("keyup", warnValidPassword);
   // display avatar image
-  $signupForm.on("submit", function(event){
+  $loginForm.on("submit", event=>{
+    event.preventDefault();
+  })
+  $btnLoginForm.on("click", event=>{
+    $.ajax({
+      type: "POST",
+      url: "/auth/login",
+      data: $loginForm.serialize(),
+      dataType: "json",
+      success: function (response) {
+        if(response.status === "success"){
+          window.location = "/"
+        }
+      },
+      error: function(xhr){
+        const response = xhr.responseJSON
+        toast(response.status, response.status, response.message);
+      }
+    });
+  })
+  $signupForm.on("submit", (event)=>{
+    console.log("submit")
+    event.preventDefault();
+  })
+  $btnSignupForm.on("click", function(event){
     // check valid form 
     const passwordRegex = /(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -107,24 +136,35 @@ $(()=>{
       emailRegex.test($signupEmail.val()) &&
       $signupPassword.val() === $retypePassword.val())
       )
-      return event.preventDefault();
+      return;
     const xhrAvatar = new XMLHttpRequest();
     xhrAvatar.open("POST","/me/upload/avatar",false);
     let form  = new FormData();
     let avatarFile = $avatarInput[0].files[0];
     form.append("avatar", avatarFile);
     xhrAvatar.send(form);
-      if(xhrAvatar.status == 200){    
-      let response = JSON.parse(xhrAvatar.responseText);
-      if(response.status === "success"){
-        $avatarPath.val(response.filename)
-      }
-      else{
-        event.preventDefault();
-      }
+    if(xhrAvatar.status == 200){    
+    let response = JSON.parse(xhrAvatar.responseText);
+    if(response.status === "success"){
+      $avatarPath.val(response.filename)
+      $.ajax({
+        type: "POST",
+        url: "/auth/signup",
+        data: $signupForm.serialize(),
+        dataType: "json",
+        success: function (response) {
+          if(response.status === "success"){
+            window.location = "/"
+          }
+        },
+        error: function(xhr){
+          const response = xhr.responseJSON
+          toast(response.status, response.status, response.message);
+        }
+      });
+
     }
-    else{ 
-      event.preventDefault();
+      
     }
   })
   $avatarInput.on("change", function(event){
@@ -134,4 +174,16 @@ $(()=>{
     }
     avatarReader.readAsDataURL(this.files[0]);
   })
+  // display login response  from server
+  function toast(type, title, content){
+    if(type == "success"){
+      $loginToast.find(".toast-icon").attr("class","toast-icon fas fa-check text-primary")
+    }
+    else if(type == "failed"){
+      $loginToast.find(".toast-icon").attr("class","toast-icon fas fa-exclamation-circle text-danger");
+    }
+    $loginToast.find(".toast-title").text(title);
+    $loginToast.find(".toast-body").text(content);
+    $loginToast.toast("show");
+  }
 })

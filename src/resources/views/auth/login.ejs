@@ -16,7 +16,7 @@
         </ul>
         <div class="tab-content py-3" id="myTabContent">
           <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-            <form class="row g-3 was-validated" action="/auth/login" method="post">
+            <form id="loginForm" class="row g-3 was-validated" action="/auth/login" method="post">
               <div class="col-lg-12">
                 <label for="username" class="form-label">Username</label>
                 <input type="text"  id="username" name="username" class="form-control" required placeholder="input your username....">
@@ -38,12 +38,12 @@
                 </div>
               </div>
               <div class="col-lg-12">
-                <button class="btn btn-primary">Login</button>
+                <button id="btnLoginForm" class="btn btn-primary">Login</button>
               </div>
             </form>
           </div>
           <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
-            <form class="row g-3"  id="signupForm" action="/auth/signup" method="post" enctype="application/x-www-form-urlencoded" >
+            <form class="row g-3" id="signupForm" action="/auth/signup" method="post" enctype="application/x-www-form-urlencoded" >
               <div class="col-6">
                 <div class="col-lg-12">
                   <label for="signupUsername" class="form-label">Username</label>
@@ -107,12 +107,24 @@
                 </div>
               </div>
               <div>
-                <button class="btn btn-primary">Sign up</button>
+                <button id="btnSignupForm" class="btn btn-primary">Sign up</button>
               </div>
             </form>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 2000">
+  <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <i class="toast-icon fas fa-check text-primary" ></i>
+      <strong class="me-auto toast-title ms-3">Bootstrap</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
     </div>
   </div>
 </div>
