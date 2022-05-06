@@ -9,6 +9,7 @@ const user = require("./user");
 const tag = require("./tag");
 const category = require("./category");
 const search = require("./search");
+const admin = require("./admin");
 
 function route(app){
   app.use("/", siteRouter);
@@ -22,6 +23,7 @@ function route(app){
   app.use("/tag", tag);
   app.use("/category", category);
   app.use("/search", search);
+  app.use("/admin", admin)
 }
 
 module.exports = route;

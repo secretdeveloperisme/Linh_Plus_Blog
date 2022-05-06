@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head") %> 
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .bg-c-lite-green {
+      background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
+      background: linear-gradient(to right, #ee5a6f, #f29263)
+    } 
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5 mt-0">
+        <h1>LinhPlusBlog</h1>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark" aria-current="page">
+              <i class="fa fa-home" aria-hidden="true"></i>
+              DashBoard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-dark" data-bs-toggle="collapse" href="#categoryList" aria-expanded="true">
+              <i class="fas fa-file-alt"></i>
+              Posts
+            </a>
+            <ul id="categoryList" class="collapse show mr-2 list-group list-group-flush">
+             
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#tagList" class="nav-link link-dark" data-bs-toggle="collapse" >
+              <i class="fa fa-tags" aria-hidden="true"></i>
+              Tags
+            </a>
+            <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#tagList" class="nav-link link-dark" data-bs-toggle="collapse" >
+              <i class="fas fa-user"></i>
+              Users
+            </a>
+            <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
+            </ul>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content">
+        <div class="profile row p-0 shadow-sm ml-2 mt-2" style="border-radius: 5px; overflow: hidden;">
+          <div class="container-fluid d-flex flex-column align-items-center bg-c-lite-green col-5 p-5">
+            <img class="icon-128"src= "<%= user.avatar %>"  alt="">
+            <div><%= user.username %></div>
+          </div>
+          <div class="container-fluid col-7 pl-3 pr-3">
+            <div class="font-weight-bolder">Information</div>
+            <div class="border-primary" style="border:2px solid"></div>
+            <div class="pt-2">
+              <div class="font-italic text-primary" >
+                Chức Vụ
+              </div>
+              <% user.Roles.forEach(role=>{ %>
+                <div class="ml-3 text-black-50" ><%= role.name %></div>
+              <% }) %>
+            </div>
+            <div class="pt-2">
+              <div class="font-italic text-primary" >
+                Địa Chỉ: 
+              </div>
+              <div class="ml-3 text-black-50"><%= user.address %></div>
+            </div>
+            <div class="pt-2">
+              <div class="font-italic text-primary" >
+                Email
+              </div>
+              <div class="ml-3 text-black-50">
+                <%= user.email %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row p-2 m-0">
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-info rounded-lg">
+              <div>
+              <h1><%= amountOfPosts %></h1>
+              <h2>Total Post</h2>
+            </div>
+            <div class="position-absolute" style="top: 32px; right: 10px;">
+              <i class="fas fa-file-alt" style="font-size: 50px;"></i>
+            </div>
+            </div>
+          </div>
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-success rounded-lg">
+              <div>
+              <h1><%= amountOfTags %></h1>
+              <h2>Tags</h2>
+            </div>
+            <div class="position-absolute" style="top: 32px; right: 10px;">
+              <i class="fas fa-tag" style="font-size: 50px;"></i>
+            </div>
+            </div>
+          </div>
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-warning rounded-lg">
+              <div>
+              <h1><%= amountOfUsers %></h1>
+              <h2>Users</h2>
+            </div>
+            <div class="position-absolute" style="top: 32px; right: 10px;">
+              <i class="fas fa-users" style="font-size: 50px;"></i>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">top 5 bài viết phổ biến</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">index</th>
+                <th scope="col">Title</th>
+                <th scope="col">amount Of Likes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% popularPosts.forEach((popularPost,index)=>{ %>
+                <tr>
+                  <th scope="row"><%= index %></th>
+                  <td><a class="d-flex justify-content-between align-items-center" href="/post/<%= popularPost.slug %>"><%= popularPost.title %></a></td>
+                  <td><span class="badge bg-primary"><%= popularPost.number_of_likes %></span></td>
+                </tr>        
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">top người viết yêu thích</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">index</th>
+                <th scope="col">Avatar</th>
+                <th scope="col">Username</th>
+                <th scope="col">amount Of Followers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% popularUsers.forEach((popularUser,index)=>{ %>
+                <tr>
+                  <th scope="row"><%= index %></th>
+                  <td scope="row"><img src="<%= popularUser.avatar %>" class="icon-32"></td>
+                  <td><a class="d-flex justify-content-between align-items-center" href="/user/<%= popularUser.username %>"><%= popularUser.username %></a></td>
+                  <td><span class="badge bg-primary"><%= popularUser.amount_of_followers %></span></td>
+                </tr>        
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">Thống Kê Bài Viết Theo Tháng</h1>
+          <div>
+            <canvas id="chartPostsPerMonth"></canvas>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div postsPerMonth="<%= JSON.stringify(postsPerMonthStatistics) %>" id="postsPerMonthData"></div>
+  <%- include("../auth/login") %>
+  <script src="/js/home.js"></script>
+  <script src="/js/login.js"></script>
+  <script src="/js/admin/Dashboard.js"></script>
+</body>
+</html>

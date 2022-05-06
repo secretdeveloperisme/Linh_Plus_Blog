@@ -158,3 +158,7 @@ as
     from posts
     where year(createdAt) = year(current_date()) 
 	group by month;
+-- popular Users
+select users.id, username, users.avatar
+from users
+inner join posts on users.id = posts.user_id
