@@ -34,20 +34,27 @@ class SiteController {
         .catch(err => { throw err })
       data.tags = await db.Tag.findAll()
         .catch(err => { throw err })
-      let popularPosts = await db.sequelize.query("CALL get_popular_posts", { type: db.Sequelize.QueryTypes.SELECT, raw: true })
+      let popularPosts = await db.sequelize.query(`
+        SELECT id,title,slug, createdAt
+        FROM 
+          popular_posts
+      `, {
+          type: db.Sequelize.QueryTypes.SELECT,
+          model: db.Post
+        })
         .catch(err => { throw err })
-      popularPosts = popularPosts[0];
-      for (let popularPost in popularPosts) {
-        popularPosts[popularPost] = await db.Post.findOne({
+      console.log(popularPosts)
+      for (let popularPost of popularPosts) {
+        popularPost = await db.Post.findOne({
           where: {
-            id: popularPosts[popularPost].id
+            id: popularPost.id
           }
         }).catch(err => { throw err })
-        popularPosts[popularPost].tags = await popularPosts[popularPost].getTags()
+        popularPost.tags = await popularPost.getTags()
           .catch(err => { throw err })
-        popularPosts[popularPost].author = await popularPosts[popularPost].getUser()
+        popularPost.author = await popularPost.getUser()
           .catch(err => { throw err })
-        data.popularPosts.push(popularPosts[popularPost]);
+        data.popularPosts.push(popularPost);
       }
       let token = req.cookies["accessToken"];
       if (token)
