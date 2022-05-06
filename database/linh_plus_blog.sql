@@ -8,6 +8,7 @@ alter table tags add fulltext(name);
 alter table users add fulltext(username);
 
 /* ======= discribe table information =======  */
+describe user_role;
 describe post_tags;
 describe posts;
 describe comments;
@@ -66,25 +67,27 @@ limit 0,5;
     where match(tags.name)
     against ("git");
 -- search users
-	select usernane, avatar
+	select username, avatar
     from users
     where match(username)
     against ("hoanglinh");
-	
+/* ====== insert data  ===== */
+-- table statuses 
+insert into statuses(id, name) values(1,"public");
+insert into statuses(id, name) values(2,"private");
+-- table roles
+insert into roles(id, name) values(1,"admin");
+insert into roles(id, name) values(2,"moderator");
+insert into roles(id, name) values(3,"user");
+-- table categories
+insert into categories(id, name) values(1, "programming");
+insert into categories(id, name) values(2, "book");
+insert into categories(id, name) values(3, "tips");
+insert into categories(id, name) values(4, "experience");
+insert into categories(id, name) values(5, "bugs");
+insert into categories(id, name) values(6, "questions")
+insert into categories(id, name) values(7, "other")
 /* ====== declare procedure ===== */
-delimiter ??
-create procedure get_popular_posts()
-begin
-select posts.id,title,slug,createdAt, count(id) as number_of_likes
-	from posts 
-    inner join likes on posts.id = likes.post_id
-    where type_like = "like"
-    group by posts.id,title,slug,createdAt
-    order by number_of_likes DESC
-    limit 0, 5;
-end??
-drop procedure get_popular_posts;
-call get_popular_posts();
 -- declare functions 
 delimiter ??
 create function is_comment_like_by_user( comment_id int, user_id int)
@@ -137,3 +140,21 @@ begin
 end$$
 select amount_comments(7);
 drop function amount_comments;
+/* ====== declare views ===== */
+-- popular posts view
+create view popular_posts 
+as
+select posts.id,title,slug,createdAt, count(id) as number_of_likes
+	from posts 
+    inner join likes on posts.id = likes.post_id
+    where type_like = "like"
+    group by posts.id,title,slug,createdAt
+    order by number_of_likes DESC
+    limit 0, 5;
+-- amount of posts per month in current year statistics
+create view amount_posts_per_month_in_current_year
+as
+	select month(createdAt) as month, count(id) as amount_of_posts
+    from posts
+    where year(createdAt) = year(current_date()) 
+	group by month;
