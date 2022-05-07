@@ -1,5 +1,74 @@
 const db = require("../models");
 class TagController{
+  async create(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let tag = await db.Tag.create({
+          name : req.body.name
+        }).catch(err=>{throw err});
+        let id = tag.id;
+        res.json({status:"success", tag: {id, name:tag.name}, message:"add tag successfully"})
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
+  async update(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let tag = await db.Tag.findOne({
+          where: {
+            id: req.body.id
+          }
+        }).catch(err=>{throw err});
+        if(tag != null){
+          tag.name = req.body.name
+          await tag.save();
+          res.json({status:"success", message:"update tag successfully"})
+        }
+        else{
+          res.status(400).json({status:"failed", message:"not found tag"})
+        }
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
+  async destroy(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let tag = await db.Tag.findOne({
+          where: {
+            id : req.body.id
+          }
+        }).catch(err=>{throw err});
+        if(tag){
+          await tag.destroy()
+          res.json({status:"success", message:"destroy tag successfully"})
+        }
+        else{
+          res.status(400).json({status:"failed", message:"not found tag"})
+        }
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
   async getTag(req, res){
     try {
         let data = {

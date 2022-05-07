@@ -19,6 +19,22 @@ const verifyToken = (req, res, next)=>{
     next();
   });
 } 
+const checkHavePrivilege = async (req, res, next)=>{
+  req.roles = [];
+  let userId = req.userId || null;
+  let user = await db.User.findOne({
+    where: {
+      id : userId
+    }
+  }).catch(err=>{throw err})
+  let roles = await user.getRoles();  
+  roles.forEach(role=>{
+    if(role.name == ROLES.ADMIN || role.name == ROLES.MODERATOR){
+      req.roles.push(role.name);
+    }
+  })
+  next()
+}
 const isAdminOrModerator = async (req, res, next)=>{
   try{
     let userId = req.userId || null;
@@ -29,15 +45,13 @@ const isAdminOrModerator = async (req, res, next)=>{
     }).catch(err=>{throw err})
     let roles = await user.getRoles();
     let valid = false;
-    console.log(roles)
+    
     roles.forEach(role=>{
-      console.log(role.name)
       if(role.name == ROLES.ADMIN || role.name == ROLES.MODERATOR){
-        console.log(role.name)
         valid = true;
       }
+      role = role.name;
     })
-    console.log(valid)
     if(valid){
       next();
     }
@@ -51,5 +65,6 @@ const isAdminOrModerator = async (req, res, next)=>{
 }
 module.exports = {
   verifyToken,
-  isAdminOrModerator
+  isAdminOrModerator,
+  checkHavePrivilege
 }

@@ -298,7 +298,7 @@ class PostController {
             id: req.body.id
           }
         }).catch(err => { throw err });
-        if (post.UserId == req.userId) {
+        if (post.UserId == req.userId || req.roles.length > 0) {
           await post.destroy({ force: true }).catch(err => { throw err });
           res.json({ status: "success", message: "destroy post successfully" });
         }
@@ -342,6 +342,7 @@ class PostController {
   // POST : /post/handle_action
   async handleAction(req, res) {
     try {
+      let isAdminOrModerator = req.roles.length > 0
       if (req.body.action === "delete") {
         if (req.body.postIds) {
           let posts = await db.Post.findAll({
@@ -352,7 +353,7 @@ class PostController {
             }
           }).catch(err => { throw err });
           let isValidOwner = posts.every(post => post.UserId == req.userId);
-          if (isValidOwner) {
+          if (isValidOwner || isAdminOrModerator) {
             posts.forEach(async post => {
               await post.destroy().catch(err => { throw err });
             })
@@ -374,7 +375,7 @@ class PostController {
               }
             }).catch(err => { throw err });
             let isValidOwner = posts.every(post => post.UserId == req.userId);
-            if (isValidOwner) {
+            if (isValidOwner || isAdminOrModerator) {
               posts.forEach(async post => {
                 await post.destroy({ force: true }).catch(err => { throw err });
               })
@@ -396,7 +397,7 @@ class PostController {
                 }
               }).catch(err => { throw err });
               let isValidOwner = posts.every(post => post.UserId == req.userId);
-              if (isValidOwner) {
+              if (isValidOwner || isAdminOrModerator) {
                 posts.forEach(async post => {
                   await post.restore().catch(err => { throw err });
                 })

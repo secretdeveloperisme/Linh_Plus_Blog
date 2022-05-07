@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require("../app/controllers/AdminController");
-const {isAdminOrModerator,verifyToken} = require("../app/middlewares/AuthJWT")
+const {isAdminOrModerator,verifyToken, checkHavePrivilege} = require("../app/middlewares/AuthJWT")
 
 router.get("/dashboard", verifyToken, isAdminOrModerator, adminController.dashboard);
+router.get("/posts", verifyToken, isAdminOrModerator, adminController.posts);
+router.get("/tags", verifyToken, isAdminOrModerator, adminController.tags);
 
 module.exports = router;

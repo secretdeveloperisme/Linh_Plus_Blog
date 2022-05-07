@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head") %> 
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="app">
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5 mt-0">
+        <h1>LinhPlusBlog</h1>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/admin/dashboard" class="nav-link link-dark" aria-current="page">
+              <i class="fa fa-home" aria-hidden="true"></i>
+              DashBoard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-dark " href="/admin/posts" aria-expanded="true">
+              <i class="fas fa-file-alt"></i>
+              Posts
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/tags" class="nav-link link-dark active" >
+              <i class="fa fa-tags" aria-hidden="true"></i>
+              Tags
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/users" class="nav-link link-dark" >
+              <i class="fas fa-user"></i>
+              Users
+            </a>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content">
+        <div class="posts px-4">
+          <div class="text-center">
+            <h1 class="mb-4">My tags</h1>
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#addTagModal">New Tag</button>
+          </div>
+          <table class="table">
+            <thead>
+              <th scope="col" colspan="2">id</th>
+              <th scope="col">title</th>
+              <th scope="col">action</th>
+              <th scope="col" colspan="2"></td>
+            </thead>
+            <tbody id="tagList">
+              <% if(tags.length){ %>
+                <% tags.forEach((tag, index)=>{ %>
+                <tr>
+                  <td scope="row"><input type="checkbox" name="" id="" data-id="<%= tag.id %>" class="form-check-input checkbox-post"></td>
+                  <td scope="row"><%= tag.id %></td>
+                  <td scope="row" class="tag-name"><a href="/tag/<%= tag.name %>"><%= tag.name %></a></td>
+                  <td scope="row" class="">
+                    <a  data-bs-target="#editTagModal" data-bs-toggle="modal" class="btn btn-secondary" data-id="<%= tag.id %>" data-name="<%= tag.name %>">edit</a>
+                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTagModal" data-id="<%= tag.id %>">delete</a>
+                  </td>
+                </tr>
+                <% }) %>
+              <% } else{ %> 
+                <tr> 
+                  <td colspan="5">
+                  There are no tags
+                  </td>
+                </tr> 
+              <% } %>
+            </tbody>
+          </table>
+          <!-- modal delete -->
+          <div class="modal fade" id="deleteTagModal" tabindex="-1" aria-labelledby="deleteTagModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you sure want to delete ?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" id="btnDeleteTag">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  modal valid form  -->
+          <div class="modal" tabindex="-1" id="modalValidForm">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">No Valid</h5>
+                </div>
+                <div class="modal-body">
+                  <p> you should input all form</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addTagModal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  modal edit  tag -->
+          <div class="modal fade" tabindex="-1" id="editTagModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Edit Tag</h5>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="form-control" id="editInput">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="btnEditTag">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  modal add  tag -->
+          <div class="modal fade" tabindex="-1" id="addTagModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">New Tag</h5>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="form-control" id="addInput">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="btnAddTag">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <%- include("../auth/login") %>
+  <script src="/js/home.js"></script>
+  <script src="/js/login.js"></script>
+  <script src="/js/admin/tags.js"></script>
+</body>
+</html>

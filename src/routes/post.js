@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const postController = require("../app/controllers/PostController");
-const {verifyToken} = require("../app/middlewares/AuthJWT");
+const {verifyToken, checkHavePrivilege} = require("../app/middlewares/AuthJWT");
 const fs = require('fs');
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -31,8 +31,8 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 router.delete("/", verifyToken, postController.deletePost);
 router.patch("/restore", verifyToken, postController.restorePost);
-router.delete("/destroy", verifyToken, postController.destroyPost);
-router.post("/handle_action",verifyToken, postController.handleAction);
+router.delete("/destroy", verifyToken,checkHavePrivilege, postController.destroyPost);
+router.post("/handle_action",verifyToken,checkHavePrivilege, postController.handleAction);
 router.get("/write",verifyToken,postController.writePost);
 router.post("/write",verifyToken, postController.uploadPost);
 router.get("/edit/:slug",verifyToken, postController.editPostUI);

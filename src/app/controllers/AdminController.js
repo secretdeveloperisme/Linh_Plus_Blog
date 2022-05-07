@@ -60,5 +60,33 @@ class AdminController {
       res.status(500).json({status:"failed", message:"server has an error"})
     }
   }
+  async posts(req, res){
+    try {
+      let data = {
+        user: null,
+        posts : null,
+      }
+      data.posts = await db.Post.findAll({
+        include: [db.User]
+      })
+        .catch(err => { throw err });
+      res.render("admin/posts", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "server has an err" })
+    }
+  }
+  async tags(req, res){
+    try {
+      let data = {
+        tags : null,
+      }
+      data.tags = await db.Tag.findAll().catch(err => { throw err });
+      res.render("admin/tags", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "server has an err" })
+    }
+  }
 }
 module.exports = new AdminController();
