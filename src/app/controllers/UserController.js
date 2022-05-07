@@ -144,5 +144,30 @@ class UserController{
       res.status(500).json({ status: "failed", message: "Server has an err" })
     }
   }
+  async destroy(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let user = await db.User.findOne({
+          where: {
+            id : req.body.id
+          }
+        }).catch(err=>{throw err});
+        if(user){
+          await user.destroy()
+          res.json({status:"success", message:"destroy user successfully"})
+        }
+        else{
+          res.status(400).json({status:"failed", message:"not found user"})
+        }
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
 }
 module.exports = new UserController();

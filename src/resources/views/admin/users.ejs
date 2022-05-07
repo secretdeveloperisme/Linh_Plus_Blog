@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../partials/head") %> 
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="app">
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5 mt-0">
+        <h1>LinhPlusBlog</h1>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/admin/dashboard" class="nav-link link-dark" aria-current="page">
+              <i class="fa fa-home" aria-hidden="true"></i>
+              DashBoard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-dark " href="/admin/posts" aria-expanded="true">
+              <i class="fas fa-file-alt"></i>
+              Posts
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/tags" class="nav-link link-dark" >
+              <i class="fa fa-tags" aria-hidden="true"></i>
+              Tags
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/users" class="nav-link link-dark active" >
+              <i class="fas fa-user"></i>
+              Users
+            </a>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content">
+        <div class="posts px-4">
+          <div class="text-center">
+            <h1 class="mb-4">My tags</h1>
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#addTagModal">New Tag</button>
+          </div>
+          <table class="table">
+            <thead>
+              <th scope="col">id</th>
+              <th scope="col">username</th>
+              <th scope="col">avatar</th>
+              <th scope="col">email</th>
+              <th scope="col">gender</th>
+              <th scope="col" >action</td>
+            </thead>
+            <tbody id="tagList">
+              <% if(users.length){ %>
+                <% users.forEach((user, index)=>{ %>
+                <tr>
+                  <td scope="row"><%= user.id %></td>
+                  <td scope="row"><a href="/user/<%= user.username %>"><%= user.username %></a></td>
+                  <td scope="row"><img class="icon-32" src="<%= user.avatar %>" alt=""></td>
+                  <td scope="row"><%= user.email %></td>
+                  <td scope="row"><%= user.gender==="m"?"male":"female" %></td>
+                  <td scope="row">
+                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal" data-id="<%= user.id %>">delete</a>
+                  </td>
+                </tr>
+                <% }) %>
+              <% } else{ %> 
+                <tr> 
+                  <td colspan="5">
+                  There are no tags
+                  </td>
+                </tr> 
+              <% } %>
+            </tbody>
+          </table>
+          <!-- modal delete -->
+          <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you sure want to delete ?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" id="btnDeleteUser">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <%- include("../auth/login") %>
+  <script src="/js/home.js"></script>
+  <script src="/js/login.js"></script>
+  <script src="/js/admin/users.js"></script>
+</body>
+</html>

@@ -88,5 +88,24 @@ class AdminController {
       res.status(500).json({ status: "failed", message: "server has an err" })
     }
   }
+  async users(req, res){
+    try {
+      let data = {
+        users : null,
+      }
+      data.users = await db.User.findAll({
+        include :[{
+          model: db.Role,
+          where : {
+            name : "user"
+          }
+        }]
+      }).catch(err => { throw err });
+      res.render("admin/users", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "server has an err" })
+    }
+  }
 }
 module.exports = new AdminController();
