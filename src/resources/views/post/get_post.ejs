@@ -111,18 +111,20 @@
           </div>
           <div class="my-2">
             <h3>Discussion (<span id="totalOfComments"><%= numberOfComments %></span>)</h3>
-            <div class="comment-form">
-              <div class="d-flex mb-2">
-                <div class="icon-64 me-2"
-                  style="background-image: url('<%= user.avatar %>');"></div>
-                <div class="mb-2 flex-grow-1 w-100">
-                  <div class="">
-                    <div class="ql-editor" id="commentEditor"></div>
+            <% if(user) { %>
+              <div class="comment-form">
+                <div class="d-flex mb-2">
+                  <div class="icon-64 me-2"
+                    style="background-image: url('<%= user.avatar %>');"></div>
+                  <div class="mb-2 flex-grow-1 w-100">
+                    <div class="">
+                      <div class="ql-editor" id="commentEditor"></div>
+                    </div>
+                    <button class="btn btn-primary mt-3" id="btnComment" data-post-id="<%= post.id %>">Submit</button>
                   </div>
-                  <button class="btn btn-primary mt-3" id="btnComment" data-post-id="<%= post.id %>">Submit</button>
                 </div>
               </div>
-            </div>
+            <% } %>
             <div class="comments">
               <%- include("../helpers/display_comments.helper.ejs", {comments : comments, postId : post.id, user:user}) %>
             </div>
@@ -135,7 +137,9 @@
               <div class="icon-64 author__avatar" style="background-image: url('<%= post.User.avatar %>');"></div>
               <h5 class="author__name ms-3"><%= post.User.username %></h5>
             </div>
+            <% if(user){ %>
             <button class="btn w-100 <%= isFollow?"btn-secondary":"btn-primary"%>" id="btnFollow" data-action="<%= isFollow?"unfollow":"follow"%>" data-user-id="<%= post.User.id %>"><%= isFollow?"unfollow":"follow"%></button>
+            <% } %>
             <div class="author-biography py-2 text-center"><%= post.User.biography %></div>
             <div class="author-email">
               <h6>Email</h6>

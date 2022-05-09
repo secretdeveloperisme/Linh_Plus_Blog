@@ -3,6 +3,7 @@ const fs = require('fs');
 const slugify = require("slugify");
 const { convertHierarchyComments } = require("../utils/comments.util");
 const res = require("express/lib/response");
+const authService = require("../services/AuthService");
 // const jwt = require("jsonwebtoken");
 // const authConfig = require("../config/auth.config");
 class PostController {
@@ -22,6 +23,7 @@ class PostController {
           id: req.userId
         }
       }).catch(err => { console.log(err) })
+      // if(isOwnerPost)
       data.post = await db.Post.findOne({
         where: {
           slug: req.params.slug
@@ -36,7 +38,7 @@ class PostController {
           attributes: ["id", "name"]
         }],
       }).catch(err => { console.log(err); });
-      console.log(data.post);
+      let isOwnerPost = await authService.isOwnerOfPost(req.userId, data.post.id);
       if (data.post != null) {
         data.like = await db.Like.findOne({
           where: {

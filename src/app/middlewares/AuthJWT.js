@@ -19,6 +19,18 @@ const verifyToken = (req, res, next)=>{
     next();
   });
 } 
+const checkUserExist = (req, res, next)=>{
+  let token = req.cookies.accessToken;
+  req.userId = null;
+  if(token)
+    jwt.verify(token,authConfig.secretKey,(err, decoded)=>{
+      if(err){
+        res.status(400).json({"status": "failed", "message": "The token is not valid"});
+      }
+      req.userId = decoded.userId;
+    });
+  next();
+}
 const checkHavePrivilege = async (req, res, next)=>{
   req.roles = [];
   let userId = req.userId || null;
@@ -65,6 +77,7 @@ const isAdminOrModerator = async (req, res, next)=>{
 }
 module.exports = {
   verifyToken,
+  checkUserExist,
   isAdminOrModerator,
   checkHavePrivilege
 }

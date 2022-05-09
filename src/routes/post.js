@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const postController = require("../app/controllers/PostController");
-const {verifyToken, checkHavePrivilege} = require("../app/middlewares/AuthJWT");
+const {verifyToken, checkHavePrivilege, checkUserExist} = require("../app/middlewares/AuthJWT");
 const fs = require('fs');
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -40,6 +40,6 @@ router.patch("/", verifyToken, postController.updatePost);
 router.post("/image", [verifyToken, upload.single("image")],postController.uploadImage);
 router.get("/get_all_posts", postController.getAllPostsPerPage);
 router.get("/get_followed_posts", verifyToken,postController.getFollowedPostByPage);
-router.get("/:slug",verifyToken ,postController.getPost);
+router.get("/:slug",checkUserExist ,postController.getPost);
 
 module.exports = router;
