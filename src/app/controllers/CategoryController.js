@@ -60,36 +60,74 @@ class CategoryController{
       res.status(500).json({ status: "failed", message: "Server has an err" })
     }
   }
-  // POST : /tag/follow
-  // async follow(req, res){
-  //   try {
-  //     if(req.body.action && req.body.tagId){
-  //       if(req.body.action === "follow"){
-  //         await db.FollowTag.create({
-  //           UserId : req.userId,
-  //           TagId : req.body.tagId
-  //         })
-  //         .catch(err=>{throw err});
-  //       }
-  //       else if(req.body.action === "unfollow"){
-  //         await db.FollowTag.destroy({
-  //           where: {
-  //             UserId : req.userId,
-  //             TagId : req.body.tagId
-  //           },
-  //           force: true
-  //         })
-  //           .catch(err=>{throw err});
-  //       }
-  //     }
-  //     else{ 
-  //       return res.status(400).json({status:"failed", message:"action or body is empty"})
-  //     }
-  //     res.json({status:"success", message:`${req.body.action} successfully`});
-  //   } catch (err) {
-  //     console.log(err);
-  //     res.status(500).json({status:"failed", message:"server has an error"})
-  //   }
-  // }
+  async create(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let category = await db.Category.create({
+          name : req.body.name
+        }).catch(err=>{throw err});
+        let id = category.id;
+        res.json({status:"success", category: {id, name:category.name}, message:"add category successfully"})
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
+  async update(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let category = await db.Category.findOne({
+          where: {
+            id: req.body.id
+          }
+        }).catch(err=>{throw err});
+        if(category != null){
+          category.name = req.body.name
+          await category.save();
+          res.json({status:"success", message:"update category successfully"})
+        }
+        else{
+          res.status(400).json({status:"failed", message:"not found category"})
+        }
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
+  async destroy(req, res){
+    try {
+      let isAdminOrModerator = req.roles.length > 0;
+      if(isAdminOrModerator){
+        let category = await db.Category.findOne({
+          where: {
+            id : req.body.id
+          }
+        }).catch(err=>{throw err});
+        if(category){
+          await category.destroy()
+          res.json({status:"success", message:"destroy category successfully"})
+        }
+        else{
+          res.status(400).json({status:"failed", message:"not found category"})
+        }
+      }
+      else{
+        res.status(403).json({status: "failed", message: "you don't have privilege"})
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({status:"failed", message:"server has an error"} )
+    }
+  }
 }
 module.exports = new CategoryController();

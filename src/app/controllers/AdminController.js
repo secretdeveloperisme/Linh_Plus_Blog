@@ -88,6 +88,18 @@ class AdminController {
       res.status(500).json({ status: "failed", message: "server has an err" })
     }
   }
+  async categories(req, res){
+    try {
+      let data = {
+        categories : null,
+      }
+      data.categories = await db.Category.findAll().catch(err => { throw err });
+      res.render("admin/categories", data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ status: "failed", message: "server has an err" })
+    }
+  }
   async users(req, res){
     try {
       let data = {

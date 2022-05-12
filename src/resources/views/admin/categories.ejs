@@ -18,24 +18,19 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link-dark active" href="/admin/posts" aria-expanded="true">
+            <a class="nav-link link-dark " href="/admin/posts" aria-expanded="true">
               <i class="fas fa-file-alt"></i>
               Posts
             </a>
-            <ul id="categoryList" class="collapse show mr-2 list-group list-group-flush">
-             
-            </ul>
           </li>
           <li class="nav-item">
             <a href="/admin/tags" class="nav-link link-dark" >
               <i class="fa fa-tags" aria-hidden="true"></i>
               Tags
             </a>
-            <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
-            </ul>
           </li>
           <li class="nav-item">
-            <a href="/admin/categories" class="nav-link link-dark" >
+            <a href="" class="nav-link link-dark active" >
               <i class="fa fa-list-ul" aria-hidden="true"></i>
               Categories
             </a>
@@ -45,8 +40,6 @@
               <i class="fas fa-user"></i>
               Users
             </a>
-            <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
-            </ul>
           </li>
           <li class="nav-connect">
             <ul class="connect-me list-style-none d-flex justify-content-center p-0">
@@ -61,55 +54,40 @@
       <div class="content">
         <div class="posts px-4">
           <div class="text-center">
-            <h1 class="mb-4">My posts</h1>
-            <a href="/me/trash/posts" class="btn btn-warning">My trash</a>
-            <a href="/post/write" class="btn btn-primary">New Post</a>
-          </div>
-          <div class="mt-4 mx-1 d-flex align-items-center">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formCheckboxAll">
-              <label class="form-check-label" for="formCheckboxAll">
-                Select All
-              </label>
-            </div>
-            <select class="form-select-sm mx-2" aria-label="Select Action" id="selectAction">
-              <option selected value="">--Select Action--</option>
-              <option value="delete">Delete</option>
-            </select>
-            <button class="btn btn-sm btn-primary disabled" id="btnSubmitAll" >execution</button>
+            <h1 class="mb-4">My Category</h1>
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#addCategoryModal">New Tag</button>
           </div>
           <table class="table">
             <thead>
               <th scope="col" colspan="2">id</th>
               <th scope="col">title</th>
-              <th scope="col">status</th>
+              <th scope="col">action</th>
               <th scope="col" colspan="2"></td>
             </thead>
-            <tbody>
-              <% if(posts.length){ %>
-                <% posts.forEach((post, index)=>{ %>
+            <tbody id="categoryList">
+              <% if(categories.length){ %>
+                <% categories.forEach((category, index)=>{ %>
                 <tr>
-                  <td scope="row"><input type="checkbox" name="" id="" data-id="<%= post.id %>" class="form-check-input checkbox-post"></td>
-                  <td scope="row"><%= index %></td>
-                  <td scope="row"><a href="/post/<%= post.slug %>"><%= post.title %></a></td>
-                  <td scope="row"><%- post.StatusId == 1?'<span class="badge bg-success">Public</span>':(post.StatusId === 2?'<span class="badge bg-danger">private</span>':"none") %></td>
+                  <td scope="row"><input type="checkbox" name="" id="" data-id="<%= category.id %>" class="form-check-input checkbox-post"></td>
+                  <td scope="row"><%= category.id %></td>
+                  <td scope="row" class="category-name"><a href="/category/<%= category.name %>"><%= category.name %></a></td>
                   <td scope="row" class="">
-                    <a href="/post/edit/<%= post.slug %>" class="btn btn-secondary">edit</a>
-                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-id="<%= post.id %>">delete</a>
+                    <a  data-bs-target="#editCategoryModal" data-bs-toggle="modal" class="btn btn-secondary" data-id="<%= category.id %>" data-name="<%= category.name %>">edit</a>
+                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" data-id="<%= category.id %>">delete</a>
                   </td>
                 </tr>
                 <% }) %>
               <% } else{ %> 
                 <tr> 
                   <td colspan="5">
-                  There are no posts
+                  There are no categories
                   </td>
                 </tr> 
               <% } %>
             </tbody>
           </table>
           <!-- modal delete -->
-          <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModal">
+          <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModal">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -121,23 +99,41 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-danger" id="btnDeletePost">Delete</button>
+                  <button type="button" class="btn btn-danger" id="btnDeleteCategory">Delete</button>
                 </div>
               </div>
             </div>
           </div>
-          <!--  modal valid form  -->
-          <div class="modal" tabindex="-1" id="modalValidForm">
+          <!--  modal edit  category -->
+          <div class="modal fade" tabindex="-1" id="editCategoryModal">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">No Valid</h5>
+                  <h5 class="modal-title">Edit Category</h5>
                 </div>
                 <div class="modal-body">
-                  <p> you should input all form</p>
+                  <input type="text" class="form-control" id="editInput">
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="btnEditCategory">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  modal add category -->
+          <div class="modal fade" tabindex="-1" id="addCategoryModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">New Category</h5>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="form-control" id="addInput">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="btnAddCategory">Add</button>
                 </div>
               </div>
             </div>
@@ -156,6 +152,6 @@
   <%- include("../auth/login") %>
   <script src="/js/home.js"></script>
   <script src="/js/login.js"></script>
-  <script src="/js/admin/posts.js"></script>
+  <script src="/js/admin/categories.js"></script>
 </body>
 </html>
