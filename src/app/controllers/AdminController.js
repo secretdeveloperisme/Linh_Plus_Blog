@@ -1,4 +1,6 @@
 const db = require("../models");
+const pagination = require("../utils/pagination")
+const amountPostsPerPage = 3
 class AdminController {
   async dashboard(req, res){
     try {
@@ -65,11 +67,24 @@ class AdminController {
       let data = {
         user: null,
         posts : null,
+        amountOfAllPosts : 0,
+        pageNumbers : [],
+        numberPages : 0
       }
       data.posts = await db.Post.findAll({
-        include: [db.User]
+        include: [db.User],
+        order: [["createdAt", "DESC"]],
+        limit : amountPostsPerPage
       })
         .catch(err => { throw err });
+        data.amountOfAllPosts = await db.Post.count().catch(err=>{throw err});
+        if(data.amountOfAllPosts%amountPostsPerPage == 0){
+          data.numberPages = Math.floor(data.amountOfAllPosts / amountPostsPerPage);
+        }
+        else{ 
+          data.numberPages = Math.floor(data.amountOfAllPosts / amountPostsPerPage) + 1;
+        }
+        data.pageNumbers = pagination(1, data.numberPages);
       res.render("admin/posts", data);
     } catch (err) {
       console.log(err);

@@ -85,12 +85,12 @@
               <th scope="col">status</th>
               <th scope="col" colspan="2"></td>
             </thead>
-            <tbody>
+            <tbody id="postList">
               <% if(posts.length){ %>
                 <% posts.forEach((post, index)=>{ %>
                 <tr>
                   <td scope="row"><input type="checkbox" name="" id="" data-id="<%= post.id %>" class="form-check-input checkbox-post"></td>
-                  <td scope="row"><%= index %></td>
+                  <td scope="row"><%= post.id %></td>
                   <td scope="row"><a href="/post/<%= post.slug %>"><%= post.title %></a></td>
                   <td scope="row"><%- post.StatusId == 1?'<span class="badge bg-success">Public</span>':(post.StatusId === 2?'<span class="badge bg-danger">private</span>':"none") %></td>
                   <td scope="row" class="">
@@ -108,6 +108,13 @@
               <% } %>
             </tbody>
           </table>
+          <nav aria-label="...">
+            <ul class="pagination">
+              <% pageNumbers.forEach((pageNumber,index)=>{ %>
+                <li class="page-item <%= pageNumber==1?"active":"" %>" data-page="<%= pageNumber %>"><span class="page-link " href="#"><%= pageNumber %></span></li>
+              <% }) %>
+            </ul>
+          </nav>
           <!-- modal delete -->
           <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModal">
             <div class="modal-dialog">
@@ -156,6 +163,6 @@
   <%- include("../auth/login") %>
   <script src="/js/home.js"></script>
   <script src="/js/login.js"></script>
-  <script src="/js/admin/posts.js"></script>
+  <script type="module" src="/js/admin/posts.js"></script>
 </body>
 </html>

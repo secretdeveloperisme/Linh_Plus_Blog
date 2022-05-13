@@ -457,7 +457,7 @@ class PostController {
   }
   async getAllPosts(start, numberOfPostsPerPage){
     let posts = await db.Post.findAll({
-      attributes: ["id", "title", "slug", "image", "createdAt"],
+      attributes: ["id", "title", "slug", "status_id", "image", "createdAt"],
       include: [{
         model: db.User,
         attributes: ["username"]
@@ -482,12 +482,20 @@ class PostController {
         }
         let start = (amountOfPostsPerPage*req.query.page) - amountOfPostsPerPage;
         let posts = await new PostController().getAllPosts(start, amountOfPostsPerPage);
+        let amountOfAllPosts = await db.Post.count().catch(err=>{throw err});
+        let amountOfPages = 0;
+        if(amountOfAllPosts%amountOfPostsPerPage == 0){
+          amountOfPages = Math.floor(amountOfAllPosts / amountOfPostsPerPage);
+        }
+        else{ 
+          amountOfPages = Math.floor(amountOfAllPosts / amountOfPostsPerPage) + 1;
+        }
         posts = posts.map(post=>{
           post.dataValues["User"] = post.User;
           post.dataValues["Tags"] = post.Tags;
           return post;
         })
-        res.json({status:"success", message:"get all post per page successfully", posts});
+        res.json({status:"success", message:"get all post per page successfully", posts, amountOfPages});
       }
       else{
         res.status(400).json({status:"failed", message:"page is not set"})
@@ -523,6 +531,6 @@ class PostController {
       console.log(err);
       res.status(500).json({status:"failed", message:"server has an err"}) 
     }
-  }
+  }  
 }
 module.exports = new PostController();
