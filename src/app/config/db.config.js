@@ -9,7 +9,7 @@ module.exports = {
     idle: 10000
   },
   root: {
-    USER: "root",
+    USER: "hoanglinh",
     PASSWORD : "hoanglinh777",
     DB: "linh_plus_blog",
   }

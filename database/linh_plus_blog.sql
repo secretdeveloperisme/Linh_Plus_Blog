@@ -1,6 +1,9 @@
 create database linh_plus_blog;
 use linh_plus_blog;
 drop database linh_plus_blog;
+/* ======= create user and grant privileges=======  */
+create user 'hoanglinh'@'localhost ' identified by 'hoanglinh777';
+grant all privileges on linh_plus_blog.* to hoanglinh@localhost;
 
 /* ======= alter table =======  */
 alter table posts add fulltext(title);
@@ -157,8 +160,18 @@ as
 	select month(createdAt) as month, count(id) as amount_of_posts
     from posts
     where year(createdAt) = year(current_date()) 
-	group by month;
+	group by month
+    order by month;
+drop view amount_posts_per_month_in_current_year;
 -- popular Users
-select users.id, username, users.avatar
+create view popular_users
+as
+select users.id, username, users.avatar, count(users.id) as amount_of_followers
 from users
-inner join posts on users.id = posts.user_id
+inner join follow_users on users.id = follow_users.user_id
+group by users.id
+order by amount_of_followers desc;
+
+drop view popular_users;
+
+/* ====== create trigger ===== */
