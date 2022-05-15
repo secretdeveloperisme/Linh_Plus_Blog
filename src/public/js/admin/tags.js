@@ -2,6 +2,7 @@ $(function () {
   let $btnAddTag = $("#btnAddTag");
   let $addInput = $("#addInput");
   let $tagList = $("#tagList");
+  let $btnEditTag = $('#btnEditTag');
   $('#deleteTagModal').on('show.bs.modal', function (event) {
     let $button = $(event.relatedTarget);
     let id = $button.data('id');
@@ -28,7 +29,6 @@ $(function () {
     let id = $button.data('id');
     let name = $button.data('name');
     let $tagNameCell = $button.parents("tr").find(".tag-name")
-    let $btnEditTag = $('#btnEditTag');
     let $editInput = $("#editInput");
     $editInput.val(name)
     $btnEditTag.on('click', function (event) {
@@ -51,6 +51,9 @@ $(function () {
       });
     });
   });
+  $('#editTagModal').on('show.bs.modal', function (event) {
+    $btnEditTag.off("click")
+  })
   $btnAddTag.on("click", event=>{
     let name = $addInput.val();
     $.ajax({
@@ -65,7 +68,6 @@ $(function () {
             html +
             `
             <tr>
-              <td scope="row"><input type="checkbox" name="" id="" data-id="${tag.id}" class="form-check-input checkbox-post"></td>
               <td scope="row">${tag.id}</td>
               <td scope="row" class="tag-name"><a href="/tag/${tag.name}">${tag.name}</a></td>
               <td scope="row" class="">

@@ -2,6 +2,7 @@ $(function () {
   let $btnAddCategory = $("#btnAddCategory");
   let $addInput = $("#addInput");
   let $categoryList = $("#categoryList");
+  let $btnEditCategory = $('#btnEditCategory');
   $('#deleteCategoryModal').on('show.bs.modal', function (event) {
     let $button = $(event.relatedTarget);
     let id = $button.data('id');
@@ -28,7 +29,6 @@ $(function () {
     let id = $button.data('id');
     let name = $button.data('name');
     let $categoryNameCell = $button.parents("tr").find(".category-name")
-    let $btnEditCategory = $('#btnEditCategory');
     let $editInput = $("#editInput");
     $editInput.val(name)
     $btnEditCategory.on('click', function (event) {
@@ -51,6 +51,9 @@ $(function () {
       });
     });
   });
+  $('#editCategoryModal').on('hide.bs.modal',event=>{
+    $btnEditCategory.off("click");
+  })
   $btnAddCategory.on("click", event=>{
     let name = $addInput.val();
     $.ajax({
@@ -65,7 +68,6 @@ $(function () {
             html +
             `
             <tr>
-              <td scope="row"><input type="checkbox" name="" id="" data-id="${category.id}" class="form-check-input checkbox-post"></td>
               <td scope="row">${category.id}</td>
               <td scope="row" class="category-name"><a href="/category/${category.name}">${category.name}</a></td>
               <td scope="row" class="">

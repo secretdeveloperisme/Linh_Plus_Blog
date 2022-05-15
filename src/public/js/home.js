@@ -1,3 +1,4 @@
+import {formatDate} from "./utils/format_date.js";
 $(()=>{
   // handle change list mode 
   const $btnChangeListMode = $("#btnChangeListMode");
@@ -69,7 +70,7 @@ $(()=>{
                         <a href="/user/${posts[i].User.username}" class="text-decoration-none text-secondary">${posts[i].User.username} </a>
                       </div>
                       <div class="post-published">
-                      ${posts[i].createdAt}
+                      ${formatDate(posts[i].createdAt)}
                       </div>
                     </div>
                   </div>
