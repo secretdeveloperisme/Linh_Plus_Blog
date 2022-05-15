@@ -175,3 +175,10 @@ order by amount_of_followers desc;
 drop view popular_users;
 
 /* ====== create trigger ===== */
+delimiter $$
+create trigger follow_myself 
+after insert on users
+for each row 
+begin 
+	insert into follow_users values (new.id, new.id);
+end$$
