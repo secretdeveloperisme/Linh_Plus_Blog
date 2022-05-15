@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <%- include("../partials/head") %> 
+  <title>Categories</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -55,11 +56,11 @@
         <div class="posts px-4">
           <div class="text-center">
             <h1 class="mb-4">My Category</h1>
-            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#addCategoryModal">New Tag</button>
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#addCategoryModal">New Category</button>
           </div>
           <table class="table">
             <thead>
-              <th scope="col" colspan="2">id</th>
+              <th scope="col" colspan="1">id</th>
               <th scope="col">title</th>
               <th scope="col">action</th>
               <th scope="col" colspan="2"></td>
@@ -68,7 +69,6 @@
               <% if(categories.length){ %>
                 <% categories.forEach((category, index)=>{ %>
                 <tr>
-                  <td scope="row"><input type="checkbox" name="" id="" data-id="<%= category.id %>" class="form-check-input checkbox-post"></td>
                   <td scope="row"><%= category.id %></td>
                   <td scope="row" class="category-name"><a href="/category/<%= category.name %>"><%= category.name %></a></td>
                   <td scope="row" class="">
@@ -150,8 +150,6 @@
     </ul>
   </div>
   <%- include("../auth/login") %>
-  <script src="/js/home.js"></script>
-  <script src="/js/login.js"></script>
   <script src="/js/admin/categories.js"></script>
 </body>
 </html>

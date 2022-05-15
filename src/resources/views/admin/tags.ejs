@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <%- include("../partials/head") %> 
+  <title>Tags</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -59,7 +60,7 @@
           </div>
           <table class="table">
             <thead>
-              <th scope="col" colspan="2">id</th>
+              <th scope="col" colspan="1">id</th>
               <th scope="col">title</th>
               <th scope="col">action</th>
               <th scope="col" colspan="2"></td>
@@ -68,7 +69,6 @@
               <% if(tags.length){ %>
                 <% tags.forEach((tag, index)=>{ %>
                 <tr>
-                  <td scope="row"><input type="checkbox" name="" id="" data-id="<%= tag.id %>" class="form-check-input checkbox-post"></td>
                   <td scope="row"><%= tag.id %></td>
                   <td scope="row" class="tag-name"><a href="/tag/<%= tag.name %>"><%= tag.name %></a></td>
                   <td scope="row" class="">
