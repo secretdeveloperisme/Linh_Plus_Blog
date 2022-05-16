@@ -48,12 +48,12 @@ select  distinct posts.id as post_id,posts.createdAt as createdAt, posts.user_id
     inner join tags on follow_tags.tag_id = tags.id
 	inner join post_tags on post_tags.tag_id = tags.id
     inner join posts on post_tags.post_id = posts.id
-    where users.id = 2
+    where users.id = 2 and posts.deletedAt is null
 union 
 select distinct posts.id as post_id, posts.createdAt as createdAt, posts.user_id  as UserId from users
 	inner join follow_users on follow_users.follower_id = users.id
     inner join posts on posts.user_id = follow_users.user_id
-    where users.id = 2
+    where users.id = 2 and posts.deletedAt is null
 order by createdAt desc
 limit 0,5;
 -- search posts
