@@ -68,7 +68,7 @@ const isAdminOrModerator = async (req, res, next)=>{
       next();
     }
     else
-      res.status(403).json({status:"failed", message:"you do not have privilege"});
+      res.render("error/401")
   }
   catch(err){
     console.log(err);
