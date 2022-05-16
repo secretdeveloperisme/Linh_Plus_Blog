@@ -210,13 +210,15 @@ class PostController {
   async updatePost(req, res) {
     if (req.body.title && req.body.content && req.body.status && req.userId) {
       try {
+        let isHavePrivilege = req.roles.length > 0;
         db.sequelize.transaction(async t => {
           let post = await db.Post.findOne({
             where: {
               id: req.body.id
-            }
+            },
+            include:[db.Tag, db.Category]
           });
-          if (post.UserId === req.userId) {
+          if (post.UserId === req.userId || isHavePrivilege) {
             let status = await db.Status.findOne({
               where: {
                 name: req.body.status
@@ -236,10 +238,16 @@ class PostController {
               return { id: value };
             }));
             // console.log(categories);
+            await post.removeCategories(post.Categories,{ transaction: t }).catch(err => {
+              console.log(err);
+            })
             await post.setCategories(categories, { transaction: t }).catch(err => {
               console.log(err);
             })
             // insert tags 
+            await post.removeTags(post.Tags,{ transaction: t }).catch(err => {
+              console.log(err);
+            })
             for (let value of req.body.tags) {
               try {
                 let [tag, isFound] = await db.Tag.findOrCreate({
@@ -255,9 +263,9 @@ class PostController {
             }
           }
           else {
-            res.status(400).json({ status: "failed", message: "you are not post's owner" });
+            res.status(400).json({ status: "failed", message: "you don't not have privilege" });
           }
-          res.redirect(`/post/edit/${post.slug}`)
+          res.redirect(`/post/${post.slug}`)
         })
       }
       catch (err) {
@@ -436,12 +444,12 @@ class PostController {
         inner join tags on follow_tags.tag_id = tags.id
       inner join post_tags on post_tags.tag_id = tags.id
         inner join posts on post_tags.post_id = posts.id
-        where users.id = ${userId}
+        where users.id = ${userId} and posts.deletedAt is null
       union 
       select distinct posts.id as id, posts.title,posts.slug ,posts.image, posts.createdAt as createdAt, posts.user_id as UserId from users
         inner join follow_users on follow_users.follower_id = users.id
           inner join posts on posts.user_id = follow_users.user_id
-          where users.id =  ${userId}
+          where users.id =  ${userId} and posts.deletedAt is null
       order by createdAt desc
       limit ${start},${numberOfPostsPerPage}
     `, {

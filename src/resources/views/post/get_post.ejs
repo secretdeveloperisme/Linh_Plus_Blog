@@ -98,7 +98,7 @@
               <h5 class="text-secondary"><%= post.description %></h5>
               <div class="post-main-tags d-flex my-3">
                 <% post.Tags.forEach(tag=>{ %>
-                  <a class="post-tag" href="/search/tag/<%= tag.id %>">#<%= tag.name %></a>
+                  <a class="post-tag" href="/tag/<%= tag.name %>">#<%= tag.name %></a>
                 <% }) %> 
               </div>
               <h5 class="text-warning"><%- include("../helpers/calculate_reading_time.ejs",{text : post.content}) %> min read</h5>
@@ -135,7 +135,9 @@
           <div class="author bg-white p-3">
             <div class="author-header d-flex align-items-center mb-3">
               <div class="icon-64 author__avatar" style="background-image: url('<%= post.User.avatar %>');"></div>
-              <h5 class="author__name ms-3"><%= post.User.username %></h5>
+              <a href="/user/<%= post.User.username %>">
+                <h5 class="author__name ms-3"><%= post.User.username %></h5>
+              </a>
             </div>
             <% if(user){ %>
             <button class="btn w-100 <%= isFollow?"btn-secondary":"btn-primary"%>" id="btnFollow" data-action="<%= isFollow?"unfollow":"follow"%>" data-user-id="<%= post.User.id %>"><%= isFollow?"unfollow":"follow"%></button>

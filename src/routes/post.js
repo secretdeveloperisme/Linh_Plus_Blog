@@ -36,7 +36,7 @@ router.post("/handle_action",verifyToken,checkHavePrivilege, postController.hand
 router.get("/write",verifyToken,postController.writePost);
 router.post("/write",verifyToken, postController.uploadPost);
 router.get("/edit/:slug",verifyToken, postController.editPostUI);
-router.patch("/", verifyToken, postController.updatePost);
+router.patch("/", verifyToken, checkHavePrivilege, postController.updatePost);
 router.post("/image", [verifyToken, upload.single("image")],postController.uploadImage);
 router.get("/get_all_posts", postController.getAllPostsPerPage);
 router.get("/get_followed_posts", verifyToken,postController.getFollowedPostByPage);
