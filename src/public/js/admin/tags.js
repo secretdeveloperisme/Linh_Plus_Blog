@@ -32,6 +32,7 @@ $(function () {
     let $editInput = $("#editInput");
     $editInput.val(name)
     $btnEditTag.on('click', function (event) {
+      console.log("ksdjf")
       $.ajax({
         url: `/tag/update`,
         type: 'PATCH',
@@ -51,7 +52,7 @@ $(function () {
       });
     });
   });
-  $('#editTagModal').on('show.bs.modal', function (event) {
+  $('#editTagModal').on('hide.bs.modal', function (event) {
     $btnEditTag.off("click")
   })
   $btnAddTag.on("click", event=>{
